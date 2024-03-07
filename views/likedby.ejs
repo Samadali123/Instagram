@@ -1,0 +1,86 @@
+<% include ./partials/header.ejs %>
+
+    <div class="top w-full flex items-center gap-12 px-10  py-1">
+        <a href="/feed" class="cursor-pointer">
+            <p><i class="ri-arrow-left-line text-lg"></i></p>
+        </a>
+        <h3 class="text-xl font-medium">Likes </h3>
+    </div>
+
+
+    <div class="allusers py-5   ">clgit
+
+        <% post.likes.forEach(function(elem){  %>
+            <div class="user w-full relative mb-5  px-10 flex justify-between items-center ">
+
+                <div class="left flex gap-3 items-center  ">
+                    <a href="/openprofile/<%= elem.username %>">
+                        <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                            <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
+                        </div>
+                    </a>
+
+                    <div class="dets text-sm ">
+                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                            <h3>
+                                <%= elem.username %>
+                            </h3>
+                        </a>
+                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                            <p>
+                                <%= elem.fullname %>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="right  text-center ">
+
+                    <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
+                        <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                        <%  }  else {  %>
+
+                            <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
+                            <%  }   %>
+
+                </div>
+
+            </div>
+            <%    })  %>
+
+    </div>
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        document.querySelector(".allusers").addEventListener("click", function(e) {
+            if (e.target.classList.contains("follow")) {
+                let btn = e.target;
+                let user = e.target.dataset.user;
+                axios.put(`/follow/${user}`)
+                    .then(function(data) {
+                        if (btn.classList.contains('bg-blue-600')) {
+                            btn.classList.add('bg-zinc-800');
+                            btn.classList.remove('bg-blue-600');
+                        } else {
+                            btn.classList.remove('bg-zinc-800');
+                            btn.classList.add('bg-blue-600');
+                        }
+
+                        if (btn.textContent === "Follow") {
+                            btn.textContent = "Following";
+                        } else {
+                            btn.textContent = "Follow";
+                        }
+
+                    })
+            }
+        })
+    </script>
+
+    <% include ./partials/footer.ejs %>

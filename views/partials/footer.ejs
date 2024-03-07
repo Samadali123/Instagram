@@ -1,0 +1,30 @@
+<% if(footer){ %>
+    <div class="footer text-white flex justify-between items-center w-full fixed bottom-0 z-[10] bg-zinc-900 px-10 py-3">
+        <a href="/feed"><i class="text-[1.4rem] ri-home-line"></i></a>
+        <a href="/search"><i class="text-[1.4rem] ri-search-line"></i></a>
+        <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
+        <a href="/profile">
+            <div class="w-6 h-6 bg-zinc-300 rounded-full mr-14 overflow-hidden ">
+                <img class="w-full h-full object-cover " src="/images/uploads/<%= loginuser.profile %>" alt="">
+            </div>
+        </a>
+    </div>
+    <% } %>
+
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                width: 100%;
+                height: 100%;
+                background-color: #18181B;
+                color: white;
+            }
+        </style>
+
+        </html>

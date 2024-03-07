@@ -1,0 +1,39 @@
+<% include ./partials/header.ejs %>
+
+    <form id="profileform" hidden action="/uploadprofile" method="post" enctype="multipart/form-data">
+        <input id="profilefile" type="file" name="profile">
+    </form>
+
+    <div class="w-full  min-h-full bg-zinc-900 text-white py-5">
+        <div class="flex justify-between items-center px-4">
+            <a class="text-sm text-blue-500" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
+            <h2 class="leading-none text-sm">Edit Profile</h2>
+            <a class="text-sm" href="/feed"><i class="ri-home-line"></i> home</a>
+        </div>
+        <div class="flex flex-col items-center gap-2 mt-20">
+            <div class="image w-20 h-20 bg-sky-100 rounded-full overflow-hidden">
+                <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="">
+            </div>
+            <button id="editprofile" class="text-blue-500 capitalize cursor-pointer">edit picture</button>
+        </div>
+        <div class="gap-5 px-4 mt-10">
+            <h3 class="text-lg leading-none">Edit Account Details</h3>
+            <hr class="opacity-30 my-3">
+            <form class="w-full" action="/update" method="post">
+                <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username" value="<%= loginuser.username %>">
+                <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="name" name="name" value="<%= loginuser.fullname %>">
+                <textarea class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900 resize-none" placeholder="Bio" name="bio"><%= loginuser.bio %></textarea>
+                <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.querySelector("#editprofile").addEventListener("click", function(e) {
+            document.querySelector("#profilefile").click();
+            document.querySelector("#profilefile").addEventListener("change", function(dets) {
+                document.querySelector("#profileform").submit();
+            })
+        })
+    </script>
+    <% include ./partials/footer.ejs %>

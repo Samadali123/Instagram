@@ -1,0 +1,58 @@
+<% include ./partials/header.ejs %>
+    <div class="w-full  min-h-full bg-zinc-900 px-4 py-5">
+        <div class="border-2 border-zinc-800 flex items-center justify-between px-2 py-1 rounded-md">
+            <i class="text-white ri-search-line"></i>
+            <input id="inp" class="ml-1 w-full bg-zinc-900 outline-none text-zinc-400" type="text" placeholder="search ">
+        </div>
+        <div class="users">
+
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const input = document.querySelector("#inp");
+
+
+
+        document.querySelector("#inp").addEventListener("input", function(e) {
+            var inp = this.value;
+            if (inp.length > 0) {
+                axios.get(`/users/${inp}`)
+                    .then(response => {
+                        var clutter = "";
+                        if (response.data.length > 0) {
+                            response.data.forEach(function(elem) {
+                                clutter += `  <a href="/openprofile/${elem.username}" class="outline-none cursor-pointer">
+                            <div class="text-white flex items-center gap-2 mt-5">
+                                <div class="image w-[11vw] h-[11vw] rounded-full bg-sky-100 overflow-hidden">
+                                    <img class='w-full h-full object-cover' src= "/images/uploads/${elem.profile}"  alt="retry"  >
+                                </div>
+                                <div class="text">
+                                    <a class= "cursor-pointer" href="/openprofile/${elem.username}"><h3>${elem.username}</h3></a>       
+                                    <h4 class="text-xs opacity-30 leading-none">${elem.fullname}</h4>
+                                </div>
+                            </div>  
+                        </a>`
+                            })
+                            document.querySelector(".users").innerHTML = clutter;
+                        } else {
+
+                            document.querySelector(".users").innerHTML = "";
+                            document.querySelector(".users").innerHTML = ` <p id="result" style="color: rgba(255, 255, 255, 0.858);  " class="ml-2 text-sm font-light ">No results were found.</p>`
+                        }
+
+                    })
+            }
+
+
+            if (input.value === "") {
+                document.querySelector(".users").innerHTML = "";
+            }
+
+        })
+    </script>
+
+
+    <% include ./partials/footer.ejs %>
