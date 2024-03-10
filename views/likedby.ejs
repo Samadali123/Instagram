@@ -7,50 +7,71 @@
         <h3 class="text-xl font-medium">Likes </h3>
     </div>
 
+    <div class="searchusers relative bg-zinc-800 rounded-2xl   w-11/12  ml-10 py-2 px-2   flex   items-center  ">
+        <div class="left flex gap-3 w-4/5 items-center  w-full pl-3">
+            <i class="ri-search-2-line cursor-pointer   text-xs font-light"></i>
+            <input class=" inp bg-zinc-800  w-full" type="text" placeholder="Search" style="border: none; outline:none;'">
+        </div>
 
-    <div class="allusers py-5   ">clgit
+        <p><i class="ri-close-line cursor-pointer  hidden ml-12 cancel "></i></p>
+    </div>
 
-        <% post.likes.forEach(function(elem){  %>
-            <div class="user w-full relative mb-5  px-10 flex justify-between items-center ">
-
-                <div class="left flex gap-3 items-center  ">
-                    <a href="/openprofile/<%= elem.username %>">
-                        <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
-                            <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
-                        </div>
-                    </a>
-
-                    <div class="dets text-sm ">
-                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                            <h3>
-                                <%= elem.username %>
-                            </h3>
-                        </a>
-                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                            <p>
-                                <%= elem.fullname %>
-                            </p>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="right  text-center ">
-
-                    <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                        <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                        <%  }  else {  %>
-
-                            <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
-                            <%  }   %>
-
-                </div>
-
-            </div>
-            <%    })  %>
+    <div class="likes  relative  w-full flex justify-between px-11 pt-4">
+        <h3>LIKED BY</h3>
+        <P class="mr-10">
+            <%= post.likes.length %> likes
+        </P>
 
     </div>
 
+    <div class="allusers py-5   ">
 
+        <div class="users">
+            <% post.likes.forEach(function(elem){ %>
+                <div class="user w-full relative mb-5  px-10 flex justify-between items-center ">
+
+                    <div class="left flex gap-3 items-center  ">
+                        <a href="/openprofile/<%= elem.username %>">
+                            <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
+                            </div>
+                        </a>
+
+                        <div class="dets text-sm ">
+                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                <h3>
+                                    <%= elem.username %>
+                                </h3>
+                            </a>
+                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                <p>
+                                    <%= elem.fullname %>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="right  text-center ">
+
+                        <% if(elem.followers.indexOf(loginuser._id)===-1){ %>
+                            <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                            <% } else { %>
+
+                                <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
+                                <% } %>
+
+                    </div>
+
+                </div>
+
+                <% }) %>
+        </div>
+
+    </div>
+
+    <div class="likesusers relative py-5  ">
+
+    </div>
 
 
 
@@ -81,6 +102,89 @@
                     })
             }
         })
+
+
+        let inp = document.querySelector("input");
+        let cancel = document.querySelector(".cancel");
+        let postid = `<%= post._id %>`;
+        let users = document.querySelector(".users")
+        let likesclutter;
+        let loginuser = `<%= loginuser._id %>`;
+        let likesusers = document.querySelector(".likesusers");
+        let result = document.querySelector("#result");
+
+
+        function likedusers() {
+            inp.addEventListener("input", function(event) {
+                        cancel.style.display = "block";
+
+                        if (this.value == "") {
+                            cancel.style.display = "none";
+                            likesusers.innerHTML = "";
+                            return;
+                        }
+
+                        cancel.addEventListener("click", function(dets) {
+                            inp.value = "";
+                            users.style.display = "initial";
+                            likesusers.innerHTML = "";
+                        });
+
+                        users.style.display = "none";
+
+                        axios.get(`/post/likes/users/${postid}/${inp.value}`)
+                            .then(function(response) {
+                                    if (inp.value !== "" && response.data.length > 0) {
+                                        let likesclutter = "";
+                                        response.data.forEach(function(elem) {
+                                                    likesclutter += `<div class="user w-full relative mb-5 px-10 flex justify-between items-center ">
+                                    <div class="left flex gap-3 items-center">
+                                        <a href="">
+                                            <div class="profile cursor-pointer w-[50px] h-[50px] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/${elem.profile}" alt="">
+                                            </div>
+                                        </a>
+                                        <div class="dets text-sm">
+                                            <a href="" class="cursor-pointer">
+                                                <h3>${elem.username}</h3>
+                                            </a>
+                                            <a href="" class="cursor-pointer">
+                                                <p>${elem.fullname}</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="right text-center">
+                                        ${elem.followers.indexOf(loginuser) === -1 ?
+                                            `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                                            `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                                        }
+                                    </div>
+                                </div>`;
+                            });
+        
+                            likesusers.innerHTML = likesclutter;
+                        } else {
+                        
+                            const noResultsMsg = document.createElement("p");
+                            noResultsMsg.textContent = "No users were found";
+                            noResultsMsg.classList.add('ml-9')
+                            likesusers.innerHTML = "";
+                            likesusers.appendChild(noResultsMsg);
+
+                        }
+                    });
+            });
+        
+            cancel.addEventListener("click", function(dets) {
+        
+                const noResultsMsg = likesusers.querySelector("p");
+                if (noResultsMsg) {
+                    noResultsMsg.remove();
+                }
+            });
+        }
+        
+        likedusers();
     </script>
 
     <% include ./partials/footer.ejs %>

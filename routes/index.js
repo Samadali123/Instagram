@@ -7,6 +7,7 @@ const userModel = require(`./users`);
 const postModel = require(`./post`);
 const commentModel = require(`./comments`)
 const utils = require(`../utils/utils`);
+const { populate } = require('dotenv');
 
 
 passport.use(new localStrategy(userModel.authenticate()));
@@ -238,8 +239,6 @@ router.get(`/previous/comments/:post`, async(req, res, next) => {
 
 })
 
-
-
 // follow and unfollow a user 
 
 router.put(`/follow/:followeruser`, IsLoggedIn, async function(req, res, next) {
@@ -279,6 +278,45 @@ router.get(`/post/likes/:postId`, IsLoggedIn, async(req, res) => {
 });
 
 
+router.get(`/post/likes/users/:postId/:input`, IsLoggedIn, async(req, res) => {
+    try {
+        const post = await postModel.findById(req.params.postId);
+        await post.populate('likes');
+        const input = req.params.input;
+        const regex = new RegExp(`^${input}`, 'i');
+        const users = post.likes.filter(like => regex.test(like.username));
+        res.json(users);
 
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
+router.get('/followers/:userId', async(req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ username: req.session.passport.user })
+        const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
+        res.render(`follows`, { openprofileuser, loginuser, footer: true });
+
+    } catch (err) {
+        res.status(200).send({ message: "Error while fetching the followers of this user" })
+    }
+});
+
+
+router.get('/followings/:userId', async(req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ username: req.session.passport.user })
+        const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
+        res.render(`follows`, { openprofileuser, loginuser, footer: true });
+
+    } catch (err) {
+        res.status(200).send({ message: "Error while fetching the followings of this user" })
+    }
+});
 
 module.exports = router;
