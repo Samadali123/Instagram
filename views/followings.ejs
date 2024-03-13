@@ -1,0 +1,438 @@
+<% include ./partials/header.ejs %>
+
+    <div class="container relative w-full h-full ">
+        <div style="z-index: 999;" class="header fixed top-[3%] w-full h-[14%]  px-7 ">
+            <div class="upper flex gap-6 items-center">
+                <a href="/openprofile/<%= openprofileuser.username %>">
+                    <p><i class="ri-arrow-left-line text-lg font-light"></i></p>
+                </a>
+                <h3 class="text-2xl font-medium">
+                    <%= openprofileuser.username %>
+                </h3>
+            </div>
+            <div class="bottom flex gap-6  items-center mt-3  cursor-pointer">
+                <p id="followers" class="text-lg">
+                    <%= openprofileuser.followers.length %> followers</p>
+                <p id="following" class="text-lg" style="border-bottom: 1px solid silver;">
+                    <%= openprofileuser.following.length %> following</p>
+            </div>
+        </div>
+
+        <div class="followerscontainer hidden  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+            <div id="followersinp" class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
+                <div class="left flex items-center gap-3  w-11/12 ">
+                    <p><i class="ri-search-line"></i></p>
+                    <input class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+                </div>
+                <div class="right pr-8">
+                    <p><i class="cancel cursor-pointer ri-close-line hidden"></i></p>
+                </div>
+            </div>
+
+            <div id="followerusers" class="users mt-6 ">
+
+                <% openprofileuser.followers.forEach(function(elem){  %>
+
+                    <div class="user mt-2 w-full relative mb-5  flex justify-between items-center ">
+
+                        <div class="left flex gap-3 items-center  ">
+                            <a href="/openprofile/<%= elem.username %>">
+                                <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                    <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
+                                </div>
+                            </a>
+
+                            <div class="dets text-sm ">
+                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                    <h3>
+                                        <%= elem.username %>
+                                    </h3>
+                                </a>
+                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                    <p>
+                                        <%= elem.fullname %>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="right  text-center pr-3 ">
+
+
+                            <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
+                                <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                                <%    }   else{   %>
+
+                                    <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
+                                    <%  }  %>
+
+                        </div>
+
+                    </div>
+                    <% })  %>
+            </div>
+
+            <div class="searchfollowers py-6">
+
+            </div>
+
+        </div>
+
+
+        <div class="followingcontainer   relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+            <div class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
+                <div class="left flex items-center gap-3  w-11/12 ">
+                    <p><i class="ri-search-line"></i></p>
+                    <input id="followinginp" class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+                </div>
+                <div class="right pr-8">
+                    <p><i class="cancel ri-close-line hidden"></i></p>
+                </div>
+            </div>
+
+
+            <div id="followingusers" class="users mt-6">
+
+                <% openprofileuser.following.forEach(function(elem){  %>
+
+                    <div class="user w-full relative mb-5  flex justify-between items-center ">
+
+                        <div class="left flex gap-3 items-center  ">
+                            <a href="/openprofile/<%= elem.username %>">
+                                <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                    <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
+                                </div>
+                            </a>
+
+                            <div class="dets text-sm ">
+                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                    <h3>
+                                        <%= elem.username %>
+                                    </h3>
+                                </a>
+                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                    <p>
+                                        <%= elem.fullname %>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="right  text-center pr-3 ">
+
+
+                            <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
+                                <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                                <%    }   else{   %>
+
+                                    <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
+                                    <%  }  %>
+
+                        </div>
+
+                    </div>
+
+
+                    <% })  %>
+
+
+
+            </div>
+
+            <div class="searchfollowing py-6">
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+    <style>
+        .followerscontainer::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .followingcontainer::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        let loginuser = `<%= loginuser._id %>`;
+
+        const following = document.querySelector("#following")
+        const followers = document.querySelector("#followers")
+        const followerscontainer = document.querySelector(".followerscontainer")
+        const followingcontainer = document.querySelector(".followingcontainer")
+        let user;
+        let openprofileuser = `<%= openprofileuser.username %>`;
+        let cancel1 = document.querySelector(".followerscontainer .cancel");
+        let cancel2 = document.querySelector(".followingcontainer .cancel");
+
+        let followersinput = document.querySelector("#followersinp");
+        let followinginput = document.querySelector("#followinginp");
+        let input1;
+        let input2;
+        let followerusers = document.querySelector("#followerusers");
+        let followingusers = document.querySelector("#followingusers");
+        let followersclutter;
+        let followingclutter;
+        let searchfollowers = document.querySelector(".searchfollowers");
+        let searchfollowing = document.querySelector(".searchfollowing");
+
+
+
+        function onOffAndFollowUnfollow() {
+
+
+            following.addEventListener("click", (dets) => {
+                followerscontainer.style.display = "none";
+                followingcontainer.style.display = "block";
+                followers.style.borderBottom = "none";
+                following.style.borderBottom = "1px solid silver";
+            })
+
+
+            followers.addEventListener("click", (dets) => {
+                followerscontainer.style.display = "block";
+                followingcontainer.style.display = "none";
+                followers.style.borderBottom = "1px solid silver";
+                following.style.borderBottom = "none";
+            })
+
+
+            document.querySelector("#followerusers ").addEventListener("click", function(dets) {
+                if (dets.target.classList.contains('follow')) {
+                    const btn = dets.target;
+                    user = dets.target.dataset.user
+                    axios.put(`/follow/${user}`)
+                        .then(function(response) {
+                            if (btn.classList.contains('bg-blue-600')) {
+                                btn.classList.add('bg-zinc-800');
+                                btn.classList.remove('bg-blue-600');
+
+                            } else {
+                                btn.classList.remove('bg-zinc-800');
+                                btn.classList.add('bg-blue-600');
+
+                            }
+
+
+                            if (btn.textContent === "Follow") {
+                                btn.textContent = "Following";
+                            } else {
+                                btn.textContent = "Follow";
+                            }
+
+
+                        })
+
+
+                }
+            })
+
+
+            document.querySelector("#followingusers ").addEventListener("click", function(dets) {
+                if (dets.target.classList.contains('follow')) {
+                    const btn = dets.target;
+                    const user = dets.target.dataset.user
+                    axios.put(`/follow/${user}`)
+                        .then(function(response) {
+                            if (btn.classList.contains('bg-blue-600')) {
+                                btn.classList.add('bg-zinc-800');
+                                btn.classList.remove('bg-blue-600');
+
+                            } else {
+                                btn.classList.remove('bg-zinc-800');
+                                btn.classList.add('bg-blue-600');
+
+                            }
+
+
+                            if (btn.textContent === "Follow") {
+                                btn.textContent = "Following";
+                            } else {
+                                btn.textContent = "Follow";
+                            }
+                        })
+                }
+            })
+        }
+
+        onOffAndFollowUnfollow();
+
+
+
+
+        function searchFollower() {
+            followersinput.addEventListener("input", function(event) {
+                        input1 = event.target.value;
+                        cancel1.style.display = "block"
+
+                        axios.get(`/search/${openprofileuser}/followers/${input1}`)
+                            .then(function(data) {
+                                    followerusers.style.display = "none";
+
+                                    if (input1.value !== "" && data.data.length > 0) {
+                                        followersclutter = "";
+                                        data.data.forEach(function(elem) {
+                                                    followersclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
+
+                            <div class="left flex gap-3 items-center  ">
+                                <a href="/openprofile/${elem.username}">
+                                    <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                        <img class="w-full h-full object-cover  object-center" src="/images/uploads/${elem.profile}" alt="">
+                                    </div>
+                                </a>
+        
+                                <div class="dets text-sm ">
+                                    <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                        <h3>
+                                            ${elem.username}
+                                        </h3>
+                                    </a>
+                                    <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                        <p>
+                                            ${elem.fullname}
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+        
+                            <div class="right  text-center pr-3 ">
+        
+                                ${elem.followers.indexOf(loginuser) === -1 ?
+                                    `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                                    `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                                }
+    
+
+                            </div>
+        
+                        </div>`
+                    })
+
+                    searchfollowers.innerHTML = followersclutter;
+
+                } else {
+
+                    const noResultsMsg = document.createElement("p");
+                    noResultsMsg.textContent = "No users were found";
+                    noResultsMsg.classList.add('ml-3')
+                    searchfollowers.innerHTML = "";
+                    searchfollowers.appendChild(noResultsMsg);
+
+                }
+
+            })
+
+            cancel1.addEventListener("click", function(e){
+                followersinput.value = "";
+                followerusers.style.display = "initial";
+                const noResultsMsg = searchfollowers.querySelector("p");
+                if (noResultsMsg) {
+                    noResultsMsg.remove();
+                }
+                searchfollowers.innerHTML = "";
+            });
+
+    })
+
+    
+        }
+      
+
+        searchFollower()
+
+
+
+
+
+
+
+
+        function searchFollowing(){
+            followinginput.addEventListener("input", function(event) {
+                input2 = event.target.value;
+                cancel2.style.display = "block"
+
+                axios.get(`/search/${openprofileuser}/following/${input2}`)
+                    .then(function(data) {
+                        console.log(data)
+                            followingusers.style.display = "none";
+                            if (input2.value !== "" && data.data.length > 0) {
+                                followingclutter = "";
+                                data.data.forEach(function(elem) {
+                                            followingclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
+
+                    <div class="left flex gap-3 items-center  ">
+                        <a href="/openprofile/${elem.username}">
+                            <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                <img class="w-full h-full object-cover  object-center" src="/images/uploads/${elem.profile}" alt="">
+                            </div>
+                        </a>
+
+                        <div class="dets text-sm ">
+                            <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                <h3>
+                                    ${elem.username}
+                                </h3>
+                            </a>
+                            <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                <p>
+                                    ${elem.fullname}
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="right  text-center pr-3 ">
+
+                        ${elem.followers.indexOf(loginuser) === -1 ?
+                            `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                            `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                        }
+
+
+                    </div>
+
+                </div>`
+            })
+
+            searchfollowing.innerHTML = followingclutter;
+
+        } else {
+
+            const noResultsMsg = document.createElement("p");
+            noResultsMsg.textContent = "No users were found";
+            noResultsMsg.classList.add('ml-3')
+            searchfollowing.innerHTML = "";
+            searchfollowing.appendChild(noResultsMsg);
+
+        }
+
+    })
+
+    cancel2.addEventListener("click", function(e){
+        followinginput.value = "";
+        followingusers.style.display = "initial";
+        const noResultsMsg = searchfollowing.querySelector("p");
+        if (noResultsMsg) {
+            noResultsMsg.remove();
+        }
+        searchfollowing.innerHTML = "";
+    });
+
+})
+
+        }
+
+        searchFollowing();
+    </script>
+    <% include ./partials/footer.ejs %>

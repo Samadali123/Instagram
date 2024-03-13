@@ -140,39 +140,7 @@
             </div>
 
             <div class="searchfollowing py-6">
-                <div class="user w-full relative mb-5  flex justify-between items-center ">
 
-                    <div class="left flex gap-3 items-center  ">
-                        <a href="">
-                            <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
-                                <img class="w-full h-full object-cover  object-center" src="/images/uploads/36fd5ea7-0860-4901-80c3-a12f8d86d5d6.avif" alt="">
-                            </div>
-                        </a>
-
-                        <div class="dets text-sm ">
-                            <a href="" class="cursor-pointer">
-                                <h3>
-                                    username
-                                </h3>
-                            </a>
-                            <a href="" class="cursor-pointer">
-                                <p>
-                                    fullname
-                                </p>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="right  text-center pr-3 ">
-
-
-
-                        <button data-user="" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
-
-
-                    </div>
-
-                </div>
 
             </div>
         </div>
@@ -381,5 +349,90 @@
       
 
         searchFollower()
+
+
+
+
+
+
+
+
+        function searchFollowing(){
+            followinginput.addEventListener("input", function(event) {
+                input2 = event.target.value;
+                cancel2.style.display = "block"
+
+                axios.get(`/search/${openprofileuser}/following/${input2}`)
+                    .then(function(data) {
+                        console.log(data)
+                            followingusers.style.display = "none";
+                            if (input2.value !== "" && data.data.length > 0) {
+                                followingclutter = "";
+                                data.data.forEach(function(elem) {
+                                            followingclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
+
+                    <div class="left flex gap-3 items-center  ">
+                        <a href="/openprofile/${elem.username}">
+                            <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
+                                <img class="w-full h-full object-cover  object-center" src="/images/uploads/${elem.profile}" alt="">
+                            </div>
+                        </a>
+
+                        <div class="dets text-sm ">
+                            <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                <h3>
+                                    ${elem.username}
+                                </h3>
+                            </a>
+                            <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                <p>
+                                    ${elem.fullname}
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="right  text-center pr-3 ">
+
+                        ${elem.followers.indexOf(loginuser) === -1 ?
+                            `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                            `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                        }
+
+
+                    </div>
+
+                </div>`
+            })
+
+            searchfollowing.innerHTML = followingclutter;
+
+        } else {
+
+            const noResultsMsg = document.createElement("p");
+            noResultsMsg.textContent = "No users were found";
+            noResultsMsg.classList.add('ml-3')
+            searchfollowing.innerHTML = "";
+            searchfollowing.appendChild(noResultsMsg);
+
+        }
+
+    })
+
+    cancel2.addEventListener("click", function(e){
+        followinginput.value = "";
+        followingusers.style.display = "initial";
+        const noResultsMsg = searchfollowing.querySelector("p");
+        if (noResultsMsg) {
+            noResultsMsg.remove();
+        }
+        searchfollowing.innerHTML = "";
+    });
+
+})
+
+        }
+
+        searchFollowing();
     </script>
     <% include ./partials/footer.ejs %>
