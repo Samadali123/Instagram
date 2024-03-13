@@ -287,11 +287,11 @@ router.get(`/post/likes/users/:postId/:input`, IsLoggedIn, async(req, res) => {
         const users = post.likes.filter(like => regex.test(like.username));
         res.json(users);
 
-
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
+
 });
 
 
@@ -318,5 +318,30 @@ router.get('/followings/:userId', async(req, res) => {
         res.status(200).send({ message: "Error while fetching the followings of this user" })
     }
 });
+
+
+
+
+
+router.get(`/search/:openuser/followers/:input`, IsLoggedIn, async(req, res) => {
+    try {
+        const openUser = req.params.openuser;
+        const input = req.params.input;
+        const regex = new RegExp(`^${input}`, 'i');
+        const user = await userModel.findOne({ username: openUser }).populate('followers');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const followers = user.followers.filter(follower => regex.test(follower.username));
+        res.json(followers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 
 module.exports = router;

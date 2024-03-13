@@ -77,12 +77,17 @@
 
                         <div class="right px-2">
 
-                            <% if(elem.user.followers.indexOf(loginuser._id) === -1){  %>
-                                <button data-user="<%= elem.user.username %>" class="follow text-white bg-blue-600 px-3 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                                <%  }  else {  %>
 
-                                    <button data-user="<%= elem.user.username  %>" class="follow text-white bg-zinc-800 px-3 text-sm font-light " style="border-radius: 5px;">Following</button>
-                                    <%  }   %>
+                            <% if(elem.user.username !== loginuser.username) { %>
+                                <% if(elem.user.followers.includes(loginuser._id)){  %>
+                                    <button data-user="<%= elem.user.username %>" class="follow text-white bg-zinc-800 px-3 text-sm font-light" style="border-radius: 5px;">Following</button>
+                                    <%  } else {  %>
+                                        <button data-user="<%= elem.user.username %>" class="follow text-white bg-blue-600 px-3 text-sm font-light" style="border-radius: 5px;">Follow</button>
+                                        <% } %>
+                                            <% } %>
+
+
+
 
                         </div>
 
@@ -219,6 +224,7 @@
 
     <script>
         let loginuser = `<%= loginuser._id  %>`;
+        let loginusername = `<%= loginuser.username %>`;
 
 
         function handlelike() {
