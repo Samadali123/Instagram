@@ -306,7 +306,7 @@ router.get('/followers/:userId', async(req, res) => {
         res.status(200).send({ message: "Error while fetching the followers of this user" })
     }
 });
-
+roadcls
 
 router.get('/followings/:userId', async(req, res) => {
     try {
