@@ -107,7 +107,7 @@
                                     <i data-id="<%= elem._id %>" class=" like ri-heart-3-fill text-red-500 cursor-pointer"></i>
                                     <%    }  %>
 
-                                        <i data-comments="<%= elem.comments.length %>" data-post="<%= elem %>" data-postid="<%= elem._id %>" id="addtocomment" class="ri-chat-3-line cursor-pointer"></i>
+                                        <a href="/view/comments/<%= elem._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
                                         <i class="ri-share-circle-line"></i>
                         </div>
                         <% if(loginuser.savedPosts.indexOf(elem._id) === -1){ %>
@@ -126,6 +126,7 @@
                         <%= elem.caption %>
                     </h2>
 
+                    <a href="/view/comments/<%= elem._id %>">
                     <p id="view-comments" data-all="<%= elem.comments.length %>" data-post="<%= elem._id %>" class="views ml-3.5 font-light text-sm cursor-pointer" style="color: rgba(192, 192, 192, 0.58);">
                         <% if(elem.comments.length == 0){  %>
                             no comments.
@@ -136,6 +137,7 @@
                                     <%  } %>
 
                     </p>
+                   </a>
 
 
                     <div class="latest-comment relative pl-3 ">
@@ -153,34 +155,6 @@
                         </div>
                         <%   }  %>
 
-                            <div class="comments-container hidden w-full  h-screen  bg-zinc-900 absolute top-[0%] left-[0%]  z-[10000]">
-                                <div class="top w-full h-[5%]  flex  items-center  justify-between pb-3 " style="border-bottom: 1px solid rgba(192, 192, 192, 0.103);">
-                                    <i id="back" class="ri-arrow-left-line text-lg font-light cursor-pointer "></i>
-                                    <h3 class="text-lg font-normal  relative right-[18%] ">Comments</h3>
-                                </div>
-
-                                <div class="middle w-full  h-[76%]  relative overflow-x-hidden overflow-y-scroll">
-                                    <div class="center text-center  my-[8vw]">
-                                        <h2 class="text-sm font-light"><span class="text-2xl font-semibold">No comments yet.</span> <br>Start the conversation.</h2>
-                                    </div>
-
-                                    <div class="all-comments py-7 px-5 ">
-
-                                    </div>
-
-
-                                </div>
-
-                                <div class="bottom  w-full  h-[10%] flex items-center gap-4" style="border-top: 1px solid rgba(192, 192, 192, 0.103); z-index: 999;">
-                                    <div class="loginprofile w-[55px] h-[55px] rounded-full overflow-hidden relative ">
-                                        <img class="w-full h-full object-cover  absolute " src="/images/uploads/<%= loginuser.profile %>" alt="">
-                                    </div>
-                                    <input id="commentinp" class="cu caption-bottom bg-zinc-900 w-[70%]" autocomplete="off" type="text" placeholder="Add a comment..." style="outline: none; border:none; ">
-                                    <div id="commenticon" class="icon hidden ml-4 px-2.5 py-0.5 rounded-3xl flex items-center justify-center " style="background-color: royalblue;">
-                                        <i class="ri-arrow-up-line cursor-pointer"></i>
-                                    </div>
-                                </div>
-                            </div>
 
                 </div>
 
@@ -240,15 +214,11 @@
                                 icon.classList.add('ri-heart-3-fill', 'text-red-500');
                                 icon.classList.remove('ri-heart-3-line')
                                 icon.classList.add('scale-125');
-
-
                             } else {
 
                                 icon.classList.add('ri-heart-3-line');
                                 icon.classList.remove('ri-heart-3-fill', 'text-red-500');
                                 icon.classList.add('scale-100');
-
-
                             }
 
                             e.target.parentNode.parentNode.parentNode.querySelector('.total-likes').textContent = response.data.likes.length + "   likes";
@@ -284,183 +254,6 @@
 
         saveandunsavepost();
 
-
-
-        let commentsLength;
-        let post;
-        let postid;
-        let previouscomments;
-
-        document.querySelector(".posts").addEventListener("click", function(dets) {
-                    if (dets.target.id === "addtocomment") {
-                        commentsLength = dets.target.dataset.comments;
-                        post = dets.target.dataset.post;
-                        postid = dets.target.dataset.postid;
-
-                        document.querySelector(".comments-container").style.display = "initial"
-                        document.querySelector(".story").style.display = "none";
-                        document.querySelector(".head").style.display = "none";
-
-                        axios.get(`/previous/comments/${postid}`)
-                            .then(function(data) {
-                                    previouscomments = "";
-                                    data.data.forEach(function(previous) {
-                                                previouscomments += `<div class="comment-one mb-4 flex justify-between w-[85%] ">
-                                <div class="left flex gap-2 ">
-                                    <a  href= "/openprofile/${previous.user.username}"><div class="comment-profile mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
-                                        <img class="w-full h-full object-cover rounded-full" src="/images/uploads/${previous.user.profile}" alt="">
-                                    </div></a>
-                                        
-                                      
-                                    <div class="comment-dets flex flex-col ">
-                                         <a class= "cursor-pointer" href= "/openprofile/${previous.user.username}"> <h3>${previous.user.username}</h3> </a>
-                                        <p class="text-sm font-light whitespace-wrap max-w-xl"> ${previous.text}
-                                        </p>
-                                    </div>
-                                </div>
-
-                            <div  class="right" 
-                            ${previous.likes.indexOf(loginuser) === -1 ?
-                                `<p><i class="ri-heart-3-line text-silver-600 text-lg"></i></p>` :
-                                `<p><i class="ri-heart-3-fill text-lg"></i></p>`
-                              }
-                           </div>
-                            </div>`
-                        })
-
-                        document.querySelector(".all-comments").innerHTML = previouscomments;
-
-                    });
-
-
-
-                if (commentsLength > 0) {
-                    document.querySelector(".center").style.display = "none";
-
-                } else {
-                    document.querySelector(".all-comments").style.display = "none";
-
-                }
-
-            }
-        })
-
-
-        let commentinp = document.querySelector("#commentinp");
-        let commentIcon = document.querySelector("#commenticon");
-        let text;
-
-
-        commentinp.addEventListener("input", function(e) {
-            commentIcon.style.display = "initial";
-            text = this.value;
-        })
-
-        let clutter;
-        let viewcomments2;
-
-        function uploadcomment() {
-            commentIcon.addEventListener("click", function(ev) {
-                viewcomments2 = ev.target.parentNode.parentNode.previousElementSibling.previousElementSibling.previousElementSibling;
-                
-                commentinp.value = "";
-                document.querySelector(".center").style.display = "none";
-
-                axios.post(`/comment/${text}/${postid}`)
-                    .then(response => {
-                        clutter = "";
-
-                        viewcomments2.textContent = `view all ${response.data.post.comments.length} comments`;
-
-                        document.querySelector(".all-comments").innerHTML += `<div class="comment-one mb-4 flex justify-between w-[85%] ">
-                            <div class="left flex gap-2 ">
-                               <a  href= "/openprofile/${response.data.user.username}"> <div class=" comment-profile mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-cover rounded-full" src="/images/uploads/${response.data.user.profile}" alt="">
-                            </div></a>
-                                    
-                                  
-                                <div class="comment-dets flex flex-col ">
-                                     <a  href= "/openprofile/${response.data.user.username}"> <h3>${response.data.user.username}</h3></a>
-                                    <p class="text-sm font-light whitespace-wrap max-w-xl"> ${response.data.text}
-                                    </p>
-                                </div>
-                            </div>
-                            
-                        <div  class="right" 
-                        ${response.data.likes.indexOf(loginuser) === -1 ?
-                            `<p><i class="ri-heart-3-line text-silver-600 text-lg"></i></p>` :
-                            `<p><i class="ri-heart-3-fill text-lg"></i></p>`
-                          }
-                       </div>
-                        </div>`
-
-
-
-                    })
-
-
-            })
-
-
-
-            document.querySelector("#back").addEventListener("click", function(e) {
-                document.querySelector(".comments-container").style.display = "none";
-                document.querySelector(".story").style.display = "flex";
-                document.querySelector(".head").style.display = "flex";
-                document.querySelector(".comments-container .bottom").style.display = "flex";
-                
-
-            })
-        }
-        uploadcomment();
-        let totalcomments;
-        document.querySelector(".posts").addEventListener("click", function(e) {
-                    if (e.target.classList.contains("views")) {
-                         document.querySelector(".comments-container .bottom").style.display = "none";
-
-                        if (e.target.dataset.all >= 1) {
-                            var postid = e.target.dataset.post
-                            document.querySelector(".comments-container").style.display = "block";
-                            document.querySelector(".story").style.display = "none";
-                            document.querySelector(".head").style.display = "none";
-                            document.querySelector(".center").style.display = "none";
-                            axios.get(`/comments/${postid}`)
-                                .then(function(allcomments) {
-                                        totalcomments = "";
-                                        allcomments.data.reverse().forEach(function(one) {
-                                                    totalcomments += ` <div class="comment-one mb-4 flex justify-between w-[85%] ">
-                                    <div class="left flex gap-2 ">
-                                       <a href= "/openprofile/${one.user.username}"> <div class=" mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
-                                        <img class="w-full h-full object-cover rounded-full" src="/images/uploads/${one.user.profile}" alt="">
-                                    </div></a>
-                                            
-                                          
-                                        <div class="comment-dets flex flex-col ">
-                                           <a href= "/openprofile/${one.user.username}"> <h3>${one.user.username}</h3></a>
-                                            <p class="text-sm font-light whitespace-wrap max-w-xl"> ${one.text}
-                                            </p>
-                                        </div>
-                                    </div>
-                                   
-                                
-                                <div  class="right" 
-                                ${one.likes.indexOf(loginuser) === -1 ?
-                                    `<p><i class="ri-heart-3-line text-silver-600 text-lg"></i></p>` :
-                                    `<p><i class="ri-heart-3-fill text-lg"></i></p>`
-                                  }
-
-                                </div>
-                                
-                                </div> `;
-
-                            })
-
-                            document.querySelector(".all-comments").innerHTML = totalcomments;
-
-                        })
-                }
-            }
-        })
 
         let addCommentIcon;
         let data2;
@@ -498,111 +291,110 @@
         });
 
 
-        
 
-           function heartaninmation(){
-            
-                document.querySelector(".posts")
-                  .addEventListener("click", function (ev) {
-                    if (ev.target.classList.contains('postimg')) {  
-                      var hearticon = document.createElement('i');
-                      hearticon.classList.add('ri-heart-3-fill', 'text-3xl', 'text-white-600', 'z-[34]');
-                      hearticon.style.scale = 2.5;
-                      hearticon.style.position = 'absolute';
-                      hearticon.style.left = "50%";
-                      hearticon.style.top = "50%";
-                      hearticon.style.transform = "translate(-50%, -50%)";
 
-                      
-                       
-                
-                      ev.target.parentNode.appendChild(hearticon);
-          
-                      axios.get(`/like/post/${ev.target.dataset.id}`)
-                      .then(function(response){
-                        var icon = ev.target.parentNode.parentNode.querySelector('.like');
-                        if (icon.classList.contains('ri-heart-3-line')) {
-                            icon.classList.remove('ri-heart-3-line');
-                            icon.classList.add('ri-heart-3-fill', 'text-red-500');
-                          }
-                          else {
-                            icon.classList.add('ri-heart-3-line');
-                            icon.classList.remove('ri-heart-3-fill', 'text-red-500');
-                          }
-          
-                          var likes = ev.target.parentNode.parentNode.querySelector(".total-likes");
-                          likes.textContent = response.data.likes.length + ' likes';
-                      })
-          
-                      gsap.from(hearticon, {
-                        scale :0,
-                        ease: 'linear',
-                        duration :1,
-                        onComplete: function(){
-                          ev.target.parentNode.removeChild(hearticon);
-                        }
-                      })
+        function heartaninmation() {
+
+            document.querySelector(".posts")
+                .addEventListener("click", function(ev) {
+                    if (ev.target.classList.contains('postimg')) {
+                        var hearticon = document.createElement('i');
+                        hearticon.classList.add('ri-heart-3-fill', 'text-3xl', 'text-white-600', 'z-[34]');
+                        hearticon.style.scale = 2.5;
+                        hearticon.style.position = 'absolute';
+                        hearticon.style.left = "50%";
+                        hearticon.style.top = "50%";
+                        hearticon.style.transform = "translate(-50%, -50%)";
+
+
+
+
+                        ev.target.parentNode.appendChild(hearticon);
+
+                        axios.get(`/like/post/${ev.target.dataset.id}`)
+                            .then(function(response) {
+                                var icon = ev.target.parentNode.parentNode.querySelector('.like');
+                                if (icon.classList.contains('ri-heart-3-line')) {
+                                    icon.classList.remove('ri-heart-3-line');
+                                    icon.classList.add('ri-heart-3-fill', 'text-red-500');
+                                } else {
+                                    icon.classList.add('ri-heart-3-line');
+                                    icon.classList.remove('ri-heart-3-fill', 'text-red-500');
+                                }
+
+                                var likes = ev.target.parentNode.parentNode.querySelector(".total-likes");
+                                likes.textContent = response.data.likes.length + ' likes';
+                            })
+
+                        gsap.from(hearticon, {
+                            scale: 0,
+                            ease: 'linear',
+                            duration: 1,
+                            onComplete: function() {
+                                ev.target.parentNode.removeChild(hearticon);
+                            }
+                        })
                     }
-                  })
-              }
-          
-        
-          
-           heartaninmation();
+                })
+        }
 
-        
-       
+
+
+        heartaninmation();
+
+
+
         function followUnfollow() {
             document.querySelectorAll(".post").forEach(post => {
                 post.addEventListener("click", function(event) {
                     if (event.target.classList.contains("follow")) {
                         let user = event.target.dataset.user;
                         let btn = event.target;
-        
+
                         axios.put(`/follow/${user}`)
-                        .then(function(data) {
-                            console.log(data.data);
-        
-                            // Update the button clicked
-                            if (btn.classList.contains('bg-blue-600')) {
-                                btn.classList.add('bg-zinc-800');
-                                btn.classList.remove('bg-blue-600');
-                            } else {
-                                btn.classList.remove('bg-zinc-800');
-                                btn.classList.add('bg-blue-600');
-                            }
-        
-                            if (btn.textContent === "Follow") {
-                                btn.textContent = "Following";
-                            } else {
-                                btn.textContent = "Follow";
-                            }
-        
-                            // Update other buttons associated with the same user
-                            let allButtons = document.querySelectorAll(`.post .follow[data-user="${user}"]`);
-                            allButtons.forEach(otherBtn => {
-                                if (otherBtn !== btn) { // Avoid updating the clicked button again
-                                    if (otherBtn.classList.contains('bg-blue-600')) {
-                                        otherBtn.classList.add('bg-zinc-800');
-                                        otherBtn.classList.remove('bg-blue-600');
-                                    } else {
-                                        otherBtn.classList.remove('bg-zinc-800');
-                                        otherBtn.classList.add('bg-blue-600');
-                                    }
-        
-                                    if (otherBtn.textContent === "Follow") {
-                                        otherBtn.textContent = "Following";
-                                    } else {
-                                        otherBtn.textContent = "Follow";
-                                    }
+                            .then(function(data) {
+                                console.log(data.data);
+
+                                // Update the button clicked
+                                if (btn.classList.contains('bg-blue-600')) {
+                                    btn.classList.add('bg-zinc-800');
+                                    btn.classList.remove('bg-blue-600');
+                                } else {
+                                    btn.classList.remove('bg-zinc-800');
+                                    btn.classList.add('bg-blue-600');
                                 }
+
+                                if (btn.textContent === "Follow") {
+                                    btn.textContent = "Following";
+                                } else {
+                                    btn.textContent = "Follow";
+                                }
+
+                                // Update other buttons associated with the same user
+                                let allButtons = document.querySelectorAll(`.post .follow[data-user="${user}"]`);
+                                allButtons.forEach(otherBtn => {
+                                    if (otherBtn !== btn) { // Avoid updating the clicked button again
+                                        if (otherBtn.classList.contains('bg-blue-600')) {
+                                            otherBtn.classList.add('bg-zinc-800');
+                                            otherBtn.classList.remove('bg-blue-600');
+                                        } else {
+                                            otherBtn.classList.remove('bg-zinc-800');
+                                            otherBtn.classList.add('bg-blue-600');
+                                        }
+
+                                        if (otherBtn.textContent === "Follow") {
+                                            otherBtn.textContent = "Following";
+                                        } else {
+                                            otherBtn.textContent = "Follow";
+                                        }
+                                    }
+                                });
                             });
-                        });
                     }
                 });
             });
         }
-        
+
         followUnfollow();
     </script>
 
