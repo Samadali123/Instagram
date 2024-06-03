@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram | Page Not Found</title>
+    <title>Instagram | Server Down</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <style>
@@ -27,16 +27,9 @@
         }
         
         .heading {
-            font-size: 6rem;
-            font-weight: bold;
-            color: #e5e7eb;
-            margin-bottom: 1rem;
-        }
-        
-        .subheading {
             font-size: 2rem;
             font-weight: bold;
-            color: #e5e7eb;
+            color: #fff;
             margin-bottom: 1rem;
         }
         
@@ -63,9 +56,6 @@
         
         @media (max-width: 768px) {
             .heading {
-                font-size: 4rem;
-            }
-            .subheading {
                 font-size: 1.5rem;
             }
             .text {
@@ -78,19 +68,16 @@
     </style>
 </head>
 
-<body>
-
+<body class="bg-gray-900 min-h-screen flex justify-center items-center">
     <section class="section">
         <div class="container">
             <div class="text-center">
-                <h1 class="heading">404</h1>
-                <p class="subheading">Page not found!</p>
-                <p class="text">Sorry, we can't find that page. You'll find lots to explore on the home page.</p>
-                <a href="/login" class="btn">Back to Homepage</a>
+                <h1 class="heading">Server Down</h1>
+                <p class="text">Our servers are currently experiencing issues. Please try again later.</p>
+                <a href="/login" class="btn">Log In</a>
             </div>
         </div>
     </section>
-
 </body>
 
 </html>

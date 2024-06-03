@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
-
-
 mongoose.connect("mongodb://127.0.0.1:27017/Instagram")
-const plm = require(`passport-local-mongoose`);
+
 
 const userSchema = mongoose.Schema({
 
@@ -10,11 +8,15 @@ const userSchema = mongoose.Schema({
         type: String,
         require: [true, "username is required "],
         minLength: [3, "username must be at least 3 characters"],
+        maxLength: [15, "username should not exceeds 15 charcaters."],
+        unique: [true, "This username is not available"],
+        trim: true
     },
 
     fullname: {
         type: String,
         require: [true, "fullname is required "],
+
     },
 
     email: {
@@ -32,13 +34,12 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         require: [true, "password is required"],
-        minLength: [3, "password must be at least 3 characters"],
-        maxLength: [15, "password must be at most 15 characters"],
-        match: [
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,15}$/,
-            "Invalid password format."
-
-        ]
+        // minLength: [3, "password must be at least 3 characters"],
+        // maxLength: [15, "password should not exceeds 15 characters"],
+        // match: [
+        //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,15}$/,
+        //     "Invalid password format."
+        // ]
     },
 
     bio: String,
@@ -69,10 +70,5 @@ const userSchema = mongoose.Schema({
 
 
 })
-
-
-
-userSchema.plugin(plm);
-
 
 module.exports = mongoose.model(`user`, userSchema);

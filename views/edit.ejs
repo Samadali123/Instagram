@@ -19,11 +19,11 @@
         <div class="gap-5 px-4 mt-10">
             <h3 class="text-lg leading-none">Edit Account Details</h3>
             <hr class="opacity-30 my-3">
-            <form class="w-full" action="/update" method="post">
-                <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username" value="<%= loginuser.username %>">
-                <input class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="name" name="name" value="<%= loginuser.fullname %>">
-                <textarea class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900 resize-none" placeholder="Bio" name="bio"><%= loginuser.bio %></textarea>
-                <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
+            <form class="w-full" action="/edit/profile" method="post">
+                <input required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username" value="<%= loginuser.username %>">
+                <input required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="full name" name="fullname" value="<%= loginuser.fullname %>">
+                <textarea required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900 resize-none" placeholder="Bio" name="bio"><%= loginuser.bio %></textarea>
+                <input class="w-full bg-blue-500 cursor-pointer px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
             </form>
         </div>
     </div>
