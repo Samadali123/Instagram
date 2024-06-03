@@ -27,10 +27,13 @@
 
 
                                     <div class="comment-dets flex flex-col ">
-                                        <a class="cursor-pointer" href="/openprofile/<%= elem.user.username %>">
+                                        <a class="cursor-pointer flex gap-1" href="/openprofile/<%= elem.user.username %>">
                                             <h3>
                                                 <%= elem.user.username %>
                                             </h3>
+                                            <p class="font-light ">
+                                                <%= elem.formattedDate %>
+                                            </p>
                                         </a>
                                         <p class="text-sm font-light whitespace-wrap max-w-xl">
                                             <%= elem.text %>
@@ -109,14 +112,17 @@
 
                             
                             <div class="comment-dets flex flex-col ">
-                                <a class="cursor-pointer" href="">
+                                <a class="cursor-pointer flex gap-1" href="">
                                     <h3>
                                         ${response.data.user.username}
                                     </h3>
+                                    
+                                    <h3>
+                                       ${response.data.formattedDate}
+                                    </h3>
+
                                 </a>
-                                <p class="text-sm font-light whitespace-wrap max-w-xl">
-                                    ${response.data.text}
-                                </p>
+                            
                             </div>
                         </div>
                         <div class="right text-center"  

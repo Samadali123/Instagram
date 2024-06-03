@@ -5,31 +5,47 @@ const passport = require(`passport`)
 const upload = require('./multer');
 const userModel = require(`./users`);
 const postModel = require(`./post`);
+const storyModel = require(`./story`);
 const commentModel = require(`./comments`)
 const utils = require(`../utils/utils`);
 
 
 
+
+
 passport.use(new localStrategy(userModel.authenticate()));
 
-router.post(`/register`, function(req, res, next) {
+router.post(`/register`, async function(req, res, next) {
+    const { username, fullname, email, password } = req.body;
 
     try {
+
+        if (!username || !email || !fullname || !password) {
+            return res.status(403).json({ success: false, message: "Please Enter Details for registered account" })
+
+        }
         var newUser = new userModel({
-            username: req.body.username,
-            fullname: req.body.fullname,
-            email: req.body.email,
+            username: username,
+            fullname: fullname,
+            email: email,
         })
 
-        userModel.register(newUser, req.body.password)
+        const User = await userModel.findOne({ username: username })
+        if (User) {
+            return res.status(403).json({ success: false, message: "User already registered" })
+
+        }
+
+        userModel.register(newUser, password)
             .then(function(e) {
                 passport.authenticate(`local`)(req, res, function() {
                     res.redirect(`/profile`);
                 })
             })
 
+
         .catch(function(err) {
-            res.status(403).json({ message: "Details is necessary for creating an account" })
+            res.status(403).json({ message: err.message })
         })
     } catch (error) {
         res.status(500).json({ success: false, message: error.message })
@@ -83,15 +99,31 @@ router.get('/login', function(req, res) {
     res.render('login', { footer: false, error: req.flash(`error`) });
 });
 
+
 router.get('/feed', IsLoggedIn, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ username: req.session.passport.user });
         const allposts = await postModel.find().populate(`user`).populate(`comments`);
-        res.render('feed', { footer: true, loginuser, allposts, dater: utils.formatRelativeTime, });
+
+        // Fetch all stories excluding those related to the login user
+        const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate(`user`);
+
+        // Filter unique user stories
+        const obj = {};
+        const userStories = allstory.filter(story => {
+            if (!obj[story.user._id]) {
+                obj[story.user._id] = true;
+                return true;
+            }
+            return false;
+        });
+
+        res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
 });
+
 
 router.get('/profile', IsLoggedIn, async function(req, res) {
     try {
@@ -128,8 +160,6 @@ router.post(`/update`, async(req, res) => {
 
         res.status(500).json({ success: false, message: err.message });
     }
-
-
 
 })
 
@@ -251,8 +281,6 @@ router.get(`/openprofile/:username`, IsLoggedIn, async(req, res) => {
 })
 
 
-
-
 router.get(`/save/:postId`, IsLoggedIn, async(req, res) => {
     try {
         const user = await userModel.findOne({ username: req.session.passport.user });
@@ -283,11 +311,9 @@ router.get(`/save/:postId`, IsLoggedIn, async(req, res) => {
 })
 
 
-
-
-router.post(`/comment/:data/:postid`, IsLoggedIn, async(req, res) => {
+router.post('/comment/:data/:postid', IsLoggedIn, async(req, res) => {
     try {
-        const commentpost = await postModel.findOne({ _id: req.params.postid })
+        const commentpost = await postModel.findOne({ _id: req.params.postid });
         const loginuser = await userModel.findOne({ username: req.session.passport.user });
 
         const createdcomment = await commentModel.create({
@@ -297,21 +323,31 @@ router.post(`/comment/:data/:postid`, IsLoggedIn, async(req, res) => {
         });
 
         commentpost.comments.push(createdcomment._id);
-
         await commentpost.save();
         await loginuser.save();
 
-        // const allcomments = await commentModel.find({ post: commentpost._id }).populate(`user`);
-        const onecomment = await commentModel.findOne({ _id: createdcomment._id }).populate(`user`).populate(`post`);
+        // Fetch the newly created comment with populated user and post fields
+        const onecomment = await commentModel.findOne({ _id: createdcomment._id }).populate('user').populate('post');
+
+        // Format the created date for the newly created comment
+        let dateObj = new Date(onecomment.createdAt);
+        let monthNames = [
+            '', 'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        let day = dateObj.getDate();
+        let month = dateObj.getMonth() + 1;
+        let year = dateObj.getFullYear();
+
+        let monthName = monthNames[month];
+        let formattedDate = `${monthName} ${day}, ${year}`;
+        onecomment.formattedDate = formattedDate;
         res.json(onecomment);
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }
-
-})
-
-
-
+});
 
 // follow and unfollow a user 
 
@@ -344,19 +380,33 @@ router.put(`/follow/:followeruser`, IsLoggedIn, async function(req, res, next) {
 })
 
 
-
-router.get(`/view/comments/:postId`, IsLoggedIn, async(req, res, next) => {
+router.get('/view/comments/:postId', IsLoggedIn, async(req, res, next) => {
     try {
-        const post = await postModel.findById({ _id: req.params.postId });
-        const comments = await commentModel.find({ post: post._id }).populate(`user`);
+        const post = await postModel.findById(req.params.postId);
+        const comments = await commentModel.find({ post: post._id }).populate('user');
+
+        comments.forEach((comment) => {
+            let dateObj = new Date(comment.createdAt);
+            let monthNames = [
+                '', 'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            let day = dateObj.getDate();
+            let month = dateObj.getMonth() + 1;
+            let year = dateObj.getFullYear();
+
+            let monthName = monthNames[month];
+            let formattedDate = `${monthName} ${day}, ${year}`;
+            comment.formattedDate = formattedDate;
+        });
+
         const loginuser = await userModel.findOne({ username: req.session.passport.user });
-        res.render(`comments`, { header: true, loginuser, comments, post })
+        res.render('comments', { header: true, loginuser, comments, post });
     } catch (err) {
-        return res.status(500).json({ success: false, message: err.message })
-
+        return res.status(500).json({ success: false, message: err.message });
     }
-})
-
+});
 
 
 
@@ -416,8 +466,6 @@ router.get('/followings/:userId', async(req, res) => {
 
 
 
-
-
 router.get(`/search/:openuser/followers/:input`, IsLoggedIn, async(req, res) => {
     try {
         const openUser = req.params.openuser;
@@ -436,9 +484,6 @@ router.get(`/search/:openuser/followers/:input`, IsLoggedIn, async(req, res) => 
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
-
-
 
 
 router.get(`/search/:openuser/following/:input`, IsLoggedIn, async(req, res) => {
@@ -482,6 +527,69 @@ router.put(`/comment/like/:commentID`, IsLoggedIn, async(req, res, next) => {
 
     }
 })
+
+router.post(`/:username/add/story`, IsLoggedIn, upload.single(`storyimage`), async(req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ username: req.session.passport.user })
+        if (!req.file.filename) {
+            return res.status(403).json({ success: false, message: "Please upload a image uploading a Story" })
+
+        }
+        const newStory = await storyModel.create({
+            user: loginuser._id,
+            image: req.file.filename,
+        })
+        loginuser.stories.push(newStory._id);
+        await loginuser.save();
+
+
+        res.status(302).redirect(`/feed`);
+
+
+    } catch (error) {
+        return res.status(err.status).json({ success: false, message: "Internal Server Errror" });
+
+    }
+})
+
+
+
+router.get(`/story/:userId/:number`, IsLoggedIn, async(req, res) => {
+    try {
+        const storyuser = await userModel.findById({ _id: req.params.userId }).populate('stories');
+        const storyimage = storyuser.stories[req.params.number];
+        const loginuser = await userModel.findOne({ username: req.session.passport.user })
+
+        if (storyuser.stories.length > req.params.number) {
+            res.render("story", { footer: false, storyimage, storyuser, number: req.params.number });
+        } else {
+            res.redirect("/feed");
+        }
+    } catch (error) {
+        return res.status(err.status).json({ success: false, message: error.message });
+    }
+
+})
+
+
+router.get(`/story/:number`, IsLoggedIn, async(req, res) => {
+    try {
+        const storyuser = await userModel.findOne({ username: req.session.passport.user }).populate(`stories`)
+        const loginuser = await userModel.findOne({ username: req.session.passport.user })
+        const storyimage = storyuser.stories[req.params.number];
+
+        if (storyuser.stories.length > req.params.number) {
+            res.render("story", { footer: false, storyuser, storyimage, number: req.params.number });
+        } else {
+            res.redirect("/feed");
+        }
+    } catch (err) {
+        return res.status(500).json({ success: false, message: err.message })
+
+    }
+
+});
+
 
 
 module.exports = router;

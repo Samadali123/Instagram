@@ -8,50 +8,82 @@
                 <i class="text-[1.4rem] ri-messenger-line"></i>
             </div>
         </div>
-        <div class="story px-3 flex gap-3 overflow-auto mt-5">
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+        <div class="mystory px-2 flex gap-3 overflow-auto mt-5">
+
+            <% if(loginuser.stories.length > 0){  %>
+
+                <div class="circle flex-shrink-0 relative ">
+                    <a href="/story/0" class="cursor-pointer">
+                        <div class="gradient w-[15vw] h-[15vw] bg-sky-100 rounded-full  rounded bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="icon absolute w-[25px] h-[25px] flex items-center justify-center  bg-blue-600 rounded-full bottom-[22%] right-[22%]">
+                        <i id="addstory" class="ri-add-line text-lg  font-medium cursor-pointer"></i>
                     </div>
+
+                    <form id="storyform" hidden action="/<%= loginuser.username %> /add/story" method="post" enctype="multipart/form-data">
+                        <input id="storyfile" type="file" name="storyimage" id="">
+                    </form>
+
+                    <p class="text-center text-sm font-light mt-1 whitespace-nowrap ">
+                        Your story
+                    </p>
                 </div>
-            </div>
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1570158268183-d296b2892211?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+
+                <% }  else{  %>
+
+                    <div class="circle flex-shrink-0 relative ">
+                        <a href="/story/0" class=" cursor-pointer">
+                            <div class="gradient w-[15vw] h-[15vw] bg-sky-100 rounded-full  flex items-center justify-center">
+                                <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                    <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                                </div>
+                            </div>
+                        </a>
+                        <div class="icon absolute w-[25px] h-[25px] flex items-center justify-center  bg-blue-600 rounded-full bottom-[22%] right-[22%]">
+                            <i id="addstory" class="ri-add-line text-lg  font-medium cursor-pointer"></i>
+                        </div>
+
+                        <form id="storyform" hidden action="/<%= loginuser.username %> /add/story" method="post" enctype="multipart/form-data">
+                            <input id="storyfile" type="file" name="storyimage" id="">
+                        </form>
+
+                        <p class="text-center text-sm font-light mt-1 whitespace-nowrap">
+                            Your story
+                        </p>
                     </div>
-                </div>
-            </div>
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1570158268183-d296b2892211?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=2550&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="circle flex-shrink-0">
-                <div class="gradient w-[18vw] h-[18vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1570158268183-d296b2892211?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
-                    </div>
-                </div>
-            </div>
+
+                    <% }  %>
+
+
+                        <div class="userstories flex gap-3 items-center">
+                            <% userStories.forEach(function(elem){  %>
+                                <a href="/story/<%= elem.user._id %>/0">
+                                    <div class="circle flex-shrink-0 relative cursor-pointer">
+                                        <div class="gradient w-[15vw] h-[15vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+
+                                        <p class="text-center whitespace-nowrap text-sm font-light mt-1.5">
+                                            <%= elem.user.username %>
+                                        </p>
+                                    </div>
+                                </a>
+
+                                <% })  %>
+                        </div>
+
+
+
         </div>
+
+
         <div class="posts mb-20 ">
 
             <% allposts.reverse().forEach(function(elem){ %>
@@ -191,6 +223,10 @@
         .middle::-webkit-scrollbar {
             display: none;
         }
+        
+        .mystory::-webkit-scrollbar {
+            display: none;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -284,7 +320,7 @@
 
                 axios.post(`/comment/${data2}/${postID}`)
                     .then(function(data) {
-                        latestComment.innerHTML = `<h3 class= "cursor-pointer" ><a href="/openprofile/${data.data.user.username}">${data.data.user.username}</a><span class="font-light text-sm ml-2">${data.data.text}</span></h3>`
+                        latestComment.innerHTML = `<h3 class= "cursor-pointer" ><a href="/openprofile/${data.data.user.username}">${data.data.user.username}</a><span class="font-light text-sm ml-2">${data.data.text}  </span></h3>`
                         viewcomments.textContent = `view all ${data.data.post.comments.length} comments `;
                     })
             })
@@ -396,6 +432,22 @@
         }
 
         followUnfollow();
+
+
+
+        function addStory() {
+
+            document.querySelector("#addstory").addEventListener("click", function(add) {
+                document.querySelector("#storyfile").click();
+                document.querySelector("#storyfile").addEventListener("change", function(ev) {
+                    document.querySelector("#storyform").submit();
+
+                })
+
+            })
+
+        }
+        addStory();
     </script>
 
     <% include ./partials/footer.ejs %>

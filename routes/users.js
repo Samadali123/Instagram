@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 mongoose.connect("mongodb://127.0.0.1:27017/Instagram")
 const plm = require(`passport-local-mongoose`);
 
@@ -7,17 +8,19 @@ const userSchema = mongoose.Schema({
 
     username: {
         type: String,
-        require: true,
+        require: [true, "username is required "],
+        minLength: [3, "username must be at least 3 characters"],
     },
 
     fullname: {
         type: String,
-        require: true,
+        require: [true, "fullname is required "],
     },
 
     email: {
         type: String,
-        require: true,
+        require: [true, "email is required "],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
         unique: true,
     },
 
@@ -28,6 +31,14 @@ const userSchema = mongoose.Schema({
 
     password: {
         type: String,
+        require: [true, "password is required"],
+        minLength: [3, "password must be at least 3 characters"],
+        maxLength: [15, "password must be at most 15 characters"],
+        match: [
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,15}$/,
+            "Invalid password format."
+
+        ]
     },
 
     bio: String,
@@ -50,6 +61,11 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `post`
     }],
+
+    stories: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: `Story`
+    }]
 
 
 })
