@@ -13,6 +13,8 @@ const GoogleStrategy = require("passport-google-oidc")
 const jwt = require("jsonwebtoken")
 const { v4: uuidV4 } = require(`uuid`);
 const secretKey = process.env.JWT_SECRET_KEY;
+const nodemailer = require("nodemailer")
+
 
 
 // Login with Google Api
@@ -127,7 +129,7 @@ router.post("/login", async(req, res, next) => {
 })
 
 
-router.get("/logout", IsLoggedIn, async(req, res, next) => {
+router.get("/logout", auth, async(req, res, next) => {
     try {
         res.clearCookie("token");
         res.redirect("/login")
@@ -138,7 +140,7 @@ router.get("/logout", IsLoggedIn, async(req, res, next) => {
 
 
 
-function IsLoggedIn(req, res, next) {
+function auth(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).render("isloggedin");
@@ -178,7 +180,7 @@ router.get('/login', function(req, res) {
 });
 
 
-router.get('/feed', IsLoggedIn, async function(req, res) {
+router.get('/feed', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
         const allposts = await postModel.find().populate(`user`).populate(`comments`);
@@ -203,18 +205,18 @@ router.get('/feed', IsLoggedIn, async function(req, res) {
 });
 
 
-router.get('/profile', IsLoggedIn, async function(req, res) {
+router.get('/profile', auth, async function(req, res) {
     try {
 
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`);
         res.render('profile', { footer: true, loginuser });
     } catch (err) {
-        res.status(500).render("server")
+        res.status(500).render("server");
     }
 });
 
 
-router.post(`/uploadprofile`, IsLoggedIn, upload.single(`profile`), async(req, res, next) => {
+router.post(`/uploadprofile`, auth, upload.single(`profile`), async(req, res, next) => {
 
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -228,7 +230,7 @@ router.post(`/uploadprofile`, IsLoggedIn, upload.single(`profile`), async(req, r
 })
 
 
-router.post(`/edit/profile`, IsLoggedIn, async(req, res) => {
+router.post(`/edit/profile`, auth, async(req, res) => {
     try {
         const { username, fullname, bio } = req.body;
         const User = await userModel.findOne({ email: req.user.email })
@@ -245,7 +247,7 @@ router.post(`/edit/profile`, IsLoggedIn, async(req, res) => {
 
 
 
-router.get('/search', IsLoggedIn, async function(req, res) {
+router.get('/search', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('search', { footer: true, loginuser });
@@ -255,7 +257,7 @@ router.get('/search', IsLoggedIn, async function(req, res) {
 });
 
 
-router.get(`/users/:input`, IsLoggedIn, async(req, res) => {
+router.get(`/users/:input`, async(req, res) => {
     try {
         const input = req.params.input;
         const regex = new RegExp(`^${input}`, 'i');
@@ -267,7 +269,7 @@ router.get(`/users/:input`, IsLoggedIn, async(req, res) => {
 })
 
 
-router.get('/edit', IsLoggedIn, async function(req, res) {
+router.get('/edit', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('edit', { footer: true, loginuser });
@@ -278,7 +280,7 @@ router.get('/edit', IsLoggedIn, async function(req, res) {
 });
 
 
-router.get('/upload', IsLoggedIn, async function(req, res) {
+router.get('/upload', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('upload', { footer: true, loginuser });
@@ -288,7 +290,7 @@ router.get('/upload', IsLoggedIn, async function(req, res) {
 });
 
 
-router.post(`/upload/post`, IsLoggedIn, upload.single(`image`), async(req, res) => {
+router.post(`/upload/post`, auth, upload.single(`image`), async(req, res) => {
     try {
 
         if (!req.body.caption || !req.file) {
@@ -323,7 +325,7 @@ router.post(`/upload/post`, IsLoggedIn, upload.single(`image`), async(req, res) 
 
 
 
-router.get(`/like/post/:postId`, IsLoggedIn, async(req, res) => {
+router.get(`/like/post/:postId`, auth, async(req, res) => {
 
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -347,7 +349,7 @@ router.get(`/like/post/:postId`, IsLoggedIn, async(req, res) => {
 })
 
 
-router.get(`/openprofile/:username`, IsLoggedIn, async(req, res) => {
+router.get(`/openprofile/:username`, auth, async(req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
 
@@ -360,7 +362,7 @@ router.get(`/openprofile/:username`, IsLoggedIn, async(req, res) => {
 })
 
 
-router.get(`/save/:postId`, IsLoggedIn, async(req, res) => {
+router.get(`/save/:postId`, auth, async(req, res) => {
     try {
         const user = await userModel.findOne({ email: req.user.email });
         const post = await postModel.findById({ _id: req.params.postId });
@@ -390,7 +392,7 @@ router.get(`/save/:postId`, IsLoggedIn, async(req, res) => {
 })
 
 
-router.post('/comment/:data/:postid', IsLoggedIn, async(req, res) => {
+router.post('/comment/:data/:postid', auth, async(req, res) => {
     try {
         const commentpost = await postModel.findOne({ _id: req.params.postid });
         const loginuser = await userModel.findOne({ email: req.user.email });
@@ -430,7 +432,7 @@ router.post('/comment/:data/:postid', IsLoggedIn, async(req, res) => {
 
 // follow and unfollow a user 
 
-router.put(`/follow/:followeruser`, IsLoggedIn, async function(req, res, next) {
+router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
     try {
         const followeduser = await userModel.findOne({ username: req.params.followeruser });
 
@@ -459,7 +461,7 @@ router.put(`/follow/:followeruser`, IsLoggedIn, async function(req, res, next) {
 })
 
 
-router.get('/view/comments/:postId', IsLoggedIn, async(req, res, next) => {
+router.get('/view/comments/:postId', auth, async(req, res, next) => {
     try {
         const post = await postModel.findById(req.params.postId);
         const comments = await commentModel.find({ post: post._id }).populate('user');
@@ -489,7 +491,7 @@ router.get('/view/comments/:postId', IsLoggedIn, async(req, res, next) => {
 
 
 
-router.get(`/post/likes/:postId`, IsLoggedIn, async(req, res) => {
+router.get(`/post/likes/:postId`, auth, async(req, res) => {
     try {
         const post = await postModel.findById({ _id: req.params.postId }).populate(`likes`).populate(`user`);
 
@@ -503,7 +505,7 @@ router.get(`/post/likes/:postId`, IsLoggedIn, async(req, res) => {
 });
 
 
-router.get(`/post/likes/users/:postId/:input`, IsLoggedIn, async(req, res) => {
+router.get(`/post/likes/users/:postId/:input`, auth, async(req, res) => {
     try {
         const post = await postModel.findById(req.params.postId);
         await post.populate('likes');
@@ -520,7 +522,7 @@ router.get(`/post/likes/users/:postId/:input`, IsLoggedIn, async(req, res) => {
 });
 
 
-router.get('/followers/:userId', IsLoggedIn, async(req, res) => {
+router.get('/followers/:userId', auth, async(req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
@@ -532,7 +534,7 @@ router.get('/followers/:userId', IsLoggedIn, async(req, res) => {
 });
 
 
-router.get('/followings/:userId', IsLoggedIn, async(req, res) => {
+router.get('/followings/:userId', auth, async(req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
@@ -545,7 +547,7 @@ router.get('/followings/:userId', IsLoggedIn, async(req, res) => {
 
 
 
-router.get(`/search/:openuser/followers/:input`, IsLoggedIn, async(req, res) => {
+router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
     try {
         const openUser = req.params.openuser;
         const input = req.params.input;
@@ -565,7 +567,7 @@ router.get(`/search/:openuser/followers/:input`, IsLoggedIn, async(req, res) => 
 });
 
 
-router.get(`/search/:openuser/following/:input`, IsLoggedIn, async(req, res) => {
+router.get(`/search/:openuser/following/:input`, auth, async(req, res) => {
     try {
         const openUser = req.params.openuser;
         const input = req.params.input;
@@ -585,7 +587,7 @@ router.get(`/search/:openuser/following/:input`, IsLoggedIn, async(req, res) => 
 });
 
 
-router.put(`/comment/like/:commentID`, IsLoggedIn, async(req, res, next) => {
+router.put(`/comment/like/:commentID`, auth, async(req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const comment = await commentModel.findOne({ _id: req.params.commentID });
@@ -609,7 +611,7 @@ router.put(`/comment/like/:commentID`, IsLoggedIn, async(req, res, next) => {
 })
 
 
-router.post(`/:username/add/story`, IsLoggedIn, upload.single(`storyimage`), async(req, res) => {
+router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         if (!req.file.filename) {
@@ -634,41 +636,170 @@ router.post(`/:username/add/story`, IsLoggedIn, upload.single(`storyimage`), asy
 })
 
 
-router.get(`/story/:userId/:number`, IsLoggedIn, async(req, res) => {
+router.get(`/story/:userId/:number`, auth, async(req, res) => {
     try {
         const storyuser = await userModel.findById({ _id: req.params.userId }).populate('stories');
         const storyimage = storyuser.stories[req.params.number];
         const loginuser = await userModel.findOne({ email: req.user.email })
 
         if (storyuser.stories.length > req.params.number) {
-            res.render("story", { footer: false, storyimage, storyuser, number: req.params.number });
+            res.render("userstory", { footer: false, storyimage, storyuser, loginuser: false, number: req.params.number, dater: utils.formatRelativeTime });
         } else {
             res.redirect("/feed");
         }
     } catch (error) {
-        return res.status(500).render("server")
+        return res.status(500).json({ message: error.message })
     }
 
 })
 
 
-router.get(`/story/:number`, IsLoggedIn, async(req, res) => {
+router.get(`/story/:number`, auth, async(req, res) => {
     try {
         const storyuser = await userModel.findOne({ email: req.user.email }).populate(`stories`)
         const loginuser = await userModel.findOne({ email: req.user.email })
         const storyimage = storyuser.stories[req.params.number];
 
         if (storyuser.stories.length > req.params.number) {
-            res.render("story", { footer: false, storyuser, storyimage, number: req.params.number });
+            res.render("mystory", { footer: false, storyuser, loginuser: true, storyimage, number: req.params.number, dater: utils.formatRelativeTime });
         } else {
             res.redirect("/feed");
         }
     } catch (err) {
-        return res.status(500).render("server")
+        return res.status(500).json({ message: err.message })
 
     }
 
 });
+
+
+const ObjectId = require('mongoose').Types.ObjectId;
+
+
+router.get("/forgot-password", async(req, res, next) => {
+    try {
+        res.render("forgotpassword")
+    } catch (error) {
+        res.status(500).render("server")
+    }
+})
+
+
+
+router.post("/forgotpassword", async(req, res, next) => {
+    try {
+
+        const { email } = req.body;
+        const User = await userModel.findOne({ email })
+
+        if (!User) {
+            return res.status(403).render("server");
+        } else {
+
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.Email,
+                    pass: process.env.Password
+                }
+            });
+
+
+            var mailOptions = {
+                from: process.env.Email, // Use the email you want to send from
+                to: email, // Make sure this field matches the recipient's email
+                subject: `Forget your Instagram Password? Reset now using link given below`,
+                html: `
+                    <a style="color: royalblue; font-size:18px; font-weight:600; text-decoration:none;" href="http://localhost:3000/reset-password">Reset Password</a>
+                `
+            }
+
+
+            transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
+                    return res.send(error)
+                }
+                res.redirect("/sent-successfully");
+            })
+
+            User.resetpasswordtoken = "1";
+            await User.save();
+        }
+
+    } catch (error) {
+        res.status(500).render("server");
+    }
+})
+
+
+router.get("/sent-successfully", async(req, res, next) => {
+    try {
+        res.render("sentmail")
+
+    } catch (error) {
+        res.status(500).render("server")
+    }
+})
+
+
+router.get("/reset-password", async(req, res, next) => {
+    try {
+        res.render("resetpassword")
+    } catch (error) {
+        res.status(500).render("server");
+    }
+});
+
+
+router.post("/resetpassword", async(req, res, next) => {
+    try {
+        const { email, newPassword } = req.body; // Assuming newPassword is sent in the request
+        const User = await userModel.findOne({ email });
+
+        if (!User) {
+            return res.json({ error: "User not Found" });
+        }
+        // Check if the reset password token is not equal to "1"
+        if (User.resetpasswordtoken === "1") {
+
+            // Hash the new password
+            const salt = await bcrypt.genSalt(10);
+            const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+            // Update the user's password
+            const updatedUser = await userModel.findOneAndUpdate({ _id: User._id }, // Target the user by ID
+                { password: hashedNewPassword }, { new: true }
+            );
+
+            // Generate JWT token
+            const token = jwt.sign({ email: User.email, userid: User._id },
+                secretKey, { algorithm: 'HS256', expiresIn: '1h' }
+            );
+
+
+            // Set the JWT token in a cookie
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict'
+            });
+
+            updatedUser.resetpasswordtoken = "0";
+
+            // Redirect to the homepage or another page
+            res.redirect("/profile");
+        } else {
+            return res.status(500).json({ message: "Invalid Reset Password link, Please try again letter" });
+
+        }
+        // Uncomment or adjust as needed
+
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).render("server") // Send a more informative message
+    }
+});
+
 
 
 

@@ -66,7 +66,12 @@ const userSchema = mongoose.Schema({
     stories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `Story`
-    }]
+    }],
+
+    resetpasswordtoken: {
+        type: String,
+        default: "0"
+    }
 
 
 })

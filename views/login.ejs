@@ -1,6 +1,6 @@
 <% include ./partials/header.ejs %>
     <div class="w-full  min-h-full bg-zinc-900 text-white py-5 flex flex-col items-center justify-center">
-        <div class="flex flex-col items-center gap-5 px-4">
+        <div class="flex flex-col items-center justify-center gap-5 px-4">
             <img class="w-1/2" src="/images/instalogo.png" alt="">
             <a class="button google  text-white " href="/login/federated/google">Sign in with Google</a>
             <form class="w-full" action="/login" method="post">
@@ -9,7 +9,10 @@
                 <input class="w-full bg-blue-500 px-3 py-3 rounded-md mt-2" type="submit" value="Log In">
             </form>
 
-            <span>Don't have an account ? <a href="/" class="text-blue-500">Sign Up</a></span>
+            <div class="flex items-center  justify-between  w-full  px-10 ">
+                <span>Don't have an account ? <a href="/" class="text-blue-500">Sign Up</a></span>
+                <span><a href="/forgot-password">Forgot Password ?</a></span>
+            </div>
         </div>
     </div>
     <% include ./partials/footer.ejs %>

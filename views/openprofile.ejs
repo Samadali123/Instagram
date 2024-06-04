@@ -81,10 +81,10 @@
 
                         <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line  text-lg  font-light ml-2  "></i></p>
 
-                        <div id="postarea" class="flex flex-wrap px-2 relative">
+                        <div id="postarea" class="flex  gap-3 flex-wrap px-2 relative">
                             <% openuser.posts.forEach(function(elem){  %>
 
-                                <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden ">
+                                <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden rounded-md ">
                                     <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
                                 </div>
                                 <% })   %>

@@ -21,7 +21,9 @@
                                     <%= storyuser.username %>
                                 </p>
                             </a>
-                            <p class="mt-1 ">13h</p>
+                            <p class="mt-1 ">
+                                <%= dater(new Date(storyimage.createdAt)) %>
+                            </p>
                         </div>
                         <div>
                             <a href="/feed">
@@ -34,6 +36,13 @@
 
 
                 </div>
+            </div>
+
+
+            <div class="bottom w-fit absolute  flex gap-3 cursor-pointer justify-items-center bottom-[-6%] right-[5%] ">
+                <a href="">
+                    <p><i class="ri-heart-3-line  text-lg text-white"></i></p>
+                </a>
             </div>
 
         </div>
