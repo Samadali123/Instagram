@@ -62,8 +62,10 @@
 
                         <div class="userstories flex gap-3 items-center">
                             <% userStories.forEach(function(elem){  %>
+
                                 <a href="/story/<%= elem.user._id %>/0">
                                     <div class="circle flex-shrink-0 relative cursor-pointer">
+
                                         <div class="gradient w-[15vw] h-[15vw] bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                                 <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profile %>" alt="">
@@ -91,20 +93,37 @@
                 <div class="post  mt-10 w-full min-h-[50vh] ">
                     <div class="title  relative flex justify-between items-center">
                         <div class="left flex px-4 items-center gap-2 ">
-                            <a href="/openprofile/<%= elem.user.username %>">
-                                <div class="w-[8vw] h-[8vw] bg-sky-100 rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.user.profile %>" alt="">
-                                </div>
-                            </a>
 
-                            <a href="/openprofile/<%= elem.user.username %>">
-                                <h4 class="text-sm">
-                                    <%= elem.user.username %>
-                                </h4>
-                            </a>
-                            <h6 class="text-xs opacity-30">
-                                <%= dater(new Date(elem.createdAt)) %>
-                            </h6>
+                            <% if(elem.user.stories.length > 0){  %>
+                                <a href="/story/<%= elem.user._id %>/0">
+                                    <div class="circle flex-shrink-0 relative cursor-pointer">
+                                        <div class="w-[8vw] h-[8vw] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <%  } else{  %>
+
+                                    <a href="/openprofile/<%= elem.user.username %>">
+                                        <div class="circle flex-shrink-0 relative cursor-pointer  ">
+                                            <div class="w-[8vw] h-[8vw] bg-sky-100 overflow-hidden rounded-full ">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <%   }  %>
+
+                                        <a href="/openprofile/<%= elem.user.username %>">
+                                            <h4 class="text-sm">
+                                                <%= elem.user.username %>
+                                            </h4>
+                                        </a>
+                                        <h6 class="text-xs opacity-30">
+                                            <%= dater(new Date(elem.createdAt)) %>
+                                        </h6>
                         </div>
 
                         <div class="right px-2">

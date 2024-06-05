@@ -493,7 +493,13 @@ router.get('/view/comments/:postId', auth, async(req, res, next) => {
 
 router.get(`/post/likes/:postId`, auth, async(req, res) => {
     try {
-        const post = await postModel.findById({ _id: req.params.postId }).populate(`likes`).populate(`user`);
+        // const post = await postModel.findById({ _id: req.params.postId }).populate(`likes`).populate(`user`, 'stories');
+        const post = await postModel.findById(req.params.postId)
+            .populate('likes')
+            .populate({
+                path: 'user',
+                select: '_id stories' // _id is always included by default, so this will include _id and stories
+            });
 
         const loginuser = await userModel.findOne({ email: req.user.email })
 
