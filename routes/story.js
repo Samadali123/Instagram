@@ -19,16 +19,14 @@ const storySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     }],
-
     expiryDate: {
         type: Date,
         default: () => new Date(+new Date() + 24 * 60 * 60 * 1000) // 24 hours from now
     },
-    hiddenFrom: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }]
-}, { timestamps: true, versionKey: false, });
+}, { timestamps: true, versionKey: false });
+
+// Create a TTL index on the expiryDate field
+storySchema.index({ expiryDate: 1 }, { expireAfterSeconds: 0 });
 
 // Create a model based on the schema
 const Story = mongoose.model('Story', storySchema);
