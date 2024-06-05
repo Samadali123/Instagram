@@ -14,49 +14,63 @@
 
             <div class="upper">
                 <div class="top flex items-center gap-8">
-                    <div class="profile w-[60px] h-[60px]  rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover " src="/images/uploads/<%= openuser.profile %>" alt="">
 
-                    </div>
+                    <% if(openuser.stories.length > 0){  %>
+                        <a href="/story/<%= openuser._id %>/0">
+                            <div class="profile w-[60px] h-[60px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center  ">
+                                <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                    <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= openuser.profile %>" alt="">
+                                </div>
 
-                    <div class="right flex items-center gap-3 text-center cursor-pointer">
+                            </div>
+                        </a>
+                        <% } else{  %>
+                            <div class="profile w-[60px] h-[60px] bg-sky-100  ">
+                                <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                    <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= openuser.profile %>" alt="">
+                                </div>
 
-                        <% if(openuser.followers.indexOf(loginuser._id) !== -1){ %>
-                            <h5 class="postbtn">
-                                <%= openuser.posts.length  %><br> <span>posts</span>
-                            </h5>
+                            </div>
+                            <%  }  %>
 
-                            <a href="/followers/<%= openuser._id %>">
-                                <h5>
-                                    <%= openuser.followers.length %> <br> <span>followers</span>
-                                </h5>
-                            </a>
+                                <div class="right flex items-center gap-3 text-center cursor-pointer">
 
-                            <a href="/followings/<%= openuser._id %>">
-                                <h5>
-                                    <%= openuser.following.length %><br> <span>following</span>
-                                </h5>
-                            </a>
-                            <%  } else { %>
+                                    <% if(openuser.followers.indexOf(loginuser._id) !== -1){ %>
+                                        <h5 class="postbtn">
+                                            <%= openuser.posts.length  %><br> <span>posts</span>
+                                        </h5>
 
-                                <h5 class="post-btn">
-                                    <%= openuser.posts.length  %><br> <span>posts</span>
-                                </h5>
+                                        <a href="/followers/<%= openuser._id %>">
+                                            <h5>
+                                                <%= openuser.followers.length %> <br> <span>followers</span>
+                                            </h5>
+                                        </a>
+
+                                        <a href="/followings/<%= openuser._id %>">
+                                            <h5>
+                                                <%= openuser.following.length %><br> <span>following</span>
+                                            </h5>
+                                        </a>
+                                        <%  } else { %>
+
+                                            <h5 class="post-btn">
+                                                <%= openuser.posts.length  %><br> <span>posts</span>
+                                            </h5>
 
 
-                                <h5>
-                                    <%= openuser.followers.length %> <br> <span>followers</span>
-                                </h5>
+                                            <h5>
+                                                <%= openuser.followers.length %> <br> <span>followers</span>
+                                            </h5>
 
 
 
-                                <h5>
-                                    <%= openuser.following.length %><br> <span>following</span>
-                                </h5>
+                                            <h5>
+                                                <%= openuser.following.length %><br> <span>following</span>
+                                            </h5>
 
-                                <%   } %>
+                                            <%   } %>
 
-                    </div>
+                                </div>
                 </div>
                 <div class="bottom mt-2 ml-2">
                     <p class=" font-light text-sm">
