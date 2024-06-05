@@ -648,7 +648,7 @@ router.get(`/story/:userId/:number`, auth, async(req, res) => {
             res.redirect("/feed");
         }
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        return res.status(500).render("server")
     }
 
 })
@@ -666,14 +666,84 @@ router.get(`/story/:number`, auth, async(req, res) => {
             res.redirect("/feed");
         }
     } catch (err) {
-        return res.status(500).json({ message: err.message })
+        return res.status(500).render("server");
 
     }
 
 });
 
 
-const ObjectId = require('mongoose').Types.ObjectId;
+
+router.put("/story/like/:StoryId", auth, async(req, res, next) => {
+    try {
+        const storyId = req.params.StoryId;
+        // Validate if storyId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(storyId)) {
+            return res.status(400).json({ error: "Invalid StoryId" });
+        }
+
+        const likedStory = await storyModel.findById(storyId);
+        if (!likedStory) {
+            return res.status(404).json({ error: "Story not found" });
+        }
+
+        const loginUser = await userModel.findOne({ email: req.user.email });
+        if (!loginUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const userIndexInLikes = likedStory.likes.indexOf(loginUser._id);
+        const storyIndexInUserLikes = loginUser.likedstories.indexOf(likedStory._id);
+
+        if (userIndexInLikes === -1) {
+            // User hasn't liked the story yet
+            likedStory.likes.push(loginUser._id);
+            loginUser.likedstories.push(likedStory._id);
+        } else {
+            // User already liked the story, so unlike it
+            likedStory.likes.splice(userIndexInLikes, 1);
+            loginUser.likedstories.splice(storyIndexInUserLikes, 1);
+        }
+
+        await likedStory.save();
+        await loginUser.save();
+
+        res.json(likedStory);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+router.delete("/story/delete/:StoryId", auth, async(req, res, next) => {
+    try {
+        const storyId = req.params.StoryId;
+
+        // Validate if storyId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(storyId)) {
+            return res.status(400).json({ error: "Invalid StoryId" });
+        }
+
+        const storyToDelete = await storyModel.findById(storyId);
+        if (!storyToDelete) {
+            return res.status(404).json({ error: "Story not found" });
+        }
+
+        const loginUser = await userModel.findOne({ email: req.user.email });
+        if (!loginUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        await storyModel.findByIdAndDelete(storyId);
+        res.json({ message: "Story successfully deleted", story: storyToDelete });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 
 router.get("/forgot-password", async(req, res, next) => {
@@ -683,6 +753,29 @@ router.get("/forgot-password", async(req, res, next) => {
         res.status(500).render("server")
     }
 })
+
+
+router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
+
+        const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
+
+
+        const openPost = await postModel.findById(req.params.openpost).populate("user");
+        if (!openPost) return res.status(403).json({ message: "Post not found!" });
+
+        const count = await postModel.countDocuments();
+        const randomIndex = Math.floor(Math.random() * count);
+        const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
+
+
+        const posts = [openPost, ...randomPosts];
+        res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+    } catch (error) {
+        res.status(500).render("server");
+    }
+});
 
 
 

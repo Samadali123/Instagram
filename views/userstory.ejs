@@ -37,21 +37,21 @@
 
                 </div>
             </div>
-
-
             <div class="bottom w-fit absolute  flex gap-3 cursor-pointer justify-items-center bottom-[-6%] right-[5%] ">
                 <a href="">
-                    <p><i class="ri-heart-3-line  text-lg text-white"></i></p>
+                    <p><i id="likeicon" class="ri-heart-3-line  text-lg text-white"></i></p>
                 </a>
             </div>
 
         </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         let story = `<%= storyimage %>`;
         var progress = document.querySelector(".progress");
         var count = 0;
-        var int = setInterval(function() {
+        var interval = setInterval(function() {
             if (count < 100) {
                 count++;
                 progress.style.width = `${count}%`;

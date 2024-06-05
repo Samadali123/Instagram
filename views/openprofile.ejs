@@ -21,21 +21,40 @@
 
                     <div class="right flex items-center gap-3 text-center cursor-pointer">
 
-                        <h5 class="postbtn">
-                            <%= openuser.posts.length  %><br> <span>posts</span>
-                        </h5>
-
-                        <a href="/followers/<%= openuser._id %>">
-                            <h5>
-                                <%= openuser.followers.length %> <br> <span>followers</span>
+                        <% if(openuser.followers.indexOf(loginuser._id) !== -1){ %>
+                            <h5 class="postbtn">
+                                <%= openuser.posts.length  %><br> <span>posts</span>
                             </h5>
-                        </a>
 
-                        <a href="/followings/<%= openuser._id %>">
-                            <h5>
-                                <%= openuser.following.length %><br> <span>following</span>
-                            </h5>
-                        </a>
+                            <a href="/followers/<%= openuser._id %>">
+                                <h5>
+                                    <%= openuser.followers.length %> <br> <span>followers</span>
+                                </h5>
+                            </a>
+
+                            <a href="/followings/<%= openuser._id %>">
+                                <h5>
+                                    <%= openuser.following.length %><br> <span>following</span>
+                                </h5>
+                            </a>
+                            <%  } else { %>
+
+                                <h5 class="post-btn">
+                                    <%= openuser.posts.length  %><br> <span>posts</span>
+                                </h5>
+
+
+                                <h5>
+                                    <%= openuser.followers.length %> <br> <span>followers</span>
+                                </h5>
+
+
+
+                                <h5>
+                                    <%= openuser.following.length %><br> <span>following</span>
+                                </h5>
+
+                                <%   } %>
 
                     </div>
                 </div>
@@ -70,9 +89,6 @@
             </div>
 
 
-
-
-
             <% if(openuser.username === loginuser.username){  %>
 
                 <div id="postcontainer" class=" relative ">
@@ -81,12 +97,14 @@
 
                         <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line  text-lg  font-light ml-2  "></i></p>
 
-                        <div id="postarea" class="flex  gap-3 flex-wrap px-2 relative">
+                        <div id="postarea" class="flex gap-3 flex-wrap px-2 relative">
                             <% openuser.posts.forEach(function(elem){  %>
 
-                                <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden rounded-md ">
-                                    <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
-                                </div>
+                                <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
+                                    <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden rounded-md ">
+                                        <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
+                                    </div>
+                                </a>
                                 <% })   %>
                                     <%    }   else { %>
                                         <p>No, posts yet.</p>
@@ -107,18 +125,22 @@
 
                                 <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line  text-lg  font-light ml-2  "></i></p>
 
-                                <div id="postarea" class="flex flex-wrap px-2 relative">
-                                    <% openuser.posts.forEach(function(elem){  %>
+                                <a href="">
+                                    <div id="postarea" class="flex gap-3  flex-wrap px-2 relative">
+                                        <% openuser.posts.forEach(function(elem){  %>
 
-                                        <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden ">
-                                            <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
-                                        </div>
-                                        <% })   %>
-                                            <%    }   else { %>
-                                                <p>No, posts yet.</p>
+                                            <a href="/posts/open/<%= elem._id  %>/<%= openuser._id %>">
+                                                <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden ">
+                                                    <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
+                                                </div>
+                                            </a>
+                                            <% })   %>
+                                                <%    }   else { %>
+                                                    <p>No, posts yet.</p>
 
-                                                <%  } %>
-                                </div>
+                                                    <%  } %>
+                                    </div>
+                                </a>
 
                         </div>
 
