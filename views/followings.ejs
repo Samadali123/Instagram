@@ -36,24 +36,37 @@
                     <div class="user mt-2 w-full relative mb-5  flex justify-between items-center ">
 
                         <div class="left flex gap-3 items-center  ">
-                            <a href="/openprofile/<%= elem.username %>">
-                                <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
-                                    <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
-                                </div>
-                            </a>
 
-                            <div class="dets text-sm ">
-                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                    <h3>
-                                        <%= elem.username %>
-                                    </h3>
+                            <% if(elem.stories.length > 0){  %>
+                                <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
+                                    <div class="w-[50px] h-[50px] bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                        </div>
+                                    </div>
                                 </a>
-                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                    <p>
-                                        <%= elem.fullname %>
-                                    </p>
-                                </a>
-                            </div>
+                                <%   }  else { %>
+                                    <a href="/openprofile/<%= elem.username %>">
+                                        <div class="w-[50px] h-[50px] bg-sky-100  bg-sky-100 overflow-hidden ">
+                                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <%  } %>
+
+                                        <div class="dets text-sm ">
+                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                <h3>
+                                                    <%= elem.username %>
+                                                </h3>
+                                            </a>
+                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                <p>
+                                                    <%= elem.fullname %>
+                                                </p>
+                                            </a>
+                                        </div>
                         </div>
 
                         <div class="right  text-center pr-3 ">
@@ -98,24 +111,36 @@
                     <div class="user w-full relative mb-5  flex justify-between items-center ">
 
                         <div class="left flex gap-3 items-center  ">
-                            <a href="/openprofile/<%= elem.username %>">
-                                <div class="profile cursor-pointer w-[50px]  h-[50px]  rounded-full  overflow-hidden ">
-                                    <img class="w-full h-full object-cover  object-center" src="/images/uploads/<%= elem.profile %>" alt="">
-                                </div>
-                            </a>
+                            <% if(elem.stories.length > 0){  %>
+                                <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
+                                    <div class="w-[50px] h-[50px] bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                        </div>
+                                    </div>
+                                </a>
+                                <%   }  else { %>
+                                    <a href="/openprofile/<%= elem.username %>">
+                                        <div class="w-[50px] h-[50px] bg-sky-100  bg-sky-100 overflow-hidden ">
+                                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <%  } %>
 
-                            <div class="dets text-sm ">
-                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                    <h3>
-                                        <%= elem.username %>
-                                    </h3>
-                                </a>
-                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                    <p>
-                                        <%= elem.fullname %>
-                                    </p>
-                                </a>
-                            </div>
+                                        <div class="dets text-sm ">
+                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                <h3>
+                                                    <%= elem.username %>
+                                                </h3>
+                                            </a>
+                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                <p>
+                                                    <%= elem.fullname %>
+                                                </p>
+                                            </a>
+                                        </div>
                         </div>
 
                         <div class="right  text-center pr-3 ">
