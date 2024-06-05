@@ -11,10 +11,26 @@
             <a class="text-sm" href="/feed"><i class="ri-home-line"></i> home</a>
         </div>
         <div class="flex flex-col items-center gap-2 mt-20">
-            <div class="image w-20 h-20 bg-sky-100 rounded-full overflow-hidden">
-                <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="">
-            </div>
-            <button id="editprofile" class="text-blue-500 capitalize cursor-pointer">edit picture</button>
+
+
+            <% if(loginuser.stories.length > 0){  %>
+                <a class="cursor-pointer" href="/story/<%= loginuser._id %>/0">
+                    <div class="w-20 h-20 bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                        </div>
+                    </div>
+                </a>
+                <%   }  else { %>
+                    <div class="w-20  h-20 bg-sky-100  bg-sky-100 overflow-hidden ">
+                        <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                        </div>
+                    </div>
+                    <%  } %>
+
+
+                        <button id="editprofile" class="text-blue-500 capitalize cursor-pointer">edit picture</button>
         </div>
         <div class="gap-5 px-4 mt-10">
             <h3 class="text-lg leading-none">Edit Account Details</h3>
