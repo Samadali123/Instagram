@@ -392,6 +392,7 @@ router.get(`/save/:postId`, auth, async(req, res) => {
 })
 
 
+
 router.post('/comment/:data/:postid', auth, async(req, res) => {
     try {
         const commentpost = await postModel.findOne({ _id: req.params.postid });
@@ -430,6 +431,7 @@ router.post('/comment/:data/:postid', auth, async(req, res) => {
     }
 });
 
+
 // follow and unfollow a user 
 
 router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
@@ -464,7 +466,7 @@ router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
 router.get('/view/comments/:postId', auth, async(req, res, next) => {
     try {
         const post = await postModel.findById(req.params.postId);
-        const comments = await commentModel.find({ post: post._id }).populate('user');
+        const comments = await commentModel.find({ post: post._id }).populate('user')
 
         comments.forEach((comment) => {
             let dateObj = new Date(comment.createdAt);

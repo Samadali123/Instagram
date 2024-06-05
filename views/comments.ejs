@@ -19,26 +19,38 @@
 
                             <div class="comment-one mb-4 flex justify-between w-[85%] ">
                                 <div class="left flex gap-2 ">
-                                    <a href="/openprofile/<%= elem.user.username %>">
-                                        <div class="comment-profile mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
-                                            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
-                                        </div>
-                                    </a>
 
-
-                                    <div class="comment-dets flex flex-col ">
-                                        <a class="cursor-pointer flex gap-1" href="/openprofile/<%= elem.user.username %>">
-                                            <h3>
-                                                <%= elem.user.username %>
-                                            </h3>
-                                            <p class="font-light ">
-                                                <%= elem.formattedDate %>
-                                            </p>
+                                    <% if(elem.user.stories.length > 0){  %>
+                                        <a href="/story/<%= elem.user._id %>/0">
+                                            <div class="comment-profile mt-1 max-w-[40px] max-h-[40px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                                                <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
+                                                    <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                                </div>
+                                            </div>
                                         </a>
-                                        <p class="text-sm font-light whitespace-wrap max-w-xl">
-                                            <%= elem.text %>
-                                        </p>
-                                    </div>
+                                        <% }  else{  %>
+                                            <a href="/openprofile/<%= elem.user.username %>">
+                                                <div class="comment-profile mt-1 max-w-[40px] max-h-[40px]  rounded-full overflow-hidden">
+                                                    <div class="inner w-full  h-full rounded-full overflow-hidden">
+                                                        <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <% }  %>
+
+                                                <div class="comment-dets flex flex-col ">
+                                                    <a class="cursor-pointer flex gap-1" href="/openprofile/<%= elem.user.username %>">
+                                                        <h3>
+                                                            <%= elem.user.username %>
+                                                        </h3>
+                                                        <p class="font-light ">
+                                                            <%= elem.formattedDate %>
+                                                        </p>
+                                                    </a>
+                                                    <p class="text-sm font-light whitespace-wrap max-w-xl">
+                                                        <%= elem.text %>
+                                                    </p>
+                                                </div>
                                 </div>
                                 <div class="right text-center">
                                     <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
@@ -59,13 +71,37 @@
         </div>
 
         <div class="bottom pt-5 w-full  h-[10%]  flex items-center gap-4" style="border-top: 1px solid rgba(192, 192, 192, 0.103); z-index: 999;">
-            <div class="loginprofile w-[55px] h-[55px] rounded-full overflow-hidden relative ">
-                <img class="w-full h-full object-cover  absolute " src="/images/uploads/<%= loginuser.profile %>" alt="">
-            </div>
-            <input id="commentinp" class="cu caption-bottom bg-zinc-900 w-[75%]" autocomplete="off" type="text" placeholder="Add a comment..." style="outline: none; border:none; ">
-            <div id="commenticon" class="icon hidden  ml-4 px-2.5 py-0.5 rounded-3xl flex items-center justify-center " style="background-color: royalblue;">
-                <i class="ri-arrow-up-line cursor-pointer"></i>
-            </div>
+
+
+            <% if(loginuser.stories.length > 0){ %>
+                <a href="/story/<%= loginuser._id %>/0">
+                    <div class="loginprofile w-[55px] h-[55px]  relative gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center  ">
+                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= loginuser.profile %>" alt="">
+                        </div>
+                    </div>
+                </a>
+
+                <%  } else{ %>
+                    <a href="/openprofile/<%= loginuser.username %>">
+                        <div class="loginprofile w-[55px] h-[55px]  relative  bg-sky-100 overflow-hidden rounded-full  ">
+                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= loginuser.profile %>" alt="">
+                            </div>
+                        </div>
+                    </a>
+
+                    <% }  %>
+
+
+
+
+
+
+                        <input id="commentinp" class="cu caption-bottom bg-zinc-900 w-[75%]" autocomplete="off" type="text" placeholder="Add a comment..." style="outline: none; border:none; ">
+                        <div id="commenticon" class="icon hidden  ml-4 px-2.5 py-0.5 rounded-3xl flex items-center justify-center " style="background-color: royalblue;">
+                            <i class="ri-arrow-up-line cursor-pointer"></i>
+                        </div>
         </div>
     </div>
 
@@ -118,7 +154,7 @@
                                     </h3>
                                     
                                     <h3>
-                                       ${response.data.formattedDate}
+                                       ${response.data.createdAt}
                                     </h3>
 
                                 </a>
