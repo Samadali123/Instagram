@@ -36,18 +36,23 @@
                                     </h3>
                                     <h4 class="cursor-pointer postbtn ">Posts</h4>
                                 </div>
-                                <div class="flex flex-col items-center justify-center cursor-pointer">
-                                    <h3>
-                                        <%= loginuser.followers.length %>
-                                    </h3>
-                                    <h4>Followers</h4>
-                                </div>
-                                <div class="flex flex-col items-center justify-center cursor-pointer">
-                                    <h3>
-                                        <%= loginuser.following.length %>
-                                    </h3>
-                                    <h4>Following</h4>
-                                </div>
+                                <a href="/myfollowers">
+                                    <div class="flex flex-col items-center justify-center cursor-pointer">
+                                        <h3>
+                                            <%= loginuser.followers.length %>
+                                        </h3>
+                                        <h4>Followers</h4>
+                                    </div>
+                                </a>
+
+                                <a href="/myfollowing">
+                                    <div class="flex flex-col items-center justify-center cursor-pointer">
+                                        <h3>
+                                            <%= loginuser.following.length %>
+                                        </h3>
+                                        <h4>Following</h4>
+                                    </div>
+                                </a>
                             </div>
             </div>
             <div class="dets px-6 mt-5">

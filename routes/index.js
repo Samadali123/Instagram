@@ -542,6 +542,18 @@ router.get('/followers/:userId', auth, async(req, res) => {
 });
 
 
+router.get('/myfollowers', auth, async(req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
+        res.render(`myfollowers`, { loginuser, footer: true });
+
+    } catch (err) {
+        res.status(500).render("server")
+    }
+});
+
+
+
 router.get('/followings/:userId', auth, async(req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -554,6 +566,16 @@ router.get('/followings/:userId', auth, async(req, res) => {
 });
 
 
+
+router.get('/myfollowing', auth, async(req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following");
+
+        res.render(`myfollowing`, { loginuser, footer: true });
+    } catch (err) {
+        res.status(500).render("server")
+    }
+});
 
 router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
     try {
