@@ -60,15 +60,16 @@
         <div class="px-6 mt-5">
             <a class="px-3 py-2 bg-zinc-800 text-xs rounded-md" href="/edit">Edit Profile</a>
         </div>
-        <div class="posts w-full flex gap-1 py-2 mt-5 flex-wrap">
+        <div class="posts w-full pl-5 flex gap-2 py-2 mt-5 flex-wrap">
             <% if(loginuser.posts.length > 0){  %>
 
                 <% loginuser.posts.forEach(function(elem){ %>
 
-                    <div class="post w-[32.5%] h-32 bg-sky-100 overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
-                    </div>
-
+                    <a href="/myposts/open/<%= elem._id %>">
+                        <div class="post w-[30vw] h-[25vh] mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
+                            <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+                        </div>
+                    </a>
 
                     <% })      %>
 

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define Schema for Story
 const storySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -21,14 +20,12 @@ const storySchema = new mongoose.Schema({
     }],
     expiryDate: {
         type: Date,
-        default: () => new Date(+new Date() + 24 * 60 * 60 * 1000) // 24 hours from now
+        default: () => new Date(+new Date() + 24 * 60 * 60 * 1000)
     },
 }, { timestamps: true, versionKey: false });
 
-// Create a TTL index on the expiryDate field
 storySchema.index({ expiryDate: 1 }, { expireAfterSeconds: 0 });
 
-// Create a model based on the schema
 const Story = mongoose.model('Story', storySchema);
 
 module.exports = Story;

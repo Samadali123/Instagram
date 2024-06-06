@@ -769,7 +769,6 @@ router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
 
         const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
 
-
         const openPost = await postModel.findById(req.params.openpost).populate("user");
         if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
@@ -784,6 +783,64 @@ router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
         res.status(500).render("server");
     }
 });
+
+
+router.get("/myposts/open/:openpost", auth, async(req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        // const openPost = await postModel.findById(req.params.openpost).populate("user").populate("comments");
+        const openPost = await postModel.findById(req.params.openpost)
+            .populate("user")
+            .populate({
+                path: 'comments',
+                select: '_id text',
+                populate: {
+                    path: 'user',
+                    select: 'username'
+                }
+            });
+
+
+        if (!openPost) return res.status(403).json({ message: "Post not found!" });
+
+
+        const userPosts = await postModel.find({ user: loginuser._id, _id: { $ne: openPost._id } }).sort({ createdAt: -1 }).populate("user").populate({
+            path: 'comments',
+            select: '_id text',
+            populate: {
+                path: 'user',
+                select: 'username'
+            }
+        });
+
+        let insertIndex = 0;
+        for (let i = 0; i < userPosts.length; i++) {
+            if (userPosts[i].createdAt < openPost.createdAt) {
+                insertIndex = i;
+                break;
+            }
+        }
+
+
+        const posts = [...userPosts];
+        posts.splice(insertIndex, 0, openPost);
+
+        const limitedPosts = posts.slice(0, 20);
+
+        res.render("myposts", {
+            footer: true,
+            posts: limitedPosts,
+            openPost,
+            loginuser,
+            dater: utils.formatRelativeTime
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error });
+    }
+});
+
 
 
 

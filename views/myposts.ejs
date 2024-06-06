@@ -1,0 +1,254 @@
+<% include ./partials/header.ejs %>
+    <div class="container container relative w-full h-full text-white">
+        <div class="header pl-4 w-full flex items-center gap-5 ">
+            <a href="/profile">
+                <p><i class="ri-arrow-left-line text-lg font-medium"></i></p>
+            </a>
+            <h6> My Posts</h6>
+        </div>
+
+
+        <div class="posts mb-20 ">
+
+            <% posts.reverse().forEach(function(elem){ %>
+
+                <div class="post  mt-10 w-full min-h-[50vh] ">
+                    <div class="title  relative flex justify-between items-center">
+                        <div class="left flex px-4 items-center gap-2 ">
+
+                            <% if(elem.user.stories.length > 0){  %>
+                                <a href="/story/<%= elem.user._id %>/0">
+                                    <div class="circle flex-shrink-0 relative cursor-pointer">
+                                        <div class="w-[8vw] h-[8vw] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <%  } else{  %>
+
+                                    <a href="/openprofile/<%= elem.user.username %>">
+                                        <div class="circle flex-shrink-0 relative cursor-pointer  ">
+                                            <div class="w-[8vw] h-[8vw] bg-sky-100 overflow-hidden rounded-full ">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <%   }  %>
+
+                                        <a href="/openprofile/<%= elem.user.username %>">
+                                            <h4 class="text-sm">
+                                                <%= elem.user.username %>
+                                            </h4>
+                                        </a>
+                                        <h6 class="text-xs opacity-30">
+                                            <%= dater(new Date(elem.createdAt)) %>
+                                        </h6>
+                        </div>
+
+                        <div class="right px-2">
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="w-full h-96 flex items-center justify-center relative mt-4 bg-sky-100 overflow-hidden">
+                        <img data-id="<%= elem._id %>" class="postimg w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+                    </div>
+                    <div class="options  relative w-full px-4 flex justify-between items-center text-[1.4rem]">
+                        <div class="flex gap-3 mt-2">
+
+                            <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
+
+                                <i data-id="<%= elem._id %>" class=" like ri-heart-3-line cursor-pointer"></i>
+                                <%   }   else {  %>
+
+                                    <i data-id="<%= elem._id %>" class=" like ri-heart-3-fill text-red-500 cursor-pointer"></i>
+                                    <%    }  %>
+
+                                        <a href="/view/comments/<%= elem._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
+                                        <i class="ri-share-circle-line"></i>
+                        </div>
+                        <% if(loginuser.savedPosts.indexOf(elem._id) === -1){ %>
+                            <i data-id="<%= elem._id %>" class="save ri-bookmark-line cursor-pointer"></i>
+                            <%   }   else {   %>
+                                <i data-id="<%= elem._id %>" class="save ri-bookmark-fill cursor-pointer"></i>
+                                <% } %>
+
+                    </div>
+                    <h3 class="px-4 relative mt-2 text-sm leading-none tracking-tight whitespace-nowrap w-fit whitespace-nowrap ">
+                        <span class="total-likes main cursor-pointer">
+                          <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby"><%= elem.likes.length %>  likes </a>
+                          </span>
+                    </h3>
+                    <h2 class="text-white pl-3.5 relative font-light text-sm   mt-2 "><span class="font-semibold  pr-2 whitespace-nowrap"><%= elem.user.username %></span>
+                        <%= elem.caption %>
+                    </h2>
+
+                    <a href="/view/comments/<%= elem._id %>">
+                    <p id="view-comments" data-all="<%= elem.comments.length %>" data-post="<%= elem._id %>" class="views ml-3.5 font-light text-sm cursor-pointer" style="color: rgba(192, 192, 192, 0.58);">
+                        <% if(elem.comments.length == 0){  %>
+                            no comments.
+                            <%    } else if(elem.comments.length == 1){  %>
+                                View all <span><%= elem.comments.length %></span> comment.
+                                <%    }   else if(elem.comments.length > 1){  %>
+                                    View all <span><%= elem.comments.length %></span> comments.
+                                    <%  } %>
+
+                    </p>
+                   </a>
+
+
+                    <div class="latest-comment relative pl-3">
+                        <% if(elem.comments.length > 0) { %>
+                            <% let coms = elem.comments.slice(0, 2); %>
+                                <% coms.forEach(function(comment) { %>
+                                    <div class="flex gap-3 items-center">
+                                        <a href="/openprofile/<%= comment.user.username %>">
+                                            <h5 class="whitespace-nowrap">
+                                                <%= comment.user.username %>
+                                            </h5>
+                                        </a>
+                                        <p>
+                                            <%= comment.text %>
+                                        </p>
+                                    </div>
+                                    <% }); %>
+                                        <% } %>
+                    </div>
+
+
+                </div>
+
+                <%  }) %>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let loginuser = `<%= loginuser._id  %>`;
+        let loginusername = `<%= loginuser.username %>`;
+
+        function handlelike() {
+            document.querySelector(".posts").addEventListener("click", function(e) {
+                if (e.target.classList.contains(`like`)) {
+
+                    let post = e.target.dataset.id;
+                    var icon = e.target;
+
+                    axios.get(`/like/post/${post}`)
+                        .then((response) => {
+                            if (icon.classList.contains('ri-heart-3-line')) {
+                                icon.classList.add('ri-heart-3-fill', 'text-red-500');
+                                icon.classList.remove('ri-heart-3-line')
+                                icon.classList.add('scale-125');
+                            } else {
+
+                                icon.classList.add('ri-heart-3-line');
+                                icon.classList.remove('ri-heart-3-fill', 'text-red-500');
+                                icon.classList.add('scale-100');
+                            }
+
+                            e.target.parentNode.parentNode.parentNode.querySelector('.total-likes').textContent = response.data.likes.length + "   likes";
+                        })
+                }
+            })
+        }
+
+        handlelike();
+
+
+        function saveandunsavepost() {
+            document.querySelector(".posts").addEventListener("click", function(e) {
+
+                if (e.target.classList.contains(`save`)) {
+                    const post = e.target.dataset.id;
+                    axios.get(`/save/${post}`)
+                        .then(function(res) {
+                            if (e.target.classList.contains('ri-bookmark-line')) {
+                                e.target.classList.add('ri-bookmark-fill');
+                                e.target.classList.remove('ri-bookmark-line');
+
+                            } else {
+                                e.target.classList.add('ri-bookmark-line');
+                                e.target.classList.remove('ri-bookmark-fill');
+
+                            }
+                        })
+
+                }
+            })
+        }
+
+        saveandunsavepost();
+
+
+
+        function heartaninmation() {
+
+            document.querySelector(".posts")
+                .addEventListener("click", function(ev) {
+                    if (ev.target.classList.contains('postimg')) {
+                        var hearticon = document.createElement('i');
+                        hearticon.classList.add('ri-heart-3-fill', 'text-3xl', 'text-white-600', 'z-[34]');
+                        hearticon.style.scale = 2.5;
+                        hearticon.style.position = 'absolute';
+                        hearticon.style.left = "50%";
+                        hearticon.style.top = "50%";
+                        hearticon.style.transform = "translate(-50%, -50%)";
+
+
+
+
+                        ev.target.parentNode.appendChild(hearticon);
+
+                        axios.get(`/like/post/${ev.target.dataset.id}`)
+                            .then(function(response) {
+                                var icon = ev.target.parentNode.parentNode.querySelector('.like');
+                                if (icon.classList.contains('ri-heart-3-line')) {
+                                    icon.classList.remove('ri-heart-3-line');
+                                    icon.classList.add('ri-heart-3-fill', 'text-red-500');
+                                } else {
+                                    icon.classList.add('ri-heart-3-line');
+                                    icon.classList.remove('ri-heart-3-fill', 'text-red-500');
+                                }
+
+                                var likes = ev.target.parentNode.parentNode.querySelector(".total-likes");
+                                likes.textContent = response.data.likes.length + ' likes';
+                            })
+
+                        gsap.from(hearticon, {
+                            scale: 0,
+                            ease: 'linear',
+                            duration: 1,
+                            onComplete: function() {
+                                ev.target.parentNode.removeChild(hearticon);
+                            }
+                        })
+                    }
+                })
+        }
+
+
+
+        heartaninmation();
+    </script>
+
+    <% include ./partials/footer.ejs %>
