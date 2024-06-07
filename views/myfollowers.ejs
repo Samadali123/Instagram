@@ -18,6 +18,32 @@
             </div>
         </div>
 
+
+        <div class="popup hidden flex py-4 px-3 text-white gap-4 fixed  ml-5  bottom-[0%] z-50 w-[90%] h-[30vh] bg-zinc-800 rounded-md  ">
+            <div class="left  h-full flex flex-col justify-between py-4">
+                <div class="profile w-[45px] h-[45px] overflow-hidden rounded-full">
+                    <img class="w-full h-full object-cover object-center rounded-full" src="" alt="">
+                </div>
+
+
+                <h3 class="font-semibold cursor-pointer tracking-tight text-red-600 text-lg">Remove</h3>
+
+            </div>
+            <div class="right  pt-3  text-white h-full flex flex-col  ">
+                <h2 class="tracking-tight">Remove Follower ?</h2>
+                <p class="font-light">We won't tell </p>
+                <h4 class="font-light"></h4>
+                <p class="font-light">they were removed from your <br>followers.</p>
+
+
+
+                <h3 class="font-light tracking-tight mt-7 cursor-pointer cross ">Cancel</h3>
+
+            </div>
+
+        </div>
+
+
         <div class="followerscontainer pt-5  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
             <div id="followersinp" class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
                 <div class="left flex items-center gap-3  w-11/12 ">
@@ -72,19 +98,14 @@
                         </div>
 
                         <div class="right  text-center pr-3 ">
-
-
-                            <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                                <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                                <%    }   else{   %>
-
-                                    <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
-                                    <%  }  %>
-
+                            <button data-profile="<%= elem.profile %>" data-username="<%= elem.username %>" data-id="<%= elem._id %>" class="remove text-white bg-zinc-800  px-6 py-1 text-sm font-light " style="border-radius: 5px;">Remove</button>
                         </div>
 
                     </div>
+
                     <% })  %>
+
+
             </div>
 
             <div class="searchfollowers py-6">
@@ -92,6 +113,8 @@
             </div>
 
         </div>
+
+
 
         <div class="followingcontainer pt-5 hidden  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
             <div class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
@@ -176,8 +199,6 @@
 
 
     </div>
-
-
 
 
     <style>
@@ -463,5 +484,76 @@
         }
 
         searchFollowing();
+
+
+        document.querySelector(".cross").addEventListener("click", function(e){
+            document.querySelector(".popup").classList.replace("flex", "hidden");
+        })
+
+
+        document.querySelector(".users").addEventListener("click", function(dets){
+         
+            if(dets.target.classList.contains("remove")){
+              document.querySelector(".popup").classList.replace("hidden", "flex");
+              let src = `/images/uploads/${dets.target.dataset.profile}`
+              document.querySelector(".popup .left .profile img").setAttribute("src",  src);
+              document.querySelector(".popup .right h4 ").textContent =  dets.target.dataset.username;
+               
+              document.querySelector(".popup .left h3").addEventListener("click", function(event){
+                document.querySelector(".popup").classList.replace("flex", "hidden");
+
+                axios.delete(`/myfollowers/remove/${dets.target.dataset.id}`).then(function(response){
+                    document.querySelector(".users").innerHTML = "";
+                    let newFollowers = "";
+                    response.data.forEach(function(elem) {
+                        newFollowers += `<div class="user mt-2 w-full relative mb-5 flex justify-between items-center">
+                            <div class="left flex gap-3 items-center">
+                                ${elem.stories.length > 0 ? `
+                                    <a class="cursor-pointer" href="/story/${elem._id}/0">
+                                        <div class="w-[50px] h-[50px] gradient overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-center object-cover rounded-full" src="/images/uploads/${elem.profile}" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                ` : `
+                                    <a href="/openprofile/${elem.username}">
+                                        <div class="w-[50px] h-[50px] overflow-hidden">
+                                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-center object-cover rounded-full" src="/images/uploads/${elem.profile}" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                `}
+                                <div class="dets text-sm">
+                                    <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                        <h3>${elem.username}</h3>
+                                    </a>
+                                    <a href="/openprofile/${elem.username}" class="cursor-pointer">
+                                        <p>${elem.fullname}</p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="right text-center pr-3">
+                                <button data-profile="${elem.profile}" data-username="${elem.username}" data-id="${elem._id}" class="remove text-white bg-zinc-800 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Remove</button>
+                            </div>
+                        </div>`;
+                    });
+                    document.querySelector(".users").innerHTML = newFollowers;
+
+                  }).catch(function(error){
+                    console.log(error)
+    
+                  })
+                
+              })
+            
+             
+
+            }
+            
+        })
     </script>
+
+
     <% include ./partials/footer.ejs %>

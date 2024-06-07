@@ -577,6 +577,28 @@ router.get('/myfollowing', auth, async(req, res) => {
     }
 });
 
+
+
+router.delete("/myfollowers/remove/:id", auth, async(req, res, next) => {
+    try {
+        const followertodelete = await userModel.findById(req.params.id).populate("following")
+
+
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers")
+        loginuser.followers.splice(loginuser.followers.indexOf(followertodelete._id), 1);
+
+        followertodelete.following.splice(followertodelete.following.indexOf(loginuser._id), 1);
+
+        await loginuser.save();
+        await followertodelete.save();
+
+        res.json(loginuser.followers);
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+
 router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
     try {
         const openUser = req.params.openuser;
