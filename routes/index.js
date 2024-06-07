@@ -97,7 +97,7 @@ router.post(`/register`, async function(req, res, next) {
 
         res.redirect("/profile");
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 
 
@@ -124,7 +124,7 @@ router.post("/login", async(req, res, next) => {
 
         });
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 })
 
@@ -134,7 +134,7 @@ router.get("/logout", auth, async(req, res, next) => {
         res.clearCookie("token");
         res.redirect("/login")
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 })
 
@@ -165,7 +165,7 @@ router.get('/', function(req, res) {
     try {
         res.render('index', { footer: false });
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 });
 
@@ -175,7 +175,7 @@ router.get('/login', function(req, res) {
         res.render('login', { footer: false });
 
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 });
 
@@ -200,7 +200,7 @@ router.get('/feed', auth, async function(req, res) {
 
         res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
     } catch (err) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 });
 
@@ -210,8 +210,8 @@ router.get('/profile', auth, async function(req, res) {
 
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`);
         res.render('profile', { footer: true, loginuser });
-    } catch (err) {
-        res.status(500).render("server");
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -223,8 +223,8 @@ router.post(`/uploadprofile`, auth, upload.single(`profile`), async(req, res, ne
         loginuser.profile = req.file.filename;
         await loginuser.save();
         res.redirect(`/edit`);
-    } catch (err) {
-        res.status(500).render("server");
+    } catch (error) {
+        res.status(500).json({ error })
     }
 
 })
@@ -239,8 +239,8 @@ router.post(`/edit/profile`, auth, async(req, res) => {
         User.bio = bio;
         await User.save();
         res.redirect("/profile")
-    } catch (err) {
-        res.status(500).render("server");
+    } catch (error) {
+        res.status(500).json({ error })
     }
 
 })
@@ -251,8 +251,8 @@ router.get('/search', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('search', { footer: true, loginuser });
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -263,8 +263,8 @@ router.get(`/users/:input`, async(req, res) => {
         const regex = new RegExp(`^${input}`, 'i');
         const users = await userModel.find({ username: regex });
         res.json(users);
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -273,8 +273,8 @@ router.get('/edit', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('edit', { footer: true, loginuser });
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 
 });
@@ -284,8 +284,8 @@ router.get('/upload', auth, async function(req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('upload', { footer: true, loginuser });
-    } catch (err) {
-        res.status(500).render("server");
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -318,8 +318,9 @@ router.post(`/upload/post`, auth, upload.single(`image`), async(req, res) => {
         await loginuser.save();
 
         res.redirect(`/feed`);
-    } catch (err) {
-        res.status(500).json({ message: err.message })
+
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -343,8 +344,8 @@ router.get(`/like/post/:postId`, auth, async(req, res) => {
         await loginuser.save();
 
         res.json(post);
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -356,8 +357,8 @@ router.get(`/openprofile/:username`, auth, async(req, res) => {
         const openuser = await userModel.findOne({ username: req.params.username }).populate(`posts`);
 
         res.render(`openprofile`, { footer: true, loginuser, openuser });
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -385,8 +386,8 @@ router.get(`/save/:postId`, auth, async(req, res) => {
         await post.save();
 
         res.json(post);
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 
 })
@@ -426,8 +427,8 @@ router.post('/comment/:data/:postid', auth, async(req, res) => {
         let formattedDate = `${monthName} ${day}, ${year}`;
         onecomment.formattedDate = formattedDate;
         res.json(onecomment);
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -457,8 +458,8 @@ router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
         await followinguser.save();
 
         res.json(followinguser);
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 })
 
@@ -486,8 +487,8 @@ router.get('/view/comments/:postId', auth, async(req, res, next) => {
 
         const loginuser = await userModel.findOne({ email: req.user.email });
         res.render('comments', { header: true, loginuser, comments, post });
-    } catch (err) {
-        return res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -506,8 +507,8 @@ router.get(`/post/likes/:postId`, auth, async(req, res) => {
         const loginuser = await userModel.findOne({ email: req.user.email })
 
         res.render(`likedby`, { loginuser, post, footer: true })
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 
 });
@@ -524,7 +525,7 @@ router.get(`/post/likes/users/:postId/:input`, auth, async(req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 
 });
@@ -536,8 +537,8 @@ router.get('/followers/:userId', auth, async(req, res) => {
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
         res.render(`followers`, { openprofileuser, loginuser, footer: true });
 
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -547,8 +548,8 @@ router.get('/myfollowers', auth, async(req, res) => {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
         res.render(`myfollowers`, { loginuser, footer: true });
 
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -560,8 +561,8 @@ router.get('/followings/:userId', auth, async(req, res) => {
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
         res.render(`followings`, { openprofileuser, loginuser, footer: true });
 
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -572,8 +573,8 @@ router.get('/myfollowing', auth, async(req, res) => {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following");
 
         res.render(`myfollowing`, { loginuser, footer: true });
-    } catch (err) {
-        res.status(500).render("server")
+    } catch (error) {
+        res.status(500).json({ error })
     }
 });
 
@@ -595,6 +596,7 @@ router.delete("/myfollowers/remove/:id", auth, async(req, res, next) => {
         res.json(loginuser.followers);
     } catch (error) {
         res.status(500).json({ error })
+
     }
 })
 
@@ -613,8 +615,7 @@ router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
         const followers = user.followers.filter(follower => regex.test(follower.username));
         res.json(followers);
     } catch (error) {
-        console.error(error);
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 });
 
@@ -633,8 +634,8 @@ router.get(`/search/:openuser/following/:input`, auth, async(req, res) => {
         const following = user.following.filter(followingUser => regex.test(followingUser.username));
         res.json(following);
     } catch (error) {
-        console.error(error);
-        res.status(500).render("server")
+
+        res.status(500).json({ error })
     }
 });
 
@@ -657,7 +658,7 @@ router.put(`/comment/like/:commentID`, auth, async(req, res, next) => {
         await comment.save();
         res.status(200).json({ success: true, length });
     } catch (error) {
-        return res.status(500).render("server")
+        res.status(500).json({ error })
 
     }
 })
@@ -682,7 +683,7 @@ router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req
 
 
     } catch (error) {
-        return res.status(500).render("server")
+        res.status(500).json({ error })
 
     }
 })
@@ -700,7 +701,7 @@ router.get(`/story/:userId/:number`, auth, async(req, res) => {
             res.redirect("/feed");
         }
     } catch (error) {
-        return res.status(500).render("server")
+        res.status(500).json({ error })
     }
 
 })
@@ -717,8 +718,8 @@ router.get(`/story/:number`, auth, async(req, res) => {
         } else {
             res.redirect("/feed");
         }
-    } catch (err) {
-        return res.status(500).render("server");
+    } catch (error) {
+        res.status(500).json({ error })
 
     }
 
@@ -762,8 +763,7 @@ router.put("/story/like/:StoryId", auth, async(req, res, next) => {
 
         res.json(likedStory);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error })
     }
 });
 
@@ -792,8 +792,7 @@ router.delete("/story/delete/:StoryId", auth, async(req, res, next) => {
         res.json({ message: "Story successfully deleted", story: storyToDelete });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error })
     }
 });
 
@@ -802,7 +801,7 @@ router.get("/forgot-password", async(req, res, next) => {
     try {
         res.render("forgotpassword")
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 })
 
@@ -824,7 +823,7 @@ router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
         const posts = [openPost, ...randomPosts];
         res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
     } catch (error) {
-        res.status(500).render("server");
+        res.status(500).json({ error })
     }
 });
 
@@ -880,8 +879,7 @@ router.get("/myposts/open/:openpost", auth, async(req, res, next) => {
             dater: utils.formatRelativeTime
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error });
+        res.status(500).json({ error })
     }
 });
 
@@ -929,7 +927,7 @@ router.post("/forgotpassword", async(req, res, next) => {
         }
 
     } catch (error) {
-        res.status(500).render("server");
+        res.status(500).json({ error })
     }
 })
 
@@ -939,7 +937,7 @@ router.get("/sent-successfully", async(req, res, next) => {
         res.render("sentmail")
 
     } catch (error) {
-        res.status(500).render("server")
+        res.status(500).json({ error })
     }
 })
 
@@ -948,7 +946,7 @@ router.get("/reset-password", async(req, res, next) => {
     try {
         res.render("resetpassword")
     } catch (error) {
-        res.status(500).render("server");
+        res.status(500).json({ error })
     }
 });
 
@@ -997,8 +995,7 @@ router.post("/resetpassword", async(req, res, next) => {
         // Uncomment or adjust as needed
 
     } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).render("server") // Send a more informative message
+        res.status(500).json({ error }) // Send a more informative message
     }
 });
 

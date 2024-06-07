@@ -10,12 +10,20 @@
                     <%= loginuser.username %>
                 </h3>
             </div>
-            <div class="bottom flex gap-6  items-center mt-3  cursor-pointer">
-                <p id="followers" class="text-lg" style="border-bottom: 1px solid silver;">
-                    <%= loginuser.followers.length %> followers</p>
-                <p id="following" class="text-lg">
-                    <%= loginuser.following.length %> following</p>
-            </div>
+
+
+            <% if(loginuser.followers.length > 0){ %>
+                <div class="bottom flex gap-6  items-center mt-3  cursor-pointer">
+                    <p id="followers" class="text-lg silver " style="border-bottom: 1px solid silver;">
+                        <%= loginuser.followers.length %> followers</p>
+                    <p id="following" class="text-lg black">
+                        <%= loginuser.following.length %> following</p>
+                </div>
+                <% } else{  %>
+                    <h3 class="mt-4 ">Don't have any followers.</h3>
+                    <% }  %>
+
+
         </div>
 
 
@@ -44,158 +52,168 @@
         </div>
 
 
-        <div class="followerscontainer pt-5  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
-            <div id="followersinp" class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
-                <div class="left flex items-center gap-3  w-11/12 ">
-                    <p><i class="ri-search-line"></i></p>
-                    <input class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+        <% if(loginuser.followers.length > 0){  %>
+            <div class="followerscontainer pt-5  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+                <div id="followersinp" class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
+                    <div class="left flex items-center gap-3  w-11/12 ">
+                        <p><i class="ri-search-line"></i></p>
+                        <input class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
 
+                    </div>
+                    <div class="right pr-8">
+                        <p><i class="cancel cursor-pointer ri-close-line hidden"></i></p>
+                    </div>
                 </div>
-                <div class="right pr-8">
-                    <p><i class="cancel cursor-pointer ri-close-line hidden"></i></p>
-                </div>
-            </div>
 
-            <h3 id="all" class="all flex font-normal mt-3 pl-2">All followers</h3>
+                <h3 id="all" class="all flex font-normal mt-3 pl-2">All followers</h3>
 
-            <div id="followerusers" class="users mt-5 ">
+                <div id="followerusers" class="users mt-5 ">
 
-                <% loginuser.followers.forEach(function(elem){  %>
+                    <% loginuser.followers.forEach(function(elem){  %>
 
-                    <div class="user mt-2 w-full relative mb-5  flex justify-between items-center ">
+                        <div class="user mt-2 w-full relative mb-5  flex justify-between items-center ">
 
-                        <div class="left flex gap-3 items-center  ">
-                            <% if(elem.stories.length > 0){  %>
-                                <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
-                                    <div class="w-[50px] h-[50px]  gradient  overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
-                                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
-                                        </div>
-                                    </div>
-                                </a>
-                                <%   }  else { %>
-                                    <a href="/openprofile/<%= elem.username %>">
-                                        <div class="w-[50px] h-[50px]  overflow-hidden ">
-                                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                            <div class="left flex gap-3 items-center  ">
+                                <% if(elem.stories.length > 0){  %>
+                                    <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
+                                        <div class="w-[50px] h-[50px]  gradient  overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                                 <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
                                             </div>
                                         </div>
                                     </a>
-                                    <%  } %>
-
-                                        <div class="dets text-sm ">
-                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                                <h3>
-                                                    <%= elem.username %>
-                                                </h3>
-                                            </a>
-                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                                <p>
-                                                    <%= elem.fullname %>
-                                                </p>
-                                            </a>
-                                        </div>
-                        </div>
-
-                        <div class="right  text-center pr-3 ">
-                            <button data-profile="<%= elem.profile %>" data-username="<%= elem.username %>" data-id="<%= elem._id %>" class="remove text-white bg-zinc-800  px-6 py-1 text-sm font-light " style="border-radius: 5px;">Remove</button>
-                        </div>
-
-                    </div>
-
-                    <% })  %>
-
-
-            </div>
-
-            <div class="searchfollowers py-6">
-
-            </div>
-
-        </div>
-
-
-
-        <div class="followingcontainer pt-5 hidden  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
-            <div class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
-                <div class="left flex items-center gap-3  w-11/12 ">
-                    <p><i class="ri-search-line"></i></p>
-                    <input id="followinginp" class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
-                </div>
-                <div class="right pr-8">
-                    <p><i class="cancel ri-close-line hidden"></i></p>
-                </div>
-            </div>
-
-
-            <div id="followingusers" class="users pt-1 mt-6">
-
-                <% loginuser.following.forEach(function(elem){  %>
-
-                    <div class="user w-full relative mb-5  flex justify-between items-center ">
-
-                        <div class="left flex gap-3 items-center  ">
-
-                            <% if(elem.stories.length > 0){  %>
-                                <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
-                                    <div class="w-[50px] h-[50px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
-                                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
-                                        </div>
-                                    </div>
-                                </a>
-                                <%   }  else { %>
-                                    <a href="/openprofile/<%= elem.username %>">
-                                        <div class="w-[50px] h-[50px]  rounded-full overflow-hidden ">
-                                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                    <%   }  else { %>
+                                        <a href="/openprofile/<%= elem.username %>">
+                                            <div class="w-[50px] h-[50px]  overflow-hidden ">
+                                                <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                                    <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <%  } %>
+                                        </a>
+                                        <%  } %>
 
+                                            <div class="dets text-sm ">
+                                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                    <h3>
+                                                        <%= elem.username %>
+                                                    </h3>
+                                                </a>
+                                                <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                    <p>
+                                                        <%= elem.fullname %>
+                                                    </p>
+                                                </a>
+                                            </div>
+                            </div>
 
-
-                                        <div class="dets text-sm ">
-                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                                <h3>
-                                                    <%= elem.username %>
-                                                </h3>
-                                            </a>
-                                            <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
-                                                <p>
-                                                    <%= elem.fullname %>
-                                                </p>
-                                            </a>
-                                        </div>
-                        </div>
-
-                        <div class="right  text-center pr-3 ">
-
-
-                            <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                                <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                                <%    }   else{   %>
-
-                                    <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
-                                    <%  }  %>
+                            <div class="right  text-center pr-3 ">
+                                <button data-profile="<%= elem.profile %>" data-username="<%= elem.username %>" data-id="<%= elem._id %>" class="remove text-white bg-zinc-800  px-6 py-1 text-sm font-light " style="border-radius: 5px;">Remove</button>
+                            </div>
 
                         </div>
 
+                        <% })  %>
+
+
+                </div>
+
+                <div class="searchfollowers py-6">
+
+                </div>
+
+            </div>
+            <%     }   %>
+
+
+
+                <% if(loginuser.following.length > 0){ %>
+
+                    <div class="followingcontainer pt-5 hidden  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+
+
+                        <div class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
+                            <div class="left flex items-center gap-3  w-11/12 ">
+                                <p><i class="ri-search-line"></i></p>
+                                <input id="followinginp" class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+                            </div>
+                            <div class="right pr-8">
+                                <p><i class="cancel ri-close-line hidden"></i></p>
+                            </div>
+                        </div>
+
+
+                        <div id="followingusers" class="users pt-1 mt-6">
+
+                            <% loginuser.following.forEach(function(elem){  %>
+
+                                <div class="user w-full relative mb-5  flex justify-between items-center ">
+
+                                    <div class="left flex gap-3 items-center  ">
+
+                                        <% if(elem.stories.length > 0){  %>
+                                            <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
+                                                <div class="w-[50px] h-[50px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                                    <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                        <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <%   }  else { %>
+                                                <a href="/openprofile/<%= elem.username %>">
+                                                    <div class="w-[50px] h-[50px]  rounded-full overflow-hidden ">
+                                                        <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
+                                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <%  } %>
+
+
+
+                                                    <div class="dets text-sm ">
+                                                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                            <h3>
+                                                                <%= elem.username %>
+                                                            </h3>
+                                                        </a>
+                                                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                            <p>
+                                                                <%= elem.fullname %>
+                                                            </p>
+                                                        </a>
+                                                    </div>
+                                    </div>
+
+                                    <div class="right  text-center pr-3 ">
+
+
+                                        <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
+                                            <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                                            <%    }   else{   %>
+
+                                                <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
+                                                <%  }  %>
+
+                                    </div>
+
+                                </div>
+
+
+                                <% })  %>
+
+
+
+                        </div>
+
+                        <div class="searchfollowing pt-2 py-6">
+
+
+                        </div>
                     </div>
 
-
-                    <% })  %>
-
-
-
-            </div>
-
-            <div class="searchfollowing pt-2 py-6">
-
-
-            </div>
-        </div>
+                    <%  }  else{  %>
+                        <h3 class="text-white ml-7 mt-[8vh] ">No followings till yet.</h3>
+                        <% }  %>
 
 
     </div>
@@ -218,6 +236,7 @@
 
         const following = document.querySelector("#following")
         const followers = document.querySelector("#followers")
+
         const followerscontainer = document.querySelector(".followerscontainer")
         const followingcontainer = document.querySelector(".followingcontainer")
         let user;
@@ -241,18 +260,21 @@
 
 
             following.addEventListener("click", (dets) => {
+                dets.target.style.borderBottom = "1px solid silver";
                 followerscontainer.style.display = "none";
                 followingcontainer.style.display = "block";
-                followers.style.borderBottom = "none";
-                following.style.borderBottom = "1px solid silver";
+                followers.style.borderBottom = "none"
             })
 
 
             followers.addEventListener("click", (dets) => {
                 followerscontainer.style.display = "block";
                 followingcontainer.style.display = "none";
-                followers.style.borderBottom = "1px solid silver";
+                dets.target.style.borderBottom = "1px solid silver";
                 following.style.borderBottom = "none";
+
+
+
             })
 
 
