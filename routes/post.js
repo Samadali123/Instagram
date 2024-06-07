@@ -36,7 +36,12 @@ const postSchema = mongoose.Schema({
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: `comment`
-    }]
+    }],
+
+    commentsEnabled: {
+        type: Boolean,
+        default: true
+    }
 
 })
 
