@@ -19,7 +19,7 @@
                     <div class="title  relative flex justify-between items-center">
                         <div class="left flex px-4 items-center gap-2 ">
 
-                            <% if(elem.user.stories.length > 0){  %>
+                            <% if(elem.user.stories.length> 0){ %>
                                 <a href="/story/<%= elem.user._id %>/0">
                                     <div class="circle flex-shrink-0 relative cursor-pointer">
                                         <div class="w-[8vw] h-[8vw] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
@@ -29,7 +29,7 @@
                                         </div>
                                     </div>
                                 </a>
-                                <%  } else{  %>
+                                <% } else{ %>
 
                                     <a href="/openprofile/<%= elem.user.username %>">
                                         <div class="circle flex-shrink-0 relative cursor-pointer  ">
@@ -39,7 +39,7 @@
                                         </div>
                                     </a>
 
-                                    <%   }  %>
+                                    <% } %>
 
                                         <a href="/openprofile/<%= elem.user.username %>">
                                             <h4 class="text-sm">
@@ -53,7 +53,9 @@
 
 
                         <div class="right px-2">
-                            <p><i class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+                            <p><i data-id="<%= elem._id %>" data-comments="<%= elem.commentsEnabled %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+
+
                         </div>
 
                     </div>
@@ -64,54 +66,63 @@
                     <div class="options  relative w-full px-4 flex justify-between items-center text-[1.4rem]">
                         <div class="flex gap-3 mt-2">
 
-                            <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
+                            <% if(elem.likes.indexOf(loginuser._id)===-1){ %>
 
                                 <i data-id="<%= elem._id %>" class=" like ri-heart-3-line cursor-pointer"></i>
-                                <%   }   else {  %>
+                                <% } else { %>
 
                                     <i data-id="<%= elem._id %>" class=" like ri-heart-3-fill text-red-500 cursor-pointer"></i>
-                                    <%    }  %>
+                                    <% } %>
 
-                                        <% if(elem.commentsEnabled){  %>
-                                            <a href="/view/comments/<%= elem._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
+                                        <% if(elem.commentsEnabled){ %>
+                                            <a href="/view/comments/<%= elem._id %>"><i id="addtocomment"
+                                                    class="ri-chat-3-line cursor-pointer"></i></a>
                                             <% } %>
 
 
 
                                                 <i class="ri-share-circle-line"></i>
                         </div>
-                        <% if(loginuser.savedPosts.indexOf(elem._id) === -1){ %>
+                        <% if(loginuser.savedPosts.indexOf(elem._id)===-1){ %>
                             <i data-id="<%= elem._id %>" class="save ri-bookmark-line cursor-pointer"></i>
-                            <%   }   else {   %>
+                            <% } else { %>
                                 <i data-id="<%= elem._id %>" class="save ri-bookmark-fill cursor-pointer"></i>
                                 <% } %>
 
                     </div>
                     <h3 class="px-4 relative mt-2 text-sm leading-none tracking-tight whitespace-nowrap w-fit whitespace-nowrap ">
                         <span class="total-likes main cursor-pointer">
-                              <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby"><%= elem.likes.length %>  likes </a>
-                              </span>
+                            <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby">
+                                <%= elem.likes.length %> likes
+                            </a>
+                        </span>
                     </h3>
-                    <h2 class="text-white pl-3.5 relative font-light text-sm   mt-2 "><span class="font-semibold  pr-2 whitespace-nowrap"><%= elem.user.username %></span>
+                    <h2 class="text-white pl-3.5 relative font-light text-sm   mt-2 "><span class="font-semibold  pr-2 whitespace-nowrap">
+                            <%= elem.user.username %>
+                        </span>
                         <%= elem.caption %>
                     </h2>
 
                     <a href="/view/comments/<%= elem._id %>">
 
-                        <% if(elem.commentsEnabled){  %>
+                        <% if(elem.commentsEnabled){ %>
                             <p id="view-comments" data-all="<%= elem.comments.length %>" data-post="<%= elem._id %>" class="views ml-3.5 font-light text-sm cursor-pointer" style="color: rgba(192, 192, 192, 0.58);">
-                                <% if(elem.comments.length == 0){  %>
+                                <% if(elem.comments.length==0){ %>
                                     no comments.
-                                    <%    } else if(elem.comments.length == 1){  %>
-                                        View all <span><%= elem.comments.length %></span> comment.
-                                        <%    }   else if(elem.comments.length > 1){  %>
-                                            View all <span><%= elem.comments.length %></span> comments.
-                                            <%  } %>
+                                    <% } else if(elem.comments.length==1){ %>
+                                        View all <span>
+                                            <%= elem.comments.length %>
+                                        </span> comment.
+                                        <% } else if(elem.comments.length> 1){ %>
+                                            View all <span>
+                                                <%= elem.comments.length %>
+                                            </span> comments.
+                                            <% } %>
 
 
 
                             </p>
-                            <%    }    %>
+                            <% } %>
 
 
                     </a>
@@ -122,8 +133,8 @@
                     </div>
 
 
-                    <% if(elem.commentsEnabled){  %>
-                        <% if(elem.comments.length <= 4){  %>
+                    <% if(elem.commentsEnabled){ %>
+                        <% if(elem.comments.length <=4){ %>
                             <div class="add-comment flex  max-w-full  px-3 mt-2 gap-2 ">
                                 <div class="loginproifle max-w-[30px] h-[30px] rounded-full  overflow-hidden">
                                     <img class="w-full h-full object-cover " src="/images/uploads/<%= loginuser.profile %>" alt="">
@@ -132,14 +143,14 @@
                                 <i class=" hidden add-comment  ri-arrow-up-line mt-0.5 text-lg cursor-pointer"></i>
 
                             </div>
-                            <%   }  %>
-                                <%    }   %>
+                            <% } %>
+                                <% } %>
 
 
 
                 </div>
 
-                <%  }) %>
+                <% }) %>
 
         </div>
 
@@ -153,9 +164,9 @@
                 <p class="text-lg cursor-pointer">Hide like count</p>
             </div>
 
-            <div class="turnoff flex gap-3 font-medium cursor-pointer">
+            <div class="turn flex gap-3 font-medium cursor-pointer">
                 <span><i class="ri-shut-down-line text-lg"></i></span>
-                <p class="text-lg cursor-pointer">Turn off commentinng</p>
+                <p class="commentswitch text-lg cursor-pointer">Turn off commentinng</p>
             </div>
 
             <div class="edit flex gap-3 font-medium cursor-pointer">
@@ -310,12 +321,40 @@
 
                 if (event.target.classList.contains("more")) {
                     document.querySelector(".popup").classList.replace("hidden", "flex");
+
+                    document.querySelector(".commentswitch").addEventListener("click", function(e) {
+
+
+                        if (event.target.dataset.comments) {
+                            document.querySelector(".turn").innerHTML =
+                                `<span><i class="ri-donut-chart-line text-lg cursor-pointer"></i></span>
+                                 <p class="commentswitch text-lg cursor-pointer">Turn on commenting</p>`;
+                        } else {
+                            document.querySelector(".turn").innerHTML =
+                                `<span><i class="ri-shut-down-line text-lg"></i></span>
+                                 <p class="commentswitch text-lg cursor-pointer">Turn off commenting</p>`;
+                        }
+
+                        axios.put(`/comments/toggle/${event.target.dataset.id}`).then(function(response) {
+                            console.log(response.data)
+                        }).catch(function(error) {
+                            console.log(error)
+                        })
+
+                        setTimeout(function() {
+                            document.querySelector(".popup").classList.replace("flex", "hidden")
+                        }, 100)
+
+                    })
+
                 }
 
                 document.querySelector(".cancel").addEventListener("click", function(dets) {
                     document.querySelector(".popup").classList.replace("flex", "hidden");
 
                 })
+
+
 
             })
 
