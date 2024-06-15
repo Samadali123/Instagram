@@ -72,6 +72,7 @@
                     <div class="options  relative w-full px-4 flex justify-between items-center text-[1.4rem]">
                         <div class="flex gap-3 mt-2">
 
+
                             <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
 
                                 <i data-id="<%= elem._id %>" class=" like ri-heart-3-line cursor-pointer"></i>
@@ -79,6 +80,7 @@
 
                                     <i data-id="<%= elem._id %>" class=" like ri-heart-3-fill text-red-500 cursor-pointer"></i>
                                     <%    }  %>
+
 
                                         <% if(elem.commentsEnabled){  %>
                                             <a href="/view/comments/<%= elem._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
@@ -96,9 +98,11 @@
 
                     </div>
                     <h3 class="px-4 relative mt-2 text-sm leading-none tracking-tight whitespace-nowrap w-fit whitespace-nowrap ">
-                        <span class="total-likes main cursor-pointer">
-                          <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby"><%= elem.likes.length %>  likes </a>
-                          </span>
+                        <% if(! elem.hidelikes){ %>
+                            <span class="total-likes main cursor-pointer">
+                                <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby"><%= elem.likes.length %>  likes </a>
+                                </span>
+                            <% }  %>
                     </h3>
                     <h2 class="text-white pl-3.5 relative font-light text-sm   mt-2 "><span class="font-semibold  pr-2 whitespace-nowrap"><%= elem.user.username %></span>
                         <%= elem.caption %>

@@ -41,7 +41,13 @@ const postSchema = mongoose.Schema({
     commentsEnabled: {
         type: Boolean,
         default: true
-    }
+    },
+
+    hidelikes: {
+        type: Boolean,
+        default: false,
+    },
+
 
 })
 

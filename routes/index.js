@@ -1019,5 +1019,21 @@ router.put('/comments/toggle/:id', async(req, res, next) => {
 
 
 
+router.put('/likes/toggle/:id', async(req, res, next) => {
+    try {
+
+        const post = await postModel.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        post.hidelikes = !post.hidelikes;
+        const updatedPost = await post.save();
+        res.json(updatedPost);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 module.exports = router;

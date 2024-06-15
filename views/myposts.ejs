@@ -43,7 +43,8 @@
                                         </h6>
                         </div>
                         <div class="right px-2">
-                            <p><i data-id="<%= elem._id %>" data-comments="<%= elem.commentsEnabled %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+                            <p><i data-id="<%= elem._id %>" data-comments="<%= elem.commentsEnabled %>" data-likes="<%= elem.hidelikes %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+
                         </div>
                     </div>
                     <div class="w-full h-96 flex items-center justify-center relative mt-4 bg-sky-100 overflow-hidden">
@@ -51,11 +52,16 @@
                     </div>
                     <div class="options relative w-full px-4 flex justify-between items-center text-[1.4rem]">
                         <div class="flex gap-3 mt-2">
+
+
                             <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
                                 <i data-id="<%= elem._id %>" class="like ri-heart-3-line cursor-pointer"></i>
                                 <% } else { %>
                                     <i data-id="<%= elem._id %>" class="like ri-heart-3-fill text-red-500 cursor-pointer"></i>
                                     <% } %>
+
+
+
                                         <% if(elem.commentsEnabled){ %>
                                             <a href="/view/comments/<%= elem._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
                                             <% } %>
@@ -69,9 +75,11 @@
                     </div>
                     <h3 class="px-4 relative mt-2 text-sm leading-none tracking-tight whitespace-nowrap w-fit">
                         <span class="total-likes main cursor-pointer">
-                            <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby">
-                                <%= elem.likes.length %> likes
-                            </a>
+                            <% if(! elem.hidelikes){  %>
+                                <a href="/post/likes/<%= elem._id %>" class="cursor-pointer likedby">
+                                    <%= elem.likes.length %> likes
+                                </a>
+                          <%  }  %>
                         </span>
                     </h3>
                     <h2 class="text-white pl-3.5 relative font-light text-sm mt-2">
@@ -106,8 +114,7 @@
 
         <div class="popup hidden fixed bottom-[-5%] z-[9999] flex flex-col gap-5 items-left pt-[5%] px-6 text-white z-auto h-[65vh] w-[93vw] bg-zinc-800 rounded-md">
             <div class="count flex gap-3 font-medium cursor-pointer">
-                <span><i class="ri-dislike-line text-lg"></i></span>
-                <p class="text-lg cursor-pointer">Hide like count</p>
+
             </div>
 
 
@@ -145,6 +152,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         let check = true;
+        let check2 = false;
+
 
         function onloadcommenttoggle() {
 
@@ -164,6 +173,30 @@
             })
         }
         onloadcommenttoggle()
+
+
+
+
+
+
+
+        function onloadlikestoggle() {
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                if (check2) {
+                    document.querySelector(".count").innerHTML = ` <span><i class="ri-heart-3-line text-lg"></i></span>
+                     <p id="hide" class="text-lg cursor-pointer">unhide like count</p>`
+
+                } else {
+                    document.querySelector(".count").innerHTML = ` <span><i class="ri-dislike-line text-lg"></i></span>
+                     <p id="hide" class="text-lg cursor-pointer">Hide like count</p>`
+
+                }
+            })
+        }
+        onloadlikestoggle()
+
+
 
 
 
@@ -283,20 +316,16 @@
                 if (event.target.classList.contains("more")) {
                     document.querySelector(".popup").classList.replace("hidden", "flex");
 
+
                     document.querySelector(".commentswitch").addEventListener("click", function(e) {
 
 
                         if (event.target.dataset.comments) {
-                            check = true;
-                            document.querySelector(".turn").innerHTML =
-                                `<span><i class="ri-donut-chart-line text-lg cursor-pointer"></i></span>
-                                 <p class="commentswitch text-lg cursor-pointer">Turn on commenting</p>`;
+                            check = false;
 
                         } else {
-                            check = false;
-                            document.querySelector(".turn").innerHTML =
-                                `<span><i class="ri-shut-down-line text-lg"></i></span>
-                                 <p class="commentswitch text-lg cursor-pointer">Turn off commenting</p>`;
+                            check = true;
+
                         }
 
                         axios.put(`/comments/toggle/${event.target.dataset.id}`).then(function(response) {
@@ -310,11 +339,44 @@
                         }, 100)
 
                         location.reload();
+
                     })
 
 
-
                 }
+
+
+
+                document.querySelector("#hide").addEventListener("click", function(dets) {
+
+                    if (dets.target.dataset.likes) {
+
+                        check2 = false;
+
+                    } else {
+                        check2 = true;
+
+                    }
+
+                    axios.put(`/likes/toggle/${event.target.dataset.id}`)
+                        .then(function(response) {
+                            console.log(response.data);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+
+                    setTimeout(function() {
+                        document.querySelector(".popup").classList.replace("flex", "hidden");
+                    }, 100);
+
+                    location.reload();
+
+                });
+
+
+
+
 
                 document.querySelector(".cancel").addEventListener("click", function(dets) {
                     document.querySelector(".popup").classList.replace("flex", "hidden");
