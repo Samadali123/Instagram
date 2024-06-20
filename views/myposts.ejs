@@ -134,9 +134,11 @@
 
             </div>
 
-            <div class="delete text-red-600 flex gap-3 font-medium cursor-pointer">
+            <div class="deletepost text-red-600 flex gap-3 font-medium cursor-pointer">
                 <span><i class="ri-delete-bin-7-line text-lg"></i></span>
-                <p class="text-lg cursor-pointer">Delete</p>
+                <a class="delete" href="">
+                    <p class=" text-lg cursor-pointer">Delete</p>
+                </a>
             </div>
 
             <div class="cancel text-white flex gap-3 font-medium">
@@ -347,6 +349,8 @@
                     document.querySelector(".popup").classList.replace("hidden", "flex");
 
                     document.querySelector(".edit").setAttribute("href", `/posts/edit/${event.target.dataset.id}`)
+
+                    document.querySelector(".delete").setAttribute("href", `/posts/delete/${event.target.dataset.id}`)
 
 
                     document.querySelector(".commentswitch").addEventListener("click", function(e) {

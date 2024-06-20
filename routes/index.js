@@ -1151,7 +1151,7 @@ router.post("/posts/edit/:id", auth, async(req, res) => {
 
 
 
-router.delete("/posts/delete/:id", auth, async(req, res, next) => {
+router.get("/posts/delete/:id", auth, async(req, res, next) => {
     try {
         const post = await postModel.findByIdAndDelete(req.params.id)
 
@@ -1162,7 +1162,5 @@ router.delete("/posts/delete/:id", auth, async(req, res, next) => {
         res.status(500).json({ error })
     }
 });
-
-
 
 module.exports = router;
