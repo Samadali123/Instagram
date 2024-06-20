@@ -76,9 +76,18 @@
                 <% loginuser.posts.forEach(function(elem){ %>
 
                     <a href="/myposts/open/<%= elem._id %>">
-                        <div class="post w-[30vw] h-[25vh] mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
+                        <div class="post  relative w-[30vw] h-[25vh]  mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
                             <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+
+                            <div class="overlay absolute top-[0%] left-[0%] w-full h-full " style="background-color: rgba(0, 0, 0, 0.137);">
+
+                                <% if(elem.pinned){ %>
+                                    <p><i class="ri-pushpin-fill text-lg font-semibold absolute top-[3%] right-[7%] "></i></p>
+                                    <% }   %>
+
+                            </div>
                         </div>
+
                     </a>
 
                     <% })      %>
