@@ -43,7 +43,7 @@
                                         </h6>
                         </div>
                         <div class="right px-2">
-                            <p><i data-id="<%= elem._id %>" data-comments="<%= elem.commentsEnabled %>" data-likes="<%= elem.hidelikes %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+                            <p><i data-id="<%= elem._id %>" data-comments="<%= elem.commentsEnabled %>" data-likes="<%= elem.hidelikes %>" data-pinned="<%= elem.pinned %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
 
                         </div>
                     </div>
@@ -127,10 +127,11 @@
                 <span><i class="ri-pencil-line text-lg"></i></span>
                 <p class="text-lg cursor-pointer">Edit</p>
             </div>
-            <div class="pin flex gap-3 font-medium cursor-pointer">
-                <span><i class="ri-pushpin-line text-lg"></i></span>
-                <p class="text-lg cursor-pointer">Pin to profile</p>
+
+            <div class="pinprofile flex gap-3 font-medium cursor-pointer">
+
             </div>
+
             <div class="delete text-red-600 flex gap-3 font-medium cursor-pointer">
                 <span><i class="ri-delete-bin-7-line text-lg"></i></span>
                 <p class="text-lg cursor-pointer">Delete</p>
@@ -153,6 +154,7 @@
     <script>
         let check = true;
         let check2 = false;
+        let check3 = false;
 
 
         function onloadcommenttoggle() {
@@ -196,6 +198,31 @@
         }
         onloadlikestoggle()
 
+
+
+        function onloadpinntoggle() {
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                if (check3) {
+
+                    document.querySelector(".pinprofile").innerHTML = `<span><i class="ri-unpin-line text-lg"></i></span>
+                    
+                    <p class="pin text-lg cursor-pointer">Unpin to profile</p>`
+
+
+                } else {
+
+
+                    document.querySelector(".pinprofile").innerHTML = `<span><i class="ri-pushpin-line text-lg"></i></span>
+                    <p class="pin text-lg cursor-pointer">Pin to profile</p>`
+
+
+                }
+            })
+
+
+        }
+        onloadpinntoggle();
 
 
 
@@ -319,7 +346,6 @@
 
                     document.querySelector(".commentswitch").addEventListener("click", function(e) {
 
-
                         if (event.target.dataset.comments) {
                             check = false;
 
@@ -376,7 +402,28 @@
 
 
 
+                document.querySelector(".pin").addEventListener("click", function(e) {
+                    if (event.target.dataset.pinned) {
+                        check3 = false;
+                    } else {
+                        check3 = true;
+                    }
 
+
+                    setTimeout(function() {
+                        document.querySelector(".popup").classList.replace("flex", "hidden");
+                    }, 100);
+
+
+                    axios.put(`/posts/pin/${event.target.dataset.id}`).then(function(response) {
+                        console.log(response.data)
+                    }).catch(function(error) {
+                        console.error(error)
+
+                    })
+                    location.reload();
+
+                })
 
                 document.querySelector(".cancel").addEventListener("click", function(dets) {
                     document.querySelector(".popup").classList.replace("flex", "hidden");

@@ -47,6 +47,10 @@ const postSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    pinned: {
+        type: Boolean,
+        default: false
+    }
 
 
 })

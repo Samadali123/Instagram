@@ -1002,7 +1002,7 @@ router.post("/resetpassword", async(req, res, next) => {
 
 
 
-router.put('/comments/toggle/:id', async(req, res, next) => {
+router.put('/comments/toggle/:id', auth, async(req, res, next) => {
     try {
 
         const post = await postModel.findById(req.params.id);
@@ -1019,7 +1019,7 @@ router.put('/comments/toggle/:id', async(req, res, next) => {
 
 
 
-router.put('/likes/toggle/:id', async(req, res, next) => {
+router.put('/likes/toggle/:id', auth, async(req, res, next) => {
     try {
 
         const post = await postModel.findById(req.params.id);
@@ -1033,6 +1033,138 @@ router.put('/likes/toggle/:id', async(req, res, next) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+
+
+// router.put("/posts/pin/:id", auth, async(req, res, next) => {
+//     try {
+//         const loginUser = await userModel.findOne({ email: req.user.email }).populate('posts');
+
+//         if (!loginUser) {
+//             return res.status(404).json({ error: 'User not found' });
+//         }
+
+//         const post = await postModel.findById(req.params.id);
+
+//         if (!post) {
+//             return res.status(404).json({ error: 'Post not found' });
+//         }
+
+//         const postIndex = loginUser.posts.findIndex(p => p._id.toString() === req.params.id);
+
+//         if (postIndex === -1) {
+//             return res.status(404).json({ error: 'Post not found in user\'s posts' });
+//         }
+
+//         if (post.pinned) {
+
+//             post.pinned = false;
+
+
+//             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
+
+//             loginUser.posts.splice(post.originalIndex, 0, removedPost);
+
+
+//             post.originalIndex = -1;
+//         } else {
+
+//             post.pinned = true;
+
+//             post.originalIndex = postIndex;
+
+
+//             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
+
+//             const lastPinnedIndex = loginUser.posts.findIndex(p => !p.pinned);
+
+//             if (lastPinnedIndex === -1) {
+
+//                 loginUser.posts.push(removedPost);
+//             } else {
+
+//                 loginUser.posts.splice(lastPinnedIndex, 0, removedPost);
+//             }
+//         }
+//         await post.save();
+//         await loginUser.save();
+//         res.redirect("/profile")
+//     } catch (error) {
+//         res.status(500).json({ error });
+//     }
+// });
+
+
+
+
+
+
+
+router.put("/posts/pin/:id", auth, async(req, res, next) => {
+    try {
+        const loginUser = await userModel.findOne({ email: req.user.email }).populate('posts');
+
+        if (!loginUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const post = await postModel.findById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+
+        const postIndex = loginUser.posts.findIndex(p => p._id.toString() === req.params.id);
+
+        if (postIndex === -1) {
+            return res.status(404).json({ error: 'Post not found in user\'s posts' });
+        }
+
+        if (post.pinned) {
+            // Unpin the post and move it to its original position
+            post.pinned = !post.pinned;
+
+            // Remove the post from its current position
+            const removedPost = loginUser.posts.splice(postIndex, 1)[0];
+
+            // Insert it back to its original position
+            loginUser.posts.splice(post.originalIndex, 0, removedPost);
+
+            // Reset the originalIndex
+            post.originalIndex = -1;
+        } else {
+            // Pin the post
+            post.pinned = !post.pinned;
+
+            // Store the current index as the original position
+            post.originalIndex = postIndex;
+
+            // Remove the post from its current position
+            const removedPost = loginUser.posts.splice(postIndex, 1)[0];
+
+            // Find the position after the last pinned post
+            const lastPinnedIndex = loginUser.posts.findIndex(p => !p.pinned);
+
+            if (lastPinnedIndex === -1) {
+                // If all posts are pinned, insert at the end
+                loginUser.posts.push(removedPost);
+            } else {
+                // Insert the post right before the first non-pinned post
+                loginUser.posts.splice(lastPinnedIndex, 0, removedPost);
+            }
+        }
+
+        // Save the updated post and user
+        await post.save();
+        await loginUser.save();
+        res.json({ success: true, posts: loginUser.posts })
+
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+});
+
 
 
 
