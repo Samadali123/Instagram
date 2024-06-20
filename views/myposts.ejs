@@ -123,9 +123,11 @@
 
             </div>
 
-            <div class="edit flex gap-3 font-medium cursor-pointer">
+            <div class="editpost flex gap-3 font-medium cursor-pointer">
                 <span><i class="ri-pencil-line text-lg"></i></span>
-                <p class="text-lg cursor-pointer">Edit</p>
+                <a class="edit" href="">
+                    <p class=" text-lg cursor-pointer">Edit</p>
+                </a>
             </div>
 
             <div class="pinprofile flex gap-3 font-medium cursor-pointer">
@@ -136,6 +138,7 @@
                 <span><i class="ri-delete-bin-7-line text-lg"></i></span>
                 <p class="text-lg cursor-pointer">Delete</p>
             </div>
+
             <div class="cancel text-white flex gap-3 font-medium">
                 <span><i class="ri-close-line text-lg"></i></span>
                 <p class="text-lg cursor-pointer cancel">Cancel</p>
@@ -343,6 +346,8 @@
                 if (event.target.classList.contains("more")) {
                     document.querySelector(".popup").classList.replace("hidden", "flex");
 
+                    document.querySelector(".edit").setAttribute("href", `/posts/edit/${event.target.dataset.id}`)
+
 
                     document.querySelector(".commentswitch").addEventListener("click", function(e) {
 
@@ -364,7 +369,6 @@
                             document.querySelector(".popup").classList.replace("flex", "hidden")
                         }, 100)
 
-                        location.reload();
 
                     })
 
@@ -416,7 +420,7 @@
 
 
                     axios.put(`/posts/pin/${event.target.dataset.id}`).then(function(response) {
-                        console.log(response.data)
+
                     }).catch(function(error) {
                         console.error(error)
 
@@ -424,6 +428,9 @@
                     location.reload();
 
                 })
+
+
+
 
                 document.querySelector(".cancel").addEventListener("click", function(dets) {
                     document.querySelector(".popup").classList.replace("flex", "hidden");

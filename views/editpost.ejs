@@ -1,0 +1,77 @@
+<% include ./partials/header.ejs %>
+
+    <div class="container w-full  h-full text-white">
+
+        <div class="header flex w-full justify-between px-5 ">
+
+            <div class="left flex gap-6 items-center">
+                <a href="/profile">
+                    <p><i class="ri-close-line text-lg font-medium"></i></p>
+                </a>
+                <h3>Edit info</h3>
+            </div>
+
+
+            <p class="hidden cursor-pointer" id="save"><i class="ri-check-fill text-2xl text-blue-600 font-medium "></i></p>
+
+        </div>
+
+        <div class="content mt-3 overflow-x-hidden overflow-y-auto ">
+            <div class="top flex items-center  justify-between px-3">
+                <div class="left flex gap-3 items-center ">
+                    <div class="profile w-[30px] h-[30px] rounded-full overflow-hidden">
+                        <img class="w-full h-full object-center object-cover" src="/images/uploads/<%= post.user.profile %>" alt="">
+                    </div>
+                    <h3 class="text-sm font-light">
+                        <%= post.user.username %>
+                    </h3>
+                </div>
+
+                <p class="font-medium text-xs  text-zinc-300">
+                    <%= post.formattedDate %>
+                </p>
+
+            </div>
+
+            <div class="image mt-1 border-2 border-zinc-800  w-full h-[60vh] relative overflow-hidden">
+                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= post.image %>" alt="">
+            </div>
+
+            <div class="caption mt-4 w-8/12 h-auto ">
+
+                <form action="/posts/edit/<%= post._id %>" method="post">
+                    <textarea name="caption" class="bg-transparent w-[100vw] text-white border-none outline-none resize-none"><%= post.caption %></textarea>
+                </form>
+
+            </div>
+
+
+
+        </div>
+
+
+
+        <style>
+
+        </style>
+
+
+        <script>
+            document.querySelector("textarea").addEventListener("input", function(e) {
+                document.querySelector("#save").classList.replace("hidden", "flex")
+
+            })
+
+
+            document.querySelector("#save").addEventListener("click", function(event) {
+                document.querySelector("form").submit();
+
+            })
+        </script>
+
+    </div>
+
+
+
+
+    <% include ./partials/footer.ejs %>

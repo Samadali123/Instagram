@@ -1036,135 +1036,132 @@ router.put('/likes/toggle/:id', auth, async(req, res, next) => {
 
 
 
-
-// router.put("/posts/pin/:id", auth, async(req, res, next) => {
-//     try {
-//         const loginUser = await userModel.findOne({ email: req.user.email }).populate('posts');
-
-//         if (!loginUser) {
-//             return res.status(404).json({ error: 'User not found' });
-//         }
-
-//         const post = await postModel.findById(req.params.id);
-
-//         if (!post) {
-//             return res.status(404).json({ error: 'Post not found' });
-//         }
-
-//         const postIndex = loginUser.posts.findIndex(p => p._id.toString() === req.params.id);
-
-//         if (postIndex === -1) {
-//             return res.status(404).json({ error: 'Post not found in user\'s posts' });
-//         }
-
-//         if (post.pinned) {
-
-//             post.pinned = false;
-
-
-//             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
-
-//             loginUser.posts.splice(post.originalIndex, 0, removedPost);
-
-
-//             post.originalIndex = -1;
-//         } else {
-
-//             post.pinned = true;
-
-//             post.originalIndex = postIndex;
-
-
-//             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
-
-//             const lastPinnedIndex = loginUser.posts.findIndex(p => !p.pinned);
-
-//             if (lastPinnedIndex === -1) {
-
-//                 loginUser.posts.push(removedPost);
-//             } else {
-
-//                 loginUser.posts.splice(lastPinnedIndex, 0, removedPost);
-//             }
-//         }
-//         await post.save();
-//         await loginUser.save();
-//         res.redirect("/profile")
-//     } catch (error) {
-//         res.status(500).json({ error });
-//     }
-// });
-
-
-
-
-
-
-
 router.put("/posts/pin/:id", auth, async(req, res, next) => {
     try {
+
         const loginUser = await userModel.findOne({ email: req.user.email }).populate('posts');
+
 
         if (!loginUser) {
             return res.status(404).json({ error: 'User not found' });
         }
 
+
         const post = await postModel.findById(req.params.id);
+
 
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
 
+
         const postIndex = loginUser.posts.findIndex(p => p._id.toString() === req.params.id);
+
 
         if (postIndex === -1) {
             return res.status(404).json({ error: 'Post not found in user\'s posts' });
         }
 
         if (post.pinned) {
-            // Unpin the post and move it to its original position
-            post.pinned = !post.pinned;
 
-            // Remove the post from its current position
+            post.pinned = false;
+
+
             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
 
-            // Insert it back to its original position
-            loginUser.posts.splice(post.originalIndex, 0, removedPost);
+            const insertIndex = post.originalIndex >= 0 && post.originalIndex < loginUser.posts.length ? post.originalIndex : loginUser.posts.length;
+            loginUser.posts.splice(insertIndex, 0, removedPost);
 
-            // Reset the originalIndex
+
             post.originalIndex = -1;
         } else {
-            // Pin the post
-            post.pinned = !post.pinned;
 
-            // Store the current index as the original position
+            post.pinned = true;
+
             post.originalIndex = postIndex;
 
-            // Remove the post from its current position
+
             const removedPost = loginUser.posts.splice(postIndex, 1)[0];
 
-            // Find the position after the last pinned post
-            const lastPinnedIndex = loginUser.posts.findIndex(p => !p.pinned);
-
-            if (lastPinnedIndex === -1) {
-                // If all posts are pinned, insert at the end
-                loginUser.posts.push(removedPost);
-            } else {
-                // Insert the post right before the first non-pinned post
-                loginUser.posts.splice(lastPinnedIndex, 0, removedPost);
-            }
+            loginUser.posts.unshift(removedPost);
         }
 
-        // Save the updated post and user
+
         await post.save();
         await loginUser.save();
-        res.json({ success: true, posts: loginUser.posts })
+
+        res.redirect("/profile")
 
     } catch (error) {
+
         res.status(500).json({ error });
     }
 });
 
+
+
+router.get("/posts/edit/:id", auth, async(req, res, next) => {
+    try {
+        const post = await postModel.findById(req.params.id).populate("user")
+        if (!post) return res.status(403).json({ message: "Post not found" })
+
+        const loginuser = await userModel.findOne({ email: req.user.email })
+
+        let dateObj = new Date(post.createdAt);
+        let monthNames = [
+            '', 'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        let day = dateObj.getDate();
+        let month = dateObj.getMonth() + 1;
+        let year = dateObj.getFullYear();
+
+        let monthName = monthNames[month];
+        let formattedDate = `${monthName} ${day}, ${year}`;
+        post.formattedDate = formattedDate;
+
+        res.render("editpost", { post, loginuser, footer: true })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+
+
+
+router.post("/posts/edit/:id", auth, async(req, res) => {
+    try {
+        const { caption } = req.body;
+        if (!caption || caption.trim() === "") {
+            return res.status(400).json({ error: 'Caption cannot be empty' });
+        }
+        const post = await postModel.findOneAndUpdate({ _id: req.params.id }, { $set: { caption } }, { new: true });
+
+
+        if (!post) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        res.redirect("/profile");
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+
+router.delete("/posts/delete/:id", auth, async(req, res, next) => {
+    try {
+        const post = await postModel.findByIdAndDelete(req.params.id)
+
+        if (!post) return res.status(403).json({ message: "Post not found !" })
+        res.redirect("/profile")
+
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+});
 
 
 
