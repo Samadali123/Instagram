@@ -1162,4 +1162,39 @@ router.get("/posts/delete/:id", auth, async(req, res, next) => {
     }
 });
 
+
+
+
+router.get("/createnote", auth, async(req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email })
+        res.render("createnote", { loginuser, footer: true })
+
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+
+
+router.post("/createnote", auth, async(req, res, next) => {
+    try {
+        await userModel.findOneAndUpdate({ email: req.user.email }, { $set: { note: req.body.note } }, { new: true })
+        res.redirect("/profile");
+
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
+
+router.get("/deletenote", auth, async(req, res, next) => {
+    try {
+        await userModel.findOneAndUpdate({ email: req.user.email }, { $set: { note: "" } }, { new: true })
+        res.redirect("/profile")
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
+
 module.exports = router;

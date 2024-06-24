@@ -10,7 +10,25 @@
                     <i class="text-[1.4rem] ri-menu-line"></i>
                 </div>
             </div>
-            <div class="flex justify-between items-center pl-6 pr-[12vw] mt-8">
+
+            <div class="flex relative justify-between items-center pl-6 pr-[12vw] mt-8">
+
+                <div class="note absolute top-[-4%]  ml-[7%] z-auto bg-zinc-900 rounded-3xl px-3 py-1 ">
+                    <% if (loginuser.note) { %>
+                        <p id="show" class="cursor-pointer font-light">
+                            <%= loginuser.note %>
+                        </p>
+
+                        <% } else { %>
+                            <a href="/createnote">
+                                <p class="cursor-pointer font-light">Add a Note</p>
+                            </a>
+                            <% } %>
+
+                </div>
+
+
+
 
                 <% if(loginuser.stories.length > 0){  %>
                     <a class="cursor-pointer" href="/story/<%= loginuser._id %>/0">
@@ -67,6 +85,24 @@
                 <a class="px-3 py-2 bg-zinc-800 text-xs rounded-md" href="/edit">Edit Profile</a>
             </div>
         </div>
+
+
+        <div class="notepopup hidden flex flex-col  justify-center items-center gap-4 w-full h-[35vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+
+            <div class="profile w-[35px] h-[35px] rounded-full overflow-hidden">
+                <img class="w-full h-full object-cover rounded-full " src="/images/uploads/02aa3355-e592-4751-803d-5e890474d172.avif" alt="">
+            </div>
+
+            <p class="font-semibold text-xl">
+                <%= loginuser.note %>
+            </p>
+
+            <button class="bg-blue-600 text-white rounded-md  px-[30%] py-2"><a href="/createnote">Leave a new note</a></button>
+            <button class=" text-blue-500 "><a href="/deletenote">Delete note</a></button>
+
+        </div>
+
+
 
 
         <div class="popup hidden flex flex-col  justify-center gap-4 w-full h-[60vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
@@ -184,6 +220,17 @@
                 document.querySelector("#storyform").submit();
 
             })
+        })
+
+
+        document.querySelector(".note").addEventListener("click", function(e) {
+            document.querySelector(".notepopup").classList.replace("hidden", "flex")
+
+            setInterval(function() {
+                document.querySelector(".notepopup").classList.replace("flex", "hidden")
+            }, 2500)
+
+
         })
     </script>
     <% include ./partials/footer.ejs %>

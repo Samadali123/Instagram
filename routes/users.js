@@ -80,7 +80,10 @@ const userSchema = mongoose.Schema({
     myStories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Story"
-    }]
+    }],
+    note: {
+        type: String,
+    }
 
 
 })
