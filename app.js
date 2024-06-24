@@ -25,6 +25,8 @@ app.use(session({
 }));
 
 
+
+
 app.use(passport.authenticate('session'));
 
 passport.serializeUser(function(user, cb) {

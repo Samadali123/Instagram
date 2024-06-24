@@ -6,7 +6,7 @@
                     <%= loginuser.username %>
                 </h3>
                 <div class="icons flex gap-5">
-                    <a href="/upload"><i class="text-[1.4rem] ri-add-box-line"></i></a>
+                    <i id="addicon" class="cursor-pointer  text-[1.4rem] ri-add-box-line"></i>
                     <i class="text-[1.4rem] ri-menu-line"></i>
                 </div>
             </div>
@@ -68,6 +68,52 @@
             </div>
         </div>
 
+
+        <div class="popup hidden flex flex-col  justify-center gap-4 w-full h-[60vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+
+            <p class="text-xl text-center relative top-[-10%]">Create</p>
+
+            <div class="post flex items-center w-full px-6 gap-3">
+                <span><i class="ri-grid-line text-2xl"></i></span>
+                <a class="cursor-pointer" href="/upload">
+                    <p class="text-xl">Post</p>
+                </a>
+            </div>
+
+            <div class="reel flex items-center w-full px-5 gap-3">
+                <img class="w-7 h-7" src="/images/reel.png" alt="">
+                <p class="text-xl">Reel</p>
+            </div>
+
+
+            <div class="story flex items-center w-full px-5 gap-3">
+                <img class="w-7 h-7" src="/images/story.png" alt="">
+                <p id="story" class="cursor-pointer text-xl">Story</p>
+
+                <form id="storyform" hidden action="/<%= loginuser._id %>/add/story" method="post" enctype="multipart/form-data">
+                    <input id="uploadstory" type="file" name="storyimage">
+                </form>
+            </div>
+
+
+            <div class="highlights flex items-center w-full px-5 gap-3">
+                <img class="w-7 h-7" src="/images/highlights.png" alt="">
+                <p class="text-xl">Story highlights</p>
+            </div>
+
+
+
+            <div class="live flex items-center w-full px-5 gap-3">
+                <img class="w-7 h-7" src="/images/live.png" alt="">
+                <p class="text-xl">Live</p>
+            </div>
+
+
+
+
+
+        </div>
+
         <p class="px-6 hidden back cursor-pointer text-sm "> <span><i class="ri-arrow-left-line font-medium  mr -2"></i></span> Back to Previous</p>
 
         <div class="posts w-full pl-5 flex gap-2 py-2 mt-5 flex-wrap">
@@ -117,6 +163,27 @@
         back.addEventListener("click", function(e) {
             document.querySelector(".upper").style.display = "block";
             back.classList.replace("flex", "hidden");
+        })
+
+
+
+        document.querySelector("#addicon").addEventListener("click", function(e) {
+            document.querySelector(".popup").classList.replace("hidden", "flex");
+
+            setInterval(function() {
+                document.querySelector(".popup").classList.replace("flex", "hidden");
+            }, 2500);
+
+        })
+
+
+        document.querySelector("#story").addEventListener("click", function(e) {
+            document.querySelector("#uploadstory").click();
+
+            document.querySelector("#uploadstory").addEventListener("change", function(dets) {
+                document.querySelector("#storyform").submit();
+
+            })
         })
     </script>
     <% include ./partials/footer.ejs %>

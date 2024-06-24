@@ -666,7 +666,8 @@ router.put(`/comment/like/:commentID`, auth, async(req, res, next) => {
 
 router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req, res) => {
     try {
-        const loginuser = await userModel.findOne({ email: req.user.email })
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories")
+
         if (!req.file.filename) {
             return res.status(403).json({ success: false, message: "Please upload a image uploading a Story" })
 
@@ -676,12 +677,10 @@ router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req
             image: req.file.filename,
         })
         loginuser.stories.push(newStory._id);
+
+        loginuser.myStories.push(newStory._id);
         await loginuser.save();
-
-
         res.status(302).redirect(`/feed`);
-
-
     } catch (error) {
         res.status(500).json({ error })
 
