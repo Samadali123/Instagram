@@ -1,0 +1,44 @@
+
+<% include ./partials/header.ejs %>
+
+<div class="container relative w-full  h-full ">
+ 
+    <div  class="top fixed top-[5%] z-[999] w-full flex justify-between px-5">
+        <div class="left flex gap-3 items-center">
+            <a href="/add/highlights"><i class="ri-arrow-left-line text-2xl"></i></a>
+            <p class="font-medium text-xl">Title</p>
+        </div>
+         <h3  data-uri="/upload/highlight/<%= cover %>" class=" done cursor-pointer  text-xl text-blue-500 absolute right-[24%] ">Done</h3>
+    </div>
+
+
+    <div class="stories-container overflow-y-auto pt-16 px-5 flex flex-col items-center justify-center w-full h-[75vh] ">
+              
+        <div style="border: 1px solid silver;" class="story relative w-[65px] h-[65px] rounded-full overflow-hidden">
+            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= cover  %>" alt="">
+        </div>
+
+        <form action="" method="post">
+            <input style="outline: none;" class="bg-transparent text-center  border-none  text-xl text-silver-600 font-normal" type="text" placeholder="Highlights" >
+        </form>
+       
+    </div>
+</div>
+
+<% include ./partials/footer.ejs %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+
+    document.querySelector(".done").addEventListener("click", function(event){
+    const starturi = event.target.dataset.uri;
+    const Ids = "<%= ids.join(',') %>"; 
+    document.querySelector("form").setAttribute("action", `/${starturi}/${Ids}`);
+    document.querySelector("form").submit();
+});
+
+</script>
+
+

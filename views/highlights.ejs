@@ -1,0 +1,59 @@
+
+   <% include ./partials/header.ejs %>
+
+<div class="container relative w-full  h-full ">
+    <!-- Top navigation bar -->
+    <div  class="top fixed top-[5%] z-[999] w-full flex justify-between px-5">
+        <div class="left flex gap-3 items-center">
+            <a href=""><i class="ri-arrow-left-line text-2xl"></i></a>
+            <p class="font-medium text-xl">New highlight</p>
+        </div>
+        <a class="next cursor-pointer next" href=""> <h3 class="font-medium text-xl text-gray-400 hover:text-blue-500 absolute right-[24%] ">Next</h3></a>
+    </div>
+
+    <!-- Stories container -->
+    <div class="stories-container overflow-y-auto pt-16 px-5 flex justify-between flex-wrap w-full h-[calc(100%-4rem)]">
+        <% loginuser.myStories.forEach(function(elem){ %>
+            <div class="cover relative cursor-pointer w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 h-60 rounded-md overflow-hidden m-2">
+                <div class="story relative w-full h-full overflow-hidden">
+                    <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+                </div>
+                <input id="check" data-id="<%= elem._id %>" class="custom-checkbox absolute bottom-4 left-4 text-3xl" type="checkbox">
+
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<% include ./partials/footer.ejs %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+    const next = document.querySelector(".next");
+    let TotaltIds =  [];
+    
+
+    document.querySelector(".stories-container").addEventListener("click", function(e){
+          if(e.target.id ===  "check"){
+              if(e.target.checked){
+                  const id = e.target.dataset.id;
+                  TotaltIds.push(id);
+              }
+              else{
+                    const id = e.target.dataset.id;
+                   TotaltIds =  TotaltIds.filter((ids, index)=> ids != id)
+              }
+
+              document.querySelector(".next").setAttribute("href", `/add/highlights/cover/${TotaltIds}`)
+
+
+          }
+    })
+
+    
+
+</script>
+
+

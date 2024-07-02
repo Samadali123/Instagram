@@ -7,6 +7,8 @@ const userModel = require(`./users`);
 const postModel = require(`./post`);
 const storyModel = require(`./story`);
 const commentModel = require(`./comments`)
+const HighlightModel = require("./highlights")
+
 const utils = require(`../utils/utils`);
 const bcrypt = require("bcrypt");
 const GoogleStrategy = require("passport-google-oidc")
@@ -1196,5 +1198,72 @@ router.get("/deletenote", auth, async(req, res, next) => {
         res.status(500).json({ error })
     }
 })
+
+
+router.get("/add/highlights", auth, async (req, res, next)=>{
+    try {
+        const loginuser = await userModel.findOne({email : req.user.email}).populate("myStories");
+        res.render("highlights", {footer: true, loginuser})
+
+    } catch (error) {
+        res.status(500).json({error})
+    }
+});
+
+
+
+router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({email : req.user.email})
+
+        const idsArray = req.params.Ids.split(",")
+
+        if (idsArray.length > 0) {
+            // Assuming you have a Story model to find the stories by their IDs
+            const stories = await storyModel.find({ _id: { $in: idsArray } });
+
+            if (stories.length > 0) {
+                const cover = stories[0].image; // Assuming each story has an 'image' field
+                console.log(idsArray)
+                res.render("next", { footer: true, loginuser, cover, ids: idsArray });
+            } else {
+                res.status(404).json({ error: "No stories found for the given IDs" });
+            }
+        } else {
+            res.status(400).json({ error: "No IDs provided" });
+        }
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+});
+
+
+router.post("/upload/highlight/:cover/:Ids", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        const idsArray = req.params.Ids.split(",");
+        const { title } = req.body;
+
+        const newHighlight = {
+            stories: idsArray,
+            coverphoto: req.params.cover,
+            title,
+            user : loginuser._id
+        };
+
+        // Save the new highlight to the database
+        const savedHighlight = await HighlightModel.create(newHighlight);
+
+        // Add the highlight ID to the user's highlights array
+        loginuser.highlights.push(savedHighlight._id);
+        await loginuser.save();
+        res.redirect("/profile");
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+});
+
+
+
 
 module.exports = router;
