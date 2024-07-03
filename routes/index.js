@@ -8,14 +8,13 @@ const postModel = require(`./post`);
 const storyModel = require(`./story`);
 const commentModel = require(`./comments`)
 const HighlightModel = require("./highlights")
-
 const utils = require(`../utils/utils`);
 const bcrypt = require("bcrypt");
 const GoogleStrategy = require("passport-google-oidc")
 const jwt = require("jsonwebtoken")
 const { v4: uuidV4 } = require(`uuid`);
 const secretKey = process.env.JWT_SECRET_KEY;
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
 
 
 
@@ -67,7 +66,7 @@ router.get('/oauth2/redirect/google', passport.authenticate('google', {
 }))
 
 
-router.post(`/register`, async function(req, res, next) {
+router.post(`/register`, async function (req, res, next) {
 
     try {
         const { username, fullname, email, password } = req.body;
@@ -106,13 +105,13 @@ router.post(`/register`, async function(req, res, next) {
 })
 
 
-router.post("/login", async(req, res, next) => {
+router.post("/login", async (req, res, next) => {
     try {
         let { email, password } = req.body
         let user = await userModel.findOne({ email })
         if (!user) return res.status(err.status || 500).render("server");
 
-        bcrypt.compare(password, user.password, function(err, result) {
+        bcrypt.compare(password, user.password, function (err, result) {
             if (err) {
                 res.status(err.status || 500).json({ success: false, message: err.message })
             } else {
@@ -131,7 +130,7 @@ router.post("/login", async(req, res, next) => {
 })
 
 
-router.get("/logout", auth, async(req, res, next) => {
+router.get("/logout", auth, async (req, res, next) => {
     try {
         res.clearCookie("token");
         res.redirect("/login")
@@ -163,7 +162,7 @@ function auth(req, res, next) {
 
 
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
     try {
         res.render('index', { footer: false });
     } catch (error) {
@@ -172,7 +171,7 @@ router.get('/', function(req, res) {
 });
 
 
-router.get('/login', function(req, res) {
+router.get('/login', function (req, res) {
     try {
         res.render('login', { footer: false });
 
@@ -182,7 +181,7 @@ router.get('/login', function(req, res) {
 });
 
 
-router.get('/feed', auth, async function(req, res) {
+router.get('/feed', auth, async function (req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
         const allposts = await postModel.find().populate(`user`).populate(`comments`);
@@ -207,7 +206,7 @@ router.get('/feed', auth, async function(req, res) {
 });
 
 
-router.get('/profile', auth, async function(req, res) {
+router.get('/profile', auth, async function (req, res) {
     try {
 
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`);
@@ -218,7 +217,7 @@ router.get('/profile', auth, async function(req, res) {
 });
 
 
-router.post(`/uploadprofile`, auth, upload.single(`profile`), async(req, res, next) => {
+router.post(`/uploadprofile`, auth, upload.single(`profile`), async (req, res, next) => {
 
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -232,7 +231,7 @@ router.post(`/uploadprofile`, auth, upload.single(`profile`), async(req, res, ne
 })
 
 
-router.post(`/edit/profile`, auth, async(req, res) => {
+router.post(`/edit/profile`, auth, async (req, res) => {
     try {
         const { username, fullname, bio } = req.body;
         const User = await userModel.findOne({ email: req.user.email })
@@ -249,7 +248,7 @@ router.post(`/edit/profile`, auth, async(req, res) => {
 
 
 
-router.get('/search', auth, async function(req, res) {
+router.get('/search', auth, async function (req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('search', { footer: true, loginuser });
@@ -259,7 +258,7 @@ router.get('/search', auth, async function(req, res) {
 });
 
 
-router.get(`/users/:input`, async(req, res) => {
+router.get(`/users/:input`, async (req, res) => {
     try {
         const input = req.params.input;
         const regex = new RegExp(`^${input}`, 'i');
@@ -271,7 +270,7 @@ router.get(`/users/:input`, async(req, res) => {
 })
 
 
-router.get('/edit', auth, async function(req, res) {
+router.get('/edit', auth, async function (req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('edit', { footer: true, loginuser });
@@ -282,7 +281,7 @@ router.get('/edit', auth, async function(req, res) {
 });
 
 
-router.get('/upload', auth, async function(req, res) {
+router.get('/upload', auth, async function (req, res) {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render('upload', { footer: true, loginuser });
@@ -292,7 +291,7 @@ router.get('/upload', auth, async function(req, res) {
 });
 
 
-router.post(`/upload/post`, auth, upload.single(`image`), async(req, res) => {
+router.post(`/upload/post`, auth, upload.single(`image`), async (req, res) => {
     try {
 
         if (!req.body.caption || !req.file) {
@@ -328,7 +327,7 @@ router.post(`/upload/post`, auth, upload.single(`image`), async(req, res) => {
 
 
 
-router.get(`/like/post/:postId`, auth, async(req, res) => {
+router.get(`/like/post/:postId`, auth, async (req, res) => {
 
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -352,7 +351,7 @@ router.get(`/like/post/:postId`, auth, async(req, res) => {
 })
 
 
-router.get(`/openprofile/:username`, auth, async(req, res) => {
+router.get(`/openprofile/:username`, auth, async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
 
@@ -365,7 +364,7 @@ router.get(`/openprofile/:username`, auth, async(req, res) => {
 })
 
 
-router.get(`/save/:postId`, auth, async(req, res) => {
+router.get(`/save/:postId`, auth, async (req, res) => {
     try {
         const user = await userModel.findOne({ email: req.user.email });
         const post = await postModel.findById({ _id: req.params.postId });
@@ -396,7 +395,7 @@ router.get(`/save/:postId`, auth, async(req, res) => {
 
 
 
-router.post('/comment/:data/:postid', auth, async(req, res) => {
+router.post('/comment/:data/:postid', auth, async (req, res) => {
     try {
         const commentpost = await postModel.findOne({ _id: req.params.postid });
         const loginuser = await userModel.findOne({ email: req.user.email });
@@ -437,7 +436,7 @@ router.post('/comment/:data/:postid', auth, async(req, res) => {
 
 // follow and unfollow a user 
 
-router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
+router.put(`/follow/:followeruser`, auth, async function (req, res, next) {
     try {
         const followeduser = await userModel.findOne({ username: req.params.followeruser });
 
@@ -466,7 +465,7 @@ router.put(`/follow/:followeruser`, auth, async function(req, res, next) {
 })
 
 
-router.get('/view/comments/:postId', auth, async(req, res, next) => {
+router.get('/view/comments/:postId', auth, async (req, res, next) => {
     try {
         const post = await postModel.findById(req.params.postId);
         const comments = await commentModel.find({ post: post._id }).populate('user')
@@ -496,7 +495,7 @@ router.get('/view/comments/:postId', auth, async(req, res, next) => {
 
 
 
-router.get(`/post/likes/:postId`, auth, async(req, res) => {
+router.get(`/post/likes/:postId`, auth, async (req, res) => {
     try {
         // const post = await postModel.findById({ _id: req.params.postId }).populate(`likes`).populate(`user`, 'stories');
         const post = await postModel.findById(req.params.postId)
@@ -516,7 +515,7 @@ router.get(`/post/likes/:postId`, auth, async(req, res) => {
 });
 
 
-router.get(`/post/likes/users/:postId/:input`, auth, async(req, res) => {
+router.get(`/post/likes/users/:postId/:input`, auth, async (req, res) => {
     try {
         const post = await postModel.findById(req.params.postId);
         await post.populate('likes');
@@ -533,7 +532,7 @@ router.get(`/post/likes/users/:postId/:input`, auth, async(req, res) => {
 });
 
 
-router.get('/followers/:userId', auth, async(req, res) => {
+router.get('/followers/:userId', auth, async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
@@ -545,7 +544,7 @@ router.get('/followers/:userId', auth, async(req, res) => {
 });
 
 
-router.get('/myfollowers', auth, async(req, res) => {
+router.get('/myfollowers', auth, async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
         res.render(`myfollowers`, { loginuser, footer: true });
@@ -557,7 +556,7 @@ router.get('/myfollowers', auth, async(req, res) => {
 
 
 
-router.get('/followings/:userId', auth, async(req, res) => {
+router.get('/followings/:userId', auth, async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const openprofileuser = await userModel.findOne({ _id: req.params.userId }).populate(`followers`).populate(`following`)
@@ -570,7 +569,7 @@ router.get('/followings/:userId', auth, async(req, res) => {
 
 
 
-router.get('/myfollowing', auth, async(req, res) => {
+router.get('/myfollowing', auth, async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following");
 
@@ -582,7 +581,7 @@ router.get('/myfollowing', auth, async(req, res) => {
 
 
 
-router.delete("/myfollowers/remove/:id", auth, async(req, res, next) => {
+router.delete("/myfollowers/remove/:id", auth, async (req, res, next) => {
     try {
         const followertodelete = await userModel.findById(req.params.id).populate("following")
 
@@ -603,7 +602,7 @@ router.delete("/myfollowers/remove/:id", auth, async(req, res, next) => {
 })
 
 
-router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
+router.get(`/search/:openuser/followers/:input`, auth, async (req, res) => {
     try {
         const openUser = req.params.openuser;
         const input = req.params.input;
@@ -622,7 +621,7 @@ router.get(`/search/:openuser/followers/:input`, auth, async(req, res) => {
 });
 
 
-router.get(`/search/:openuser/following/:input`, auth, async(req, res) => {
+router.get(`/search/:openuser/following/:input`, auth, async (req, res) => {
     try {
         const openUser = req.params.openuser;
         const input = req.params.input;
@@ -642,7 +641,7 @@ router.get(`/search/:openuser/following/:input`, auth, async(req, res) => {
 });
 
 
-router.put(`/comment/like/:commentID`, auth, async(req, res, next) => {
+router.put(`/comment/like/:commentID`, auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         const comment = await commentModel.findOne({ _id: req.params.commentID });
@@ -666,7 +665,7 @@ router.put(`/comment/like/:commentID`, auth, async(req, res, next) => {
 })
 
 
-router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req, res) => {
+router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories")
 
@@ -690,7 +689,7 @@ router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async(req
 })
 
 
-router.get(`/story/:userId/:number`, auth, async(req, res) => {
+router.get(`/story/:userId/:number`, auth, async (req, res) => {
     try {
         const storyuser = await userModel.findById({ _id: req.params.userId }).populate('stories');
         const storyimage = storyuser.stories[req.params.number];
@@ -708,7 +707,7 @@ router.get(`/story/:userId/:number`, auth, async(req, res) => {
 })
 
 
-router.get(`/story/:number`, auth, async(req, res) => {
+router.get(`/story/:number`, auth, async (req, res) => {
     try {
         const storyuser = await userModel.findOne({ email: req.user.email }).populate(`stories`)
         const loginuser = await userModel.findOne({ email: req.user.email })
@@ -728,7 +727,7 @@ router.get(`/story/:number`, auth, async(req, res) => {
 
 
 
-router.put("/story/like/:StoryId", auth, async(req, res, next) => {
+router.put("/story/like/:StoryId", auth, async (req, res, next) => {
     try {
         const storyId = req.params.StoryId;
         // Validate if storyId is a valid ObjectId
@@ -770,7 +769,7 @@ router.put("/story/like/:StoryId", auth, async(req, res, next) => {
 
 
 
-router.delete("/story/delete/:StoryId", auth, async(req, res, next) => {
+router.delete("/story/delete/:StoryId", auth, async (req, res, next) => {
     try {
         const storyId = req.params.StoryId;
 
@@ -798,7 +797,7 @@ router.delete("/story/delete/:StoryId", auth, async(req, res, next) => {
 });
 
 
-router.get("/forgot-password", async(req, res, next) => {
+router.get("/forgot-password", async (req, res, next) => {
     try {
         res.render("forgotpassword")
     } catch (error) {
@@ -807,7 +806,7 @@ router.get("/forgot-password", async(req, res, next) => {
 })
 
 
-router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
+router.get("/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
 
@@ -829,7 +828,7 @@ router.get("/posts/open/:openpost/:openuser", auth, async(req, res, next) => {
 });
 
 
-router.get("/myposts/open/:openpost", auth, async(req, res, next) => {
+router.get("/myposts/open/:openpost", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
 
@@ -887,7 +886,7 @@ router.get("/myposts/open/:openpost", auth, async(req, res, next) => {
 
 
 
-router.post("/forgotpassword", async(req, res, next) => {
+router.post("/forgotpassword", async (req, res, next) => {
     try {
 
         const { email } = req.body;
@@ -916,7 +915,7 @@ router.post("/forgotpassword", async(req, res, next) => {
             }
 
 
-            transporter.sendMail(mailOptions, function(error, info) {
+            transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     return res.send(error)
                 }
@@ -933,7 +932,7 @@ router.post("/forgotpassword", async(req, res, next) => {
 })
 
 
-router.get("/sent-successfully", async(req, res, next) => {
+router.get("/sent-successfully", async (req, res, next) => {
     try {
         res.render("sentmail")
 
@@ -943,7 +942,7 @@ router.get("/sent-successfully", async(req, res, next) => {
 })
 
 
-router.get("/reset-password", async(req, res, next) => {
+router.get("/reset-password", async (req, res, next) => {
     try {
         res.render("resetpassword")
     } catch (error) {
@@ -952,7 +951,7 @@ router.get("/reset-password", async(req, res, next) => {
 });
 
 
-router.post("/resetpassword", async(req, res, next) => {
+router.post("/resetpassword", async (req, res, next) => {
     try {
         const { email, newPassword } = req.body; // Assuming newPassword is sent in the request
         const User = await userModel.findOne({ email });
@@ -1003,7 +1002,7 @@ router.post("/resetpassword", async(req, res, next) => {
 
 
 
-router.put('/comments/toggle/:id', auth, async(req, res, next) => {
+router.put('/comments/toggle/:id', auth, async (req, res, next) => {
     try {
 
         const post = await postModel.findById(req.params.id);
@@ -1020,7 +1019,7 @@ router.put('/comments/toggle/:id', auth, async(req, res, next) => {
 
 
 
-router.put('/likes/toggle/:id', auth, async(req, res, next) => {
+router.put('/likes/toggle/:id', auth, async (req, res, next) => {
     try {
 
         const post = await postModel.findById(req.params.id);
@@ -1037,7 +1036,7 @@ router.put('/likes/toggle/:id', auth, async(req, res, next) => {
 
 
 
-router.put("/posts/pin/:id", auth, async(req, res, next) => {
+router.put("/posts/pin/:id", auth, async (req, res, next) => {
     try {
 
         const loginUser = await userModel.findOne({ email: req.user.email }).populate('posts');
@@ -1101,7 +1100,7 @@ router.put("/posts/pin/:id", auth, async(req, res, next) => {
 
 
 
-router.get("/posts/edit/:id", auth, async(req, res, next) => {
+router.get("/posts/edit/:id", auth, async (req, res, next) => {
     try {
         const post = await postModel.findById(req.params.id).populate("user")
         if (!post) return res.status(403).json({ message: "Post not found" })
@@ -1131,7 +1130,7 @@ router.get("/posts/edit/:id", auth, async(req, res, next) => {
 
 
 
-router.post("/posts/edit/:id", auth, async(req, res) => {
+router.post("/posts/edit/:id", auth, async (req, res) => {
     try {
         const { caption } = req.body;
         if (!caption || caption.trim() === "") {
@@ -1152,7 +1151,7 @@ router.post("/posts/edit/:id", auth, async(req, res) => {
 
 
 
-router.get("/posts/delete/:id", auth, async(req, res, next) => {
+router.get("/posts/delete/:id", auth, async (req, res, next) => {
     try {
         const post = await postModel.findByIdAndDelete(req.params.id)
 
@@ -1167,7 +1166,7 @@ router.get("/posts/delete/:id", auth, async(req, res, next) => {
 
 
 
-router.get("/createnote", auth, async(req, res, next) => {
+router.get("/createnote", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
         res.render("createnote", { loginuser, footer: true })
@@ -1179,7 +1178,7 @@ router.get("/createnote", auth, async(req, res, next) => {
 
 
 
-router.post("/createnote", auth, async(req, res, next) => {
+router.post("/createnote", auth, async (req, res, next) => {
     try {
         await userModel.findOneAndUpdate({ email: req.user.email }, { $set: { note: req.body.note } }, { new: true })
         res.redirect("/profile");
@@ -1190,7 +1189,7 @@ router.post("/createnote", auth, async(req, res, next) => {
 })
 
 
-router.get("/deletenote", auth, async(req, res, next) => {
+router.get("/deletenote", auth, async (req, res, next) => {
     try {
         await userModel.findOneAndUpdate({ email: req.user.email }, { $set: { note: "" } }, { new: true })
         res.redirect("/profile")
@@ -1200,13 +1199,13 @@ router.get("/deletenote", auth, async(req, res, next) => {
 })
 
 
-router.get("/add/highlights", auth, async (req, res, next)=>{
+router.get("/add/highlights", auth, async (req, res, next) => {
     try {
-        const loginuser = await userModel.findOne({email : req.user.email}).populate("myStories");
-        res.render("highlights", {footer: true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories");
+        res.render("highlights", { footer: true, loginuser })
 
     } catch (error) {
-        res.status(500).json({error})
+        res.status(500).json({ error })
     }
 });
 
@@ -1214,7 +1213,7 @@ router.get("/add/highlights", auth, async (req, res, next)=>{
 
 router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
     try {
-        const loginuser = await userModel.findOne({email : req.user.email})
+        const loginuser = await userModel.findOne({ email: req.user.email })
 
         const idsArray = req.params.Ids.split(",")
 
@@ -1224,7 +1223,7 @@ router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
 
             if (stories.length > 0) {
                 const cover = stories[0].image; // Assuming each story has an 'image' field
-                console.log(idsArray)
+
                 res.render("next", { footer: true, loginuser, cover, ids: idsArray });
             } else {
                 res.status(404).json({ error: "No stories found for the given IDs" });
@@ -1238,31 +1237,67 @@ router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
 });
 
 
-router.post("/upload/highlight/:cover/:Ids", auth, async (req, res, next) => {
+
+
+// router.post("/upload/highlight/:cover", auth, async (req, res) => {
+//     try {
+//         const loginuser = await userModel.findOne({ email: req.user.email });
+//         const coverphotoid = req.params.cover;
+//         const ids = req.body.ids;
+    
+//         // Create a new highlight with the provided stories and other details
+//         let newHighlight = await HighlightModel.create({
+//             coverphoto: coverphotoid,
+//             user: loginuser._id,
+//             title: req.body.title || "Untitled",
+//             stories : ids
+//         });
+        
+//         // Respond with the newly updated highlight
+//         res.json(ids);
+
+
+//     } catch (error) {
+//         res.status(500).json({ error });
+//     }
+// });
+
+
+
+router.post("/upload/highlight/:cover", auth, async (req, res) => {
+    const mongoose = require("mongoose");
+
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
-        const idsArray = req.params.Ids.split(",");
-        const { title } = req.body;
+        if (!loginuser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+          
+        const coverphotoid = req.params.cover;
+        const ids = req.body.ids// Expecting an array of IDs from the request body
+        const updatedIds = ids.map(id=> id.toString());
+        console.log(updatedIds);
 
-        const newHighlight = {
-            stories: idsArray,
-            coverphoto: req.params.cover,
-            title,
-            user : loginuser._id
-        };
+        // Create a new highlight with the provided stories and other details
+        const newHighlight = await HighlightModel.create({
+            coverphoto: coverphotoid,
+            user: loginuser._id,
+            title: req.body.title || "Untitled",
+            stories :  updatedIds
+        });
 
-        // Save the new highlight to the database
-        const savedHighlight = await HighlightModel.create(newHighlight);
-
-        // Add the highlight ID to the user's highlights array
-        loginuser.highlights.push(savedHighlight._id);
+        // Update the user's highlights
+        loginuser.highlights.push(newHighlight._id);
         await loginuser.save();
-        res.redirect("/profile");
+         
+        // Respond with the newly created highlight
+        res.json(newHighlight);
+
     } catch (error) {
-        res.status(500).json({ error });
+        console.error('Error:', error);
+        res.status(500).json({ error: error.message });
     }
 });
-
 
 
 

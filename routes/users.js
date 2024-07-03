@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const highlights = require('./highlights');
 mongoose.connect("mongodb://127.0.0.1:27017/Instagram")
 
-
 const userSchema = mongoose.Schema({
 
     username: {
@@ -92,3 +91,7 @@ const userSchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model(`user`, userSchema);
+
+
+
+

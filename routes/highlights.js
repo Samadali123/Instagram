@@ -32,3 +32,7 @@ const highlightSchema = mongoose.Schema({
 
 
 module.exports = mongoose.model("highlights", highlightSchema)
+
+
+
+

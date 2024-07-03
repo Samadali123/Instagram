@@ -8,7 +8,7 @@
             <a href="/add/highlights"><i class="ri-arrow-left-line text-2xl"></i></a>
             <p class="font-medium text-xl">Title</p>
         </div>
-         <h3  data-uri="/upload/highlight/<%= cover %>" class=" done cursor-pointer  text-xl text-blue-500 absolute right-[24%] ">Done</h3>
+         <h3 data-ids="<%= ids %> "  data-cover="<%= cover %>" class=" done cursor-pointer  text-xl text-blue-500 absolute right-[24%] ">Done</h3>
     </div>
 
 
@@ -32,12 +32,22 @@
 <script>
 
 
-    document.querySelector(".done").addEventListener("click", function(event){
-    const starturi = event.target.dataset.uri;
-    const Ids = "<%= ids.join(',') %>"; 
-    document.querySelector("form").setAttribute("action", `/${starturi}/${Ids}`);
-    document.querySelector("form").submit();
+document.querySelector(".done").addEventListener("click", function(event) {
+    const starturi = `/upload/highlight/${event.target.dataset.cover}`;
+    let ids = event.target.dataset.ids;// Assuming ids are stored as comma-separated values in the dataset
+    ids = ids.split(",");
+    
+   const title = document.querySelector("input").value.trim();
+
+    axios.post(starturi, { ids,title })
+        .then(function(response) {
+            console.log(response);
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
 });
+
 
 </script>
 
