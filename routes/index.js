@@ -209,7 +209,9 @@ router.get('/feed', auth, async function (req, res) {
 router.get('/profile', auth, async function (req, res) {
     try {
 
-        const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`);
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`).populate("highlights")
+        console.log(loginuser.highlights);
+        
         res.render('profile', { footer: true, loginuser });
     } catch (error) {
         res.status(500).json({ error })
@@ -1201,8 +1203,8 @@ router.get("/deletenote", auth, async (req, res, next) => {
 
 router.get("/add/highlights", auth, async (req, res, next) => {
     try {
-        const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories");
-        res.render("highlights", { footer: true, loginuser })
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories")
+        res.render("highlights", { footer: true, loginuser})
 
     } catch (error) {
         res.status(500).json({ error })
@@ -1214,9 +1216,8 @@ router.get("/add/highlights", auth, async (req, res, next) => {
 router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
-
+        
         const idsArray = req.params.Ids.split(",")
-
         if (idsArray.length > 0) {
             // Assuming you have a Story model to find the stories by their IDs
             const stories = await storyModel.find({ _id: { $in: idsArray } });
@@ -1237,68 +1238,65 @@ router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
 });
 
 
-
-
-// router.post("/upload/highlight/:cover", auth, async (req, res) => {
-//     try {
-//         const loginuser = await userModel.findOne({ email: req.user.email });
-//         const coverphotoid = req.params.cover;
-//         const ids = req.body.ids;
-    
-//         // Create a new highlight with the provided stories and other details
-//         let newHighlight = await HighlightModel.create({
-//             coverphoto: coverphotoid,
-//             user: loginuser._id,
-//             title: req.body.title || "Untitled",
-//             stories : ids
-//         });
-        
-//         // Respond with the newly updated highlight
-//         res.json(ids);
-
-
-//     } catch (error) {
-//         res.status(500).json({ error });
-//     }
-// });
-
-
+   
 
 router.post("/upload/highlight/:cover", auth, async (req, res) => {
-    const mongoose = require("mongoose");
-
     try {
+        // Ensure the user is authenticated
         const loginuser = await userModel.findOne({ email: req.user.email });
-        if (!loginuser) {
-            return res.status(404).json({ error: 'User not found' });
+        
+        // Extract ids and title from request body
+        let { ids, title } = req.body;
+        title = title || "Untitled";
+        
+        // Ensure ids is an array
+        if (!Array.isArray(ids)) {
+            return res.status(400).json({ error: "Invalid 'ids' format. It should be an array." });
         }
-          
-        const coverphotoid = req.params.cover;
-        const ids = req.body.ids// Expecting an array of IDs from the request body
-        const updatedIds = ids.map(id=> id.toString());
-        console.log(updatedIds);
 
-        // Create a new highlight with the provided stories and other details
-        const newHighlight = await HighlightModel.create({
-            coverphoto: coverphotoid,
-            user: loginuser._id,
-            title: req.body.title || "Untitled",
-            stories :  updatedIds
+        // Trim any extra spaces from the IDs
+        ids = ids.map(id => id.trim());
+
+        // Fetch all stories for the ids
+        const storiesPromises = ids.map(async (id) => {
+            try {
+                const story = await storyModel.findById(id);
+                if (!story) {
+                    console.error(`Story not found for id: ${id}`);
+                    return null;
+                }
+                return story;
+            } catch (err) {
+                console.error(`Error fetching story with id ${id}:`, err);
+                return null;
+            }
         });
 
-        // Update the user's highlights
-        loginuser.highlights.push(newHighlight._id);
-        await loginuser.save();
-         
-        // Respond with the newly created highlight
-        res.json(newHighlight);
+        // Await all story fetch promises
+        const stories = await Promise.all(storiesPromises);
 
+        // Filter out any null values in case any stories were not found
+        const filteredStories = stories.filter(story => story !== null);
+
+        // Create new highlight with fetched stories
+        const newhighlight = await HighlightModel.create({
+            title,
+            user: loginuser._id,
+            coverphoto: req.params.cover,
+            stories: filteredStories,
+        });
+
+        loginuser.highlights.push(newhighlight._id)
+        await loginuser.save();
+        req.flash("success", "Highlight created Successfully.")   
+
+       const message =  req.flash("success")
+       res.json({ message});
     } catch (error) {
-        console.error('Error:', error);
         res.status(500).json({ error: error.message });
     }
 });
 
 
 
-module.exports = router;
+module.exports = router

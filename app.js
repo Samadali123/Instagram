@@ -5,6 +5,8 @@ var logger = require('morgan');
 const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require("connect-mongo");
+const flash = require("connect-flash")
+
 
 require("dotenv").config({ path: "./.env" });
 
@@ -23,6 +25,8 @@ app.use(session({
         autoRemove: 'disabled'
     }),
 }));
+
+app.use(flash());
 
 
 

@@ -3,6 +3,12 @@
 
 <div class="container relative w-full  h-full ">
  
+      <div class="flash hidden w-full flex justify-between  px-5 bg-green-500 rounded-md py-2 text-white ">
+           <a class="cursor-pointer font-light capitalize" ></a>
+            <p class="hidden cut "><i class="ri-close-line text-2xl cursor-pointer  "></i></p>
+      </div>
+      
+
     <div  class="top fixed top-[5%] z-[999] w-full flex justify-between px-5">
         <div class="left flex gap-3 items-center">
             <a href="/add/highlights"><i class="ri-arrow-left-line text-2xl"></i></a>
@@ -11,6 +17,13 @@
          <h3 data-ids="<%= ids %> "  data-cover="<%= cover %>" class=" done cursor-pointer  text-xl text-blue-500 absolute right-[24%] ">Done</h3>
     </div>
 
+
+       <div class="redirect-container mt-[25%]  hidden  flex flex-col gap-3 justify-center items-center">
+        <div class="redirect relative w-[65px] h-[65px] rounded-full overflow-hidden ">
+            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="">
+        </div>
+         <a href="/profile" class="font-light text-xl">Back to profile</a>
+       </div>
 
     <div class="stories-container overflow-y-auto pt-16 px-5 flex flex-col items-center justify-center w-full h-[75vh] ">
               
@@ -31,7 +44,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 
-
+let message;
 document.querySelector(".done").addEventListener("click", function(event) {
     const starturi = `/upload/highlight/${event.target.dataset.cover}`;
     let ids = event.target.dataset.ids;// Assuming ids are stored as comma-separated values in the dataset
@@ -39,16 +52,29 @@ document.querySelector(".done").addEventListener("click", function(event) {
     
    const title = document.querySelector("input").value.trim();
 
-    axios.post(starturi, { ids,title })
-        .then(function(response) {
-            console.log(response);
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+   document.querySelector(".cut").addEventListener("click", function(event){
+       document.querySelector(".flash").classList.replace("flex", "hidden");
+
+   })  
+
+    axios.post(starturi, { ids, title })
+    .then(function(response) {  
+       message =  response.data.message
+       document.querySelector("input").value = "";
+       document.querySelector(".flash").classList.replace("hidden", "flex");
+       document.querySelector(".flash p").classList.replace("hidden", "flex");
+       document.querySelector(".flash a").textContent = message;
+       document.querySelector(".top").classList.replace("flex", "hidden");
+       document.querySelector(".stories-container").classList.add("hidden")
+       document.querySelector(".redirect-container").classList.replace("hidden", "flex");
+    })
+    .catch(function(error) {
+        console.log(error);
+    }).finally(function(){
+         
+    });
+
 });
 
 
 </script>
-
-

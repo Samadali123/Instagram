@@ -7,6 +7,11 @@ const highlightSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : `Story`
     }],
+      
+      // stories : [{
+      //    type : String,
+      //    default : []
+      // }],
 
      coverphoto : {
         type : String,
