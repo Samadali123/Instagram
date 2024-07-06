@@ -15,6 +15,7 @@ const jwt = require("jsonwebtoken")
 const { v4: uuidV4 } = require(`uuid`);
 const secretKey = process.env.JWT_SECRET_KEY;
 const nodemailer = require("nodemailer");
+const highlights = require('./highlights');
 
 
 
@@ -210,8 +211,7 @@ router.get('/profile', auth, async function (req, res) {
     try {
 
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`).populate("highlights")
-        console.log(loginuser.highlights);
-        
+    
         res.render('profile', { footer: true, loginuser });
     } catch (error) {
         res.status(500).json({ error })
@@ -714,7 +714,7 @@ router.get(`/story/:number`, auth, async (req, res) => {
         const storyuser = await userModel.findOne({ email: req.user.email }).populate(`stories`)
         const loginuser = await userModel.findOne({ email: req.user.email })
         const storyimage = storyuser.stories[req.params.number];
-
+        
         if (storyuser.stories.length > req.params.number) {
             res.render("mystory", { footer: false, storyuser, loginuser: true, storyimage, number: req.params.number, dater: utils.formatRelativeTime });
         } else {
@@ -1287,7 +1287,10 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
         });
 
         loginuser.highlights.push(newhighlight._id)
+        newhighlight.populate("stories")
+        await newhighlight.save();
         await loginuser.save();
+        // console.log(newhighlight.stories)
         req.flash("success", "Highlight created Successfully.")   
 
        const message =  req.flash("success")
@@ -1296,6 +1299,48 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+router.get("/highlights/:highlightId/:number", auth, async (req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        // Fetch the highlight and populate the stories array
+        const highlight = await HighlightModel.findById(req.params.highlightId).populate("stories");
+
+    
+        // Ensure highlight exists and the stories array has the element at the specified index
+        if (highlight && highlight.stories.length > req.params.number) {
+            let highlightimage = highlight.stories[req.params.number].image;
+
+            res.render("viewhighlights", {
+                footer: false,
+                highlightimage,
+                loginuser,
+                number: req.params.number,
+            });
+        } else {
+            // Redirect to profile if no further stories are available
+            res.redirect("/profile");
+        }
+    } catch (error) {
+        // Handle errors by returning a 500 status code and the error message
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

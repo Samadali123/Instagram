@@ -87,13 +87,17 @@
 
              <div class="highlightscontainer  flex gap-6  px-5  pt-6 relative w-full overflow-y-hidden overflow-x-auto  ">
 
-                    <div class="highlight cursor-pointer">
-                        <div class="relative w-20 h-20 rounded-full  overflow-hidden ">
-                            <img class="w-full h-full object-cover object-center rounded-full " src="/images/uploads/153e389e-3c62-4384-a8a8-867727b5abc5.avif" alt="">
-                          </div>
-                          <h3 class="w-fit ml-7 font-light cursor-pointer ">Title</h3>
-                    </div>
-
+                    <% loginuser.highlights.forEach(function(highlight) { %>
+                       <a href='/highlights/<%= highlight._id %>/0'>
+                        <div class="highlight cursor-pointer">
+                            <div class="relative w-20 h-20 rounded-full  overflow-hidden " style="border: 1px solid silver;">
+                                <img class="w-full h-full object-cover object-center rounded-full " src="/images/uploads/<%= highlight.coverphoto %>" alt="">
+                              </div>
+                              <h3 class="whitespace-nowrap text-center ml-1 font-light cursor-pointer "><%= highlight.title %></h3>
+                        </div>
+                       </a>
+                    <% })  %>
+                     
                    <div class="add-highlight-container cursor-pointer">
                     <div style="border: 1px solid silver;" class="addhighlight flex justify-center items-center text-white  relative w-20 h-20 rounded-full  overflow-hidden">
                          <a href="/add/highlights"> <p><i class="ri-add-line text-xl cursor-pointer "></i></p></a>

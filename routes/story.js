@@ -4,7 +4,7 @@ const User = require('./users'); // Ensure the correct path to the User model
 const storySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'User', // Ensure the correct reference to the User model
         required: [true, "User is required for creating a story"]
     },
     image: {
@@ -22,7 +22,7 @@ const storySchema = new mongoose.Schema({
     expiryDate: {
         type: Date,
         default: () => new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours from now
-    },
+    }
 }, { timestamps: true, versionKey: false });
 
 // Index to automatically delete stories after they expire

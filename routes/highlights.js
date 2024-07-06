@@ -8,11 +8,7 @@ const highlightSchema = mongoose.Schema({
         ref : `Story`
     }],
       
-      // stories : [{
-      //    type : String,
-      //    default : []
-      // }],
-
+   
      coverphoto : {
         type : String,
         required : [true, "Cover photo is required for creating a Highlights"],
