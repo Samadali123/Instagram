@@ -1,5 +1,5 @@
 <% include ./partials/header.ejs %>
-    <div class="w-full  min-h-full bg-zinc-900 text-white py-5">
+    <div class="w-full min-h-full bg-zinc-900 text-white ">
         <div class="upper">
             <div class="nav flex justify-between items-center px-4">
                 <h3 class="text-lg">
@@ -7,10 +7,10 @@
                 </h3>
                 <div class="icons flex gap-5">
                     <i id="addicon" class="cursor-pointer  text-[1.4rem] ri-add-box-line"></i>
-                    <i class="text-[1.4rem] ri-menu-line"></i>
+                     <a href="/settings"><i id="settings" class="text-[1.4rem] ri-menu-line cursor-pointer"></i></a>
                 </div>
             </div>
-
+ 
             <div class="flex relative justify-between items-center pl-6 pr-[12vw] mt-8">
 
                 <div class="note absolute top-[-4%]  ml-[7%] z-auto bg-zinc-900 rounded-3xl px-3 py-1 ">
@@ -109,7 +109,7 @@
         </div>
 
 
-        <div class="notepopup hidden flex flex-col  justify-center items-center gap-4 w-full h-[35vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+        <div class="notepopup hidden flex flex-col  justify-center items-center gap-4 w-[93%] h-[35vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
 
             <div class="profile w-[35px] h-[35px] rounded-full overflow-hidden">
                 <img class="w-full h-full object-cover rounded-full " src="/images/uploads/02aa3355-e592-4751-803d-5e890474d172.avif" alt="">
@@ -127,7 +127,7 @@
 
 
 
-        <div class="popup hidden flex flex-col  justify-center gap-4 w-full h-[60vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+        <div class="popup hidden flex flex-col  justify-center gap-4 w-[93%] h-[60vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
 
             <p class="text-xl text-center relative top-[-10%]">Create</p>
 
@@ -154,9 +154,9 @@
             </div>
 
 
-            <div class="highlights flex items-center w-full px-5 gap-3">
+            <div class="highlights cursor-pointer flex items-center w-full px-5 gap-3">
                 <img class="w-7 h-7" src="/images/highlights.png" alt="">
-                <p class="text-xl">Story highlights</p>
+                <a href="/add/highlights"><p class="text-xl">Story highlights</p></a>
             </div>
 
 

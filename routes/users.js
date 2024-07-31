@@ -25,12 +25,11 @@ const userSchema = mongoose.Schema({
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
         unique: true,
     },
-
     profile: {
         type: String,
         default: `default.jpg`
     },
-
+     
     password: {
         type: String,
         require: [true, "password is required"],

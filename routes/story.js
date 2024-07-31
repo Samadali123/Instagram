@@ -4,7 +4,7 @@ const User = require('./users'); // Ensure the correct path to the User model
 const storySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Ensure the correct reference to the User model
+        ref: 'user', // Ensure the correct reference to the User model
         required: [true, "User is required for creating a story"]
     },
     image: {

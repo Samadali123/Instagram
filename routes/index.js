@@ -201,8 +201,8 @@ router.get('/feed', auth, async function (req, res) {
         });
 
         res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
-    } catch (err) {
-        res.status(500).json({ error })
+    } catch (error) {
+        res.status(500).json({message: error.message});
     }
 });
 
@@ -1139,8 +1139,6 @@ router.post("/posts/edit/:id", auth, async (req, res) => {
             return res.status(400).json({ error: 'Caption cannot be empty' });
         }
         const post = await postModel.findOneAndUpdate({ _id: req.params.id }, { $set: { caption } }, { new: true });
-
-
         if (!post) {
             return res.status(404).json({ error: 'Post not found' });
         }
@@ -1331,6 +1329,15 @@ router.get("/highlights/:highlightId/:number", auth, async (req, res) => {
 
 
 
+router.get("/settings", auth, async (req, res)=>{
+    try { 
+        const loginuser = await userModel.findOne({email : req.user.email});
+        res.render("settings", {loginuser, footer : true})
+        
+    } catch (error) {
+         res.status(500).json({error})
+    }
+})
 
 
 
