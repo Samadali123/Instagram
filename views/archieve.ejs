@@ -1,0 +1,102 @@
+
+<% include ./partials/header.ejs %>
+<div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
+  <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-10">
+    <a href="/settings"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
+    <p class="text-xl font-semibold text-white">Stories  archieve</p>
+  </div>
+
+  <div class="archieve-stories relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
+ 
+    <% loginuser.myStories.forEach(function(story){ %>
+        <div id="story" class="story relative w-full sm:w-[48%] md:w-[30%] h-[25vh] cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= story.image %>" alt="Story-image">
+    
+          <a href="/archieve/story/<%= story._id %>">
+            <div class="overlay w-full h-full absolute top-0 left-0" style="background-color: rgba(0, 0, 0, 0.041);">
+                <div class="absolute top-7 left-4 container bg-zinc-900 w-fit h-fit rounded-md p-2">
+                    <p class="text-sm whitespace-nowrap">
+                        <% 
+                            const options = { day: '2-digit', month: 'short' };
+                            const formattedDate = new Date(story.createdAt).toLocaleDateString('en-US', options);
+                            %>
+                        <%= formattedDate %>
+                    </p>
+                </div>
+            </div>
+          </a>
+            
+        </div>
+    <% }) %>
+    
+    
+  </div>
+</div>
+
+<style>
+ .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+
+  .saved-posts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .post img {
+    transition: transform 0.3s ease;
+  }
+
+  .post:hover img {
+    transform: scale(1.1);
+  }
+
+  @media (min-width: 768px) {
+    .archieve-stories {
+      justify-content: space-between;
+    }
+  }
+
+
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 5%;
+    background-color: rgba(0, 0, 0, 0.8); 
+  }
+
+  @media (max-width: 640px) {
+    .header {
+      padding-left: 14%;
+      padding-right: 14%;
+      justify-content: space-between;
+    }
+    .header p {
+      font-size: 1rem; 
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .header {
+      padding-left: 3%;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .header {
+      padding-left: 5%;
+    }
+  }
+</style>
+
+<script>
+
+</script>
+<% include ./partials/footer.ejs %>

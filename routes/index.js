@@ -728,6 +728,18 @@ router.get(`/story/:number`, auth, async (req, res) => {
 
 
 
+router.get(`/archieve/story/:id`, auth, async (req, res) => {
+    try { 
+       const loginuser = await userModel.findOne({email : req.user.email});
+       const story = await storyModel.findById(req.params.id).populate("user");
+       console.log(story)
+       res.render("archievestory", { footer: false, loginuser: false, story, dater: utils.formatRelativeTime });
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+})
+
 router.put("/story/like/:StoryId", auth, async (req, res, next) => {
     try {
         const storyId = req.params.StoryId;
@@ -1328,6 +1340,8 @@ router.get("/highlights/:highlightId/:number", auth, async (req, res) => {
 
 
 
+
+
 router.get("/settings", auth, async (req, res)=>{
     try { 
         const loginuser = await userModel.findOne({email : req.user.email});
@@ -1348,6 +1362,15 @@ router.get("/saved/posts", auth, async (req, res, next)=>{
 })
 
 
+
+router.get("/archieve/stories", auth, async (req, res, next) => {
+    try {
+      const loginuser = await userModel.findOne({email : req.user.email});
+        res.render("archieve", { footer: true, loginuser });
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+});
 
 
 

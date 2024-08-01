@@ -1,0 +1,63 @@
+<% include ./partials/header.ejs %>
+
+    <div class="container w-full h-full  relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
+        <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= story.image %>" alt="story-unavailable">
+        <div class="overlay absolute w-full h-full  top-[0%] left-[0%]" style="background-color: rgba(0, 0, 0, 0.096);">
+            <div class="top ">
+                <div class="progresscontainer relative w-full h-[5px]  " style="background-color: rgba(215, 215, 215, 0.792);">
+                    <div class="progress w-[0%] h-full " style="background-color: white;"></div>
+                </div>
+                <div class="userdets mt-2 flex items-top gap-1 px-3 ">
+                    <a href="/openprofile/<%= story.user.username %>">
+                        <div class="profile w-[40px] h-[40px] rounded-full overflow-hidden cursor-pointer">
+                            <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= story.user.profile %>" alt="user profile">
+                        </div>
+                    </a>
+
+                    <div class="flex w-full justify-between items-center px-8 ">
+                        <div class="whitespace-nowrap flex gap-1">
+                            <a href="/openprofile/<%= story.user.username %>">
+                                <p class="font-medium mt-1 cursor-pointer">
+                                    <%= story.user.username %>
+                                </p>
+                            </a>
+                            <p class="mt-1 ">
+                                <%= dater(new Date(story.createdAt)) %>
+                            </p>
+                        </div>
+                        <div>
+                            <a href="/archieve/stories">
+                                <p><i class="ri-close-line text-xl font-semibold cursor-pointer "></i></p>
+                            </a>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="bottom w-fit absolute  flex gap-3 cursor-pointer justify-items-center bottom-[-6%] right-[5%] ">
+                <a href="">
+                    <p><i id="likeicon" class="ri-heart-3-line  text-lg text-white"></i></p>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let story = `<%= story %>`;
+        var progress = document.querySelector(".progress");
+        var count = 0;
+        var interval = setInterval(function() {
+            if (count < 100) {
+                count++;
+                progress.style.width = `${count}%`;
+            } else {
+                window.location = `http://localhost:3000/archieve/stories`;
+            }
+            
+        }, 50)
+    </script>
