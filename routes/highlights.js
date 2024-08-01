@@ -3,12 +3,11 @@ const mongoose = require("mongoose")
 const highlightSchema = mongoose.Schema({
 
 
-    stories : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : `Story`
-    }],
-      
-   
+    stories : {
+       type : Array,
+       default : []
+    },
+
      coverphoto : {
         type : String,
         required : [true, "Cover photo is required for creating a Highlights"],

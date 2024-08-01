@@ -680,8 +680,7 @@ router.post(`/:username/add/story`, auth, upload.single(`storyimage`), async (re
             image: req.file.filename,
         })
         loginuser.stories.push(newStory._id);
-
-        loginuser.myStories.push(newStory._id);
+        loginuser.myStories.push(newStory);
         await loginuser.save();
         res.status(302).redirect(`/feed`);
     } catch (error) {
@@ -813,21 +812,22 @@ router.get("/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
 
         const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
-
+        
         const openPost = await postModel.findById(req.params.openpost).populate("user");
         if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
         const count = await postModel.countDocuments();
         const randomIndex = Math.floor(Math.random() * count);
         const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
-
-
-        const posts = [openPost, ...randomPosts];
-        res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+        let posts =  [openPost, ...randomPosts];
+       res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
     } catch (error) {
         res.status(500).json({ error })
     }
 });
+
+
+
 
 
 router.get("/myposts/open/:openpost", auth, async (req, res, next) => {
@@ -1304,9 +1304,8 @@ router.get("/highlights/:highlightId/:number", auth, async (req, res) => {
         const loginuser = await userModel.findOne({ email: req.user.email });
 
         // Fetch the highlight and populate the stories array
-        const highlight = await HighlightModel.findById(req.params.highlightId).populate("stories");
+        const highlight = await HighlightModel.findById(req.params.highlightId);
 
-    
         // Ensure highlight exists and the stories array has the element at the specified index
         if (highlight && highlight.stories.length > req.params.number) {
             let highlightimage = highlight.stories[req.params.number].image;

@@ -76,10 +76,10 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: `Story`
     }],
-    myStories: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Story"
-    }],
+    myStories: {
+        type : Array,
+        default : []
+    },
     note: {
         type: String,
     },
