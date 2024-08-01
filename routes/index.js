@@ -1339,6 +1339,15 @@ router.get("/settings", auth, async (req, res)=>{
     }
 })
 
+router.get("/saved/posts", auth, async (req, res, next)=>{
+    try {
+          const loginuser = await userModel.findOne({email : req.user.email}).populate("savedPosts")
+          res.render("saved", {footer:true, loginuser})
+    } catch (error) {
+          res.status(500).json({error})
+    }
+})
+
 
 
 

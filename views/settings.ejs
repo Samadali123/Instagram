@@ -1,15 +1,142 @@
 <% include ./partials/header.ejs %>
-    <div class="w-full min-h-full text-white ">
+    <div class="w-full min-h-full text-white overflow-x-hidden overflow-y-auto ">
           <div class="header fixed top-[5%] z-auto text-lg font-medium w-[94%] flex items-center gap-4 text-white">
                 <p><i class="ri-arrow-left-line"></i></p>
                 <p>Settings and activity</p>
           </div>
+          
+          <div class="options relative pt-8">
+              <p class="ml-1 mb-5 font-light text-[silver] ">How you use InstaVerse</p>
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/saved.png" alt="">
+                        <a href="/saved/posts"><p class="cursor-pointer">Saved</p></a>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/archieve.png" alt="">
+                        <p class="cursor-pointer">Archieve</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+         
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/activity.png" alt="">
+                        <p class="cursor-pointer">Your Activity</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+               <hr>
+              <p class="ml-1 mb-5 font-light text-[silver]  ">Who can see your private content</p>
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/account privacy.png" alt="">
+                        <p class="cursor-pointer">Account privacy</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/close friends.png" alt="">
+                        <p class="cursor-pointer">Close One's</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/blocked accounts.png" alt="">
+                        <p class="cursor-pointer">Blocked</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+              <hr>
+              <p class="ml-1 mb-5 font-light text-[silver]  ">Information and Support</p>
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/account status.png" alt="">
+                        <p class="cursor-pointer">Account Status</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                        <img class="w-6" src="/images/about.png" alt="">
+                        <p class="cursor-pointer">About</p>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+
+              <hr>
+              <p class="ml-1 mb-4 font-light text-[silver]  ">Login</p>
+
+              <p class="mb-3 text-blue-500 ">Add account</p>
+              <p class=" text-red-500 font-medium ">Log out</p>
+          </div>
+
+          <hr class="mt-3">
     </div>
-     
-
-
+    
     <style>
      
+  hr {
+    border: none; /* Remove default border */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Lighter shade of white */
+    height: 1px; /* Reduce height */
+    margin: 10px 0; /* Adjust margin as needed */
+  }
+
     </style>
 
     <script>
