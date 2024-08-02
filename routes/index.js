@@ -409,6 +409,7 @@ router.post('/comment/:data/:postid', auth, async (req, res) => {
         });
 
         commentpost.comments.push(createdcomment._id);
+         loginuser.commentPost.push(commentpost._id);  
         await commentpost.save();
         await loginuser.save();
 
@@ -1393,6 +1394,64 @@ router.get("/user/likes", auth, async (req, res, next) => {
         res.status(500).json({ error });
     }
 });
+
+
+router.get("/user/comments", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        if (!loginuser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Find all comments made by the logged-in user and populate the post field
+        const userComments = await commentModel.find({ user: loginuser._id })
+            .populate({
+                path: 'post',
+                populate: {
+                    path: 'user', // populate the user field in the post
+                    select: '_id username profile' // selecting only necessary fields
+                }
+            }).populate('user'); // populate the user who made the comment
+
+        // Helper function to calculate relative time
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diff = now - new Date(date);
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+            const months = Math.floor(days / 30);
+            const years = Math.floor(days / 365);
+
+            if (years > 0) return `${years}yr${years > 1 ? 's' : ''}`;
+            if (months > 0) return `${months}mon${months > 1 ? 's' : ''}`;
+            if (days > 0) return `${days}d${days > 1 ? 'ays' : 'ay'} `;
+            if (hours > 0) return `${hours}hr${hours > 1 ? 's' : ''} `;
+            if (minutes > 0) return `${minutes}min${minutes > 1 ? 's' : ''} `;
+            return `${seconds}s${seconds > 1 ? 's' : ''}`;
+        }
+
+        // Format the createdAt dates for comments and posts
+        userComments.forEach(comment => {
+            comment.formattedCreatedAt = getRelativeTime(comment.createdAt);
+            if (comment.post) {
+                comment.post.formattedCreatedAt = getRelativeTime(comment.post.createdAt);
+            }
+        });
+
+        console.log(userComments);
+
+        // Render the data to a template (e.g., usercomments.ejs)
+        res.render("usercomments", { footer: true, userComments, loginuser });
+
+    } catch (error) {
+        // Handle any errors that occur
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 
 router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {

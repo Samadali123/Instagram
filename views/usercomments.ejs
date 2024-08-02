@@ -1,0 +1,97 @@
+
+<% include ./partials/header.ejs %>
+<div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
+  <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-[9999]">
+    <a href="/activity"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
+    <p class="text-xl font-semibold text-white">Comments</p>
+  </div>
+
+
+  <div class="comments-container relative  relative w-full min-h-[85vh] overflow-x-hidden overflow-y-auto x pt-5 px-7">
+                
+          <% userComments.forEach(function(comment){  %>
+            <span class="w-full  flex mb-7 ">
+                <div class="profile cursor-pointer w-[3rem] h-[3rem] rounded-full">
+                    <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= comment.post.user.profile %>" alt="">
+              </div>
+    
+    
+             <div class="second w-9/12 flex flex-col gap-4 ml-5">
+                   <div class="top pl-4">
+                      <h1 class="cursor-pointer"><%= comment.post.user.username %><br>
+                         <p style="color: silver;" class="font-light"><%= comment.post.formattedCreatedAt %></p>
+                     </h1>
+                   </div>
+                   <div class="bottom flex gap-3 items-center  ">
+                          <div class="profile cursor-pointer w-[1.5rem] h-[1.5rem] rounded-full overflow-hidden">
+                             <img class="w-full h-full object-cover rounded-full" src="/images/uploads/083e3d70-b7a0-4a3d-972d-e06983ed1155.avif" alt="">
+                          </div>
+                           <p class="cursor-pointer whitespace-nowrap"> <span><%= comment.user.username %> </span><%= comment.text %> <br> <span style="color: silver;" class="font-light "><%= comment.formattedCreatedAt %></span></p>
+                   </div> 
+    
+             </div>
+    
+    
+             <div class="postimage cursor-pointer  w-[150px] h-[150px] rounded-md  ">
+                   <img class="w-full h-full cursor-pointer object-cover hover:scale-110" src="/images/uploads/<%= comment.post.image %>" alt="">
+             </div>
+               </span>
+          <%  })    %>
+         
+
+
+           </div>
+        
+
+           
+            
+
+           
+            
+  </div>
+
+</div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 5%;
+    background-color: rgba(0, 0, 0, 0.8); 
+  }
+
+  @media (max-width: 640px) {
+    .header {
+      padding-left: 14%;
+      padding-right: 14%;
+      justify-content: space-between;
+    }
+    .header p {
+      font-size: 1rem; 
+    }
+  }
+
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .header {
+      padding-left: 3%;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .header {
+      padding-left: 5%;
+    }
+  }
+</style>
+
+<script>
+
+</script>
+<% include ./partials/footer.ejs %>

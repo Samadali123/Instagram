@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
         //     "Invalid password format."
         // ]
     },
-
+   
     bio: String,
     posts: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -86,6 +86,10 @@ const userSchema = mongoose.Schema({
     highlights :[{
         type : mongoose.Schema.Types.ObjectId,
         ref : "highlights"
+    }],
+    commentPost :[{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'post'
     }]
 })
 
