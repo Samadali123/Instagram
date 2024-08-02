@@ -1,0 +1,134 @@
+<% include ./partials/header.ejs %>
+    <div class="w-full min-h-full text-white overflow-x-hidden overflow-y-auto ">
+          <div class="header fixed top-[5%] z-auto text-lg font-medium w-[94%] flex items-center gap-4 text-white">
+                 <a href="/settings"><p><i class="ri-arrow-left-line"></i></p></a>
+                <p>My Activity</p>
+          </div>
+          
+          <div class="options relative pt-8">
+              <p class="ml-1 mb-5 font-light text-[silver] ">Interactions</p>
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                    <i class="ri-heart-line text-xl"></i>
+                        <a href="/user/likes"><p class="cursor-pointer">Likes</p></a>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+
+
+
+              <div class="option flex w-full justify-between mb-4">
+                       
+                  <div class="left flex items-center gap-3">
+                    <i class="ri-chat-1-line text-xl"></i>
+                         <a href=""><p class="cursor-pointer">Comments</p></a>
+                  </div>
+                        
+                  </p>
+                   
+                  <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                    
+              </div>
+         
+               <hr>
+              <p class="ml-1 mb-5 font-light text-[silver]  ">Removed Content</p>
+            
+              <div class="option flex w-full justify-between mb-4">
+                       
+                <div class="left flex items-center gap-3">
+                    <i class="ri-delete-bin-7-line text-xl"></i>
+                       <a href=""><p class="cursor-pointer">Recently deleted</p></a>
+                </div>
+                      
+                </p>
+                 
+                <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                  
+            </div>
+
+
+
+            <div class="option flex w-full justify-between mb-4">
+                       
+                <div class="left flex items-center gap-3">
+                    <i class="ri-archive-line text-xl"></i>
+                       <a href="/archieve/stories"><p class="cursor-pointer">Archieve</p></a>
+                </div>
+                      
+                </p>
+                 
+                <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                  
+            </div>
+                    
+
+            <p class="ml-1 mb-5 font-light text-[silver] ">Content you shared</p>
+              
+
+            <div class="option flex w-full justify-between mb-4">
+                       
+                <div class="left flex items-center gap-3">
+                    <i class="ri-image-fill text-xl"></i>
+                       <a href=""><p class="cursor-pointer">Posts</p></a>
+                </div>
+                      
+                </p>
+                 
+                <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                  
+            </div>
+
+            <div class="option flex w-full justify-between mb-4">
+                       
+                <div class="left flex items-center gap-3">
+                      <img class="w-6" src="/images/highlights.png" alt="">
+                       <a href=""><p class="cursor-pointer">Highlights</p></a>
+                </div>
+                      
+                </p>
+                 
+                <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                  
+            </div>
+
+
+
+            <div class="option flex w-full justify-between mb-4">
+                       
+                <div class="left flex items-center gap-3">
+                      <img class="w-6" src="/images/reel.png" alt="">
+                       <a href=""><p class="cursor-pointer">Reels</p></a>
+                </div>
+                      
+                </p>
+                 
+                <p><i class="ri-arrow-right-s-line text-lg cursor-pointer"></i></p>
+                  
+            </div>
+
+
+          </div>
+
+    
+    </div>
+    
+    <style>
+     
+  hr {
+    border: none; /* Remove default border */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* Lighter shade of white */
+    height: 1px; /* Reduce height */
+    margin: 10px 0; /* Adjust margin as needed */
+  }
+
+    </style>
+
+    <script>
+   
+    </script>
+    <% include ./partials/footer.ejs %>

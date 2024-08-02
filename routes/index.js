@@ -1373,13 +1373,46 @@ router.get("/archieve/stories", auth, async (req, res, next) => {
 });
 
 
+router.get("/activity", auth, async (req, res, next)=>{
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email})
+         res.render("activity", { footer: true, loginuser });
+    } catch (error) {
+         res.status(500).json({error});
+    }
+})
 
 
+router.get("/user/likes", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        const userPosts = await postModel.find({ likes: loginuser._id }).populate("user"); 
+        res.render("userlikes", {footer : true, loginuser, userPosts });
+
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+});
 
 
+router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
 
+        const openUser = await userModel.findById(req.params.userid).populate("followers").populate("following")
+        
+        const openPost = await postModel.findById(req.params.postid).populate("user");
+        if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
-
-
+        const count = await postModel.countDocuments();
+        const randomIndex = Math.floor(Math.random() * count);
+        const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
+        let posts =  [openPost, ...randomPosts];
+       res.render("openuserliked", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+})
 
 module.exports = router
+
