@@ -8,11 +8,15 @@
 
   <div class="liked-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
   
-    <% userPosts.forEach(function(post){  %>
+     <% if(userPosts.length > 0){  %>
+      <% userPosts.forEach(function(post){  %>
         <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
             <img class="w-full h-full object-cover" src="/images/uploads/<%=  post.image %>" alt="">
           </div>
    <% })  %>
+   <%  }  else{  %>
+            <p>Sorry, you have'nt any post you liked recently</p>
+ <%  }  %>
 
   </div>
 </div>

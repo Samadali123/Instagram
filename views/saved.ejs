@@ -84,7 +84,7 @@ document.querySelector(".saved-posts").addEventListener("click", function(event)
     let postElement = event.target.closest('.post');
     if (postElement) {
       const loginuserid = `<%= loginuser._id %>`;
-        window.location.href = `/posts/open/${postElement.dataset.id}/${loginuserid}`;
+        window.location.href = `/saved/posts/open/${postElement.dataset.id}/${loginuserid}`;
     }
 });
 

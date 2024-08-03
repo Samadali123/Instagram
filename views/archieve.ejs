@@ -8,26 +8,30 @@
 
   <div class="archieve-stories relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
  
-    <% loginuser.myStories.forEach(function(story){ %>
-        <div id="story" class="story relative w-full sm:w-[48%] md:w-[30%] h-[25vh] cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-            <img class="w-full h-full object-cover" src="/images/uploads/<%= story.image %>" alt="Story-image">
-    
-          <a href="/archieve/story/<%= story._id %>">
-            <div class="overlay w-full h-full absolute top-0 left-0" style="background-color: rgba(0, 0, 0, 0.041);">
-                <div class="absolute top-7 left-4 container bg-zinc-900 w-fit h-fit rounded-md p-2">
-                    <p class="text-sm whitespace-nowrap">
-                        <% 
-                            const options = { day: '2-digit', month: 'short' };
-                            const formattedDate = new Date(story.createdAt).toLocaleDateString('en-US', options);
-                            %>
-                        <%= formattedDate %>
-                    </p>
-                </div>
-            </div>
-          </a>
-            
-        </div>
-    <% }) %>
+      <% if(loginuser.myStories.length > 0){  %>
+        <% loginuser.myStories.forEach(function(story){ %>
+          <div id="story" class="story relative w-full sm:w-[48%] md:w-[30%] h-[25vh] cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+              <img class="w-full h-full object-cover" src="/images/uploads/<%= story.image %>" alt="Story-image">
+      
+            <a href="/archieve/story/<%= story._id %>">
+              <div class="overlay w-full h-full absolute top-0 left-0" style="background-color: rgba(0, 0, 0, 0.041);">
+                  <div class="absolute top-7 left-4 container bg-zinc-900 w-fit h-fit rounded-md p-2">
+                      <p class="text-sm whitespace-nowrap">
+                          <% 
+                              const options = { day: '2-digit', month: 'short' };
+                              const formattedDate = new Date(story.createdAt).toLocaleDateString('en-US', options);
+                              %>
+                          <%= formattedDate %>
+                      </p>
+                  </div>
+              </div>
+            </a>
+              
+          </div>
+      <% }) %>
+     <% }else{  %>
+          <h3>Sorry, you have'nt have any Archieve Stories</h3>
+   <%   }  %>
     
     
   </div>

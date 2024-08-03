@@ -9,34 +9,39 @@
 
   <div class="comments-container relative  relative w-full min-h-[85vh] overflow-x-hidden overflow-y-auto x pt-5 px-7">
                 
-          <% userComments.forEach(function(comment){  %>
-            <span class="w-full  flex mb-7 ">
-                <div class="profile cursor-pointer w-[3rem] h-[3rem] rounded-full">
-                    <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= comment.post.user.profile %>" alt="">
-              </div>
-    
-    
-             <div class="second w-9/12 flex flex-col gap-4 ml-5">
-                   <div class="top pl-4">
-                      <h1 class="cursor-pointer"><%= comment.post.user.username %><br>
-                         <p style="color: silver;" class="font-light"><%= comment.post.formattedCreatedAt %></p>
-                     </h1>
-                   </div>
-                   <div class="bottom flex gap-3 items-center  ">
-                          <div class="profile cursor-pointer w-[1.5rem] h-[1.5rem] rounded-full overflow-hidden">
-                             <img class="w-full h-full object-cover rounded-full" src="/images/uploads/083e3d70-b7a0-4a3d-972d-e06983ed1155.avif" alt="">
-                          </div>
-                           <p class="cursor-pointer whitespace-nowrap"> <span><%= comment.user.username %> </span><%= comment.text %> <br> <span style="color: silver;" class="font-light "><%= comment.formattedCreatedAt %></span></p>
-                   </div> 
-    
-             </div>
-    
-    
-             <div class="postimage cursor-pointer  w-[150px] h-[150px] rounded-md  ">
-                   <img class="w-full h-full cursor-pointer object-cover hover:scale-110" src="/images/uploads/<%= comment.post.image %>" alt="">
-             </div>
-               </span>
-          <%  })    %>
+          <% if(userComments.length > 0){  %>
+            <% userComments.forEach(function(comment){  %>
+              <span class="w-full  flex mb-7 ">
+                  <div class="profile cursor-pointer w-[3rem] h-[3rem] rounded-full">
+                      <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= comment.post.user.profile %>" alt="">
+                </div>
+      
+      
+               <div class="second w-9/12 flex flex-col gap-4 ml-5">
+                     <div class="top pl-4">
+                        <h1 class="cursor-pointer"><%= comment.post.user.username %><br>
+                           <p style="color: silver;" class="font-light"><%= comment.post.formattedCreatedAt %></p>
+                       </h1>
+                     </div>
+                     <div class="bottom flex gap-3 items-center  ">
+                            <div class="profile cursor-pointer w-[1.5rem] h-[1.5rem] rounded-full overflow-hidden">
+                               <img class="w-full h-full object-cover rounded-full" src="/images/uploads/083e3d70-b7a0-4a3d-972d-e06983ed1155.avif" alt="">
+                            </div>
+                            <a href="/user/posts/comments/<%=comment.post._id %>"><p class="cursor-pointer whitespace-nowrap"> <span><%= comment.user.username %> </span><%= comment.text %> <br> <span style="color: silver;" class="font-light "><%= comment.formattedCreatedAt %></span></p></a>
+                     </div> 
+      
+               </div>
+      
+      
+               <a href="/user/posts/comments/<%=comment.post._id %>"> <div class="postimage cursor-pointer  w-[150px] h-[150px] rounded-md  ">
+                <img class="w-full h-full cursor-pointer object-cover hover:scale-110" src="/images/uploads/<%= comment.post.image %>" alt="">
+          </div></a>
+                 </span>
+            <%  })    %>
+         <% }  else{  %>
+                <p>Sorry, you have'nt any post comment recently</p>
+        <%  }  %>
+       
          
 
 

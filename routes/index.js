@@ -729,17 +729,8 @@ router.get(`/story/:number`, auth, async (req, res) => {
 
 
 
-router.get(`/archieve/story/:id`, auth, async (req, res) => {
-    try { 
-       const loginuser = await userModel.findOne({email : req.user.email});
-       const story = await storyModel.findById(req.params.id).populate("user");
-       console.log(story)
-       res.render("archievestory", { footer: false, loginuser: false, story, dater: utils.formatRelativeTime });
-    } catch (error) {
-        res.status(500).json({ error })
-    }
 
-})
+
 
 router.put("/story/like/:StoryId", auth, async (req, res, next) => {
     try {
@@ -1353,6 +1344,7 @@ router.get("/settings", auth, async (req, res)=>{
     }
 })
 
+
 router.get("/saved/posts", auth, async (req, res, next)=>{
     try {
           const loginuser = await userModel.findOne({email : req.user.email}).populate("savedPosts")
@@ -1364,6 +1356,25 @@ router.get("/saved/posts", auth, async (req, res, next)=>{
 
 
 
+router.get("/saved/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
+
+        const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
+        
+        const openPost = await postModel.findById(req.params.openpost).populate("user");
+        if (!openPost) return res.status(403).json({ message: "Post not found!" });
+
+        const count = await postModel.countDocuments();
+        const randomIndex = Math.floor(Math.random() * count);
+        const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
+        let posts =  [openPost, ...randomPosts];
+       res.render("opensavedpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+});
+
 router.get("/archieve/stories", auth, async (req, res, next) => {
     try {
       const loginuser = await userModel.findOne({email : req.user.email});
@@ -1373,6 +1384,21 @@ router.get("/archieve/stories", auth, async (req, res, next) => {
     }
 });
 
+
+router.get(`/archieve/story/:id`, auth, async (req, res) => {
+    try { 
+       const loginuser = await userModel.findOne({email : req.user.email});
+       const story = await storyModel.findById(req.params.id).populate("user");
+      if(story){
+          res.render("archievestory", { footer: false, loginuser: false, story, dater: utils.formatRelativeTime });
+      }else{
+        if(! story) return res.redirect("/archieve/stories")
+      }
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+
+})
 
 router.get("/activity", auth, async (req, res, next)=>{
     try {
@@ -1440,9 +1466,6 @@ router.get("/user/comments", auth, async (req, res, next) => {
                 comment.post.formattedCreatedAt = getRelativeTime(comment.post.createdAt);
             }
         });
-
-        console.log(userComments);
-
         // Render the data to a template (e.g., usercomments.ejs)
         res.render("usercomments", { footer: true, userComments, loginuser });
 
@@ -1452,6 +1475,35 @@ router.get("/user/comments", auth, async (req, res, next) => {
     }
 });
 
+
+
+router.get('/user/posts/comments/:postId', auth, async (req, res, next) => {
+    try {
+        const post = await postModel.findById(req.params.postId);
+        const comments = await commentModel.find({ post: post._id }).populate('user')
+
+        comments.forEach((comment) => {
+            let dateObj = new Date(comment.createdAt);
+            let monthNames = [
+                '', 'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+
+            let day = dateObj.getDate();
+            let month = dateObj.getMonth() + 1;
+            let year = dateObj.getFullYear();
+
+            let monthName = monthNames[month];
+            let formattedDate = `${monthName} ${day}, ${year}`;
+            comment.formattedDate = formattedDate;
+        });
+
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render('postcomments', { header: true, loginuser, comments, post });
+    } catch (error) {
+        res.status(500).json({ error })
+    }
+});
 
 
 router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
@@ -1472,6 +1524,18 @@ router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
         res.status(500).json({ error })
     }
 })
+
+
+
+router.get("/user/deleted/content", async (req, res, next)=>{
+    try {
+        const loginuser = await userModel.findOne({email : req.user.email});
+        res.render("deleted", {footer})
+    } catch (error) {
+         res.status(500).json({error: error.message})
+    }
+})
+
 
 module.exports = router
 
