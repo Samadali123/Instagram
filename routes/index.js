@@ -1537,5 +1537,74 @@ router.get("/user/deleted/content", auth, async (req, res, next)=>{
     }
 })
 
+
+router.get("/user/posts", auth, async (req, res, next)=>{
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email}).populate("posts")
+         res.render("posts", {footer : true, loginuser})
+
+    } catch (error) {
+         res.status(500).json({error})
+    }
+})
+
+
+router.get("/user/posts/open/:postid", auth, async (req, res, next)=>{
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        // const openPost = await postModel.findById(req.params.openpost).populate("user").populate("comments");
+        const openPost = await postModel.findById(req.params.postid).populate("user")
+
+        if (!openPost) return res.status(403).json({ message: "Post not found!" });
+
+        res.render("singlepost", {
+            footer: true,
+            openPost,
+            loginuser,
+            dater: utils.formatRelativeTime
+        });
+    } catch (error) {
+        res.status(err.status).json({message : err.message })
+    }
+})
+
+
+router.get("/user/highlights", auth, async (req, res, next)=>{
+    try {
+         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+         res.render("userhighlights", {footer : true, loginuser})
+    } catch (error) {
+         res.status(error.status).json({message : error.message})
+    }
+})
+
+
+router.get("/user/highlights/:highlightId/:number", auth, async (req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        // Fetch the highlight and populate the stories array
+        const highlight = await HighlightModel.findById(req.params.highlightId);
+
+        // Ensure highlight exists and the stories array has the element at the specified index
+        if (highlight && highlight.stories.length > req.params.number) {
+            let highlightimage = highlight.stories[req.params.number].image;
+
+            res.render("openhighlight", {
+                footer: false,
+                highlightimage,
+                loginuser,
+                number: req.params.number,
+            });
+        } else {
+            // Redirect to profile if no further stories are available
+            res.redirect("/profile");
+        }
+    } catch (error) {
+        // Handle errors by returning a 500 status code and the error message
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router
 

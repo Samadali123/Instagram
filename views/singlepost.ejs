@@ -1,0 +1,441 @@
+<% include ./partials/header.ejs %>
+    <div class="container container relative w-full h-full text-white">
+        <div class="header pl-4 w-full flex items-center gap-5 ">
+            <a href="/activity">
+                <p><i class="ri-arrow-left-line text-lg font-medium"></i></p>
+            </a>
+            <h6> Photo</h6>
+        </div>
+
+
+        <div class="posts relative mb-20 ">
+                <div class="post mt-10 w-full min-h-[50vh] ">
+                    <div class="title relative flex justify-between items-center">
+                        <div class="left flex px-4 items-center gap-2 ">
+                            <% if(openPost.user.stories.length > 0){ %>
+                                <a href="/story/<%= openPost.user._id %>/0">
+                                    <div class="circle flex-shrink-0 relative cursor-pointer">
+                                        <div class="w-[8vw] h-[8vw] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openPost.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <% } else { %>
+                                    <a href="/openprofile/<%= openPost.user.username %>">
+                                        <div class="circle flex-shrink-0 relative cursor-pointer">
+                                            <div class="w-[8vw] h-[8vw] bg-sky-100 overflow-hidden rounded-full">
+                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openPost.user.profile %>" alt="">
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <% } %>
+                                        <a href="/openprofile/<%= openPost.user.username %>">
+                                            <h4 class="text-sm">
+                                                <%= openPost.user.username %>
+                                            </h4>
+                                        </a>
+                                        <h6 class="text-xs opacity-30">
+                                            <%= dater(new Date(openPost.createdAt)) %>
+                                        </h6>
+                        </div>
+                        <div class="right px-2">
+                            <p><i data-id="<%= openPost._id %>" data-comments="<%= openPost.commentsEnabled %>" data-likes="<%= openPost.hidelikes %>" data-pinned="<%= openPost.pinned %>" class="more ri-more-2-fill font-medium text-lg cursor-pointer"></i></p>
+
+                        </div>
+                    </div>
+                    <div class="w-full h-96 flex items-center justify-center relative mt-4 bg-sky-100 overflow-hidden">
+                        <img data-id="<%= openPost._id %>" class="postimg w-full h-full object-cover" src="/images/uploads/<%= openPost.image %>" alt="">
+                    </div>
+                    <div class="options relative w-full px-4 flex justify-between items-center text-[1.4rem]">
+                        <div class="flex gap-3 mt-2">
+
+
+                            <% if(openPost.likes.indexOf(loginuser._id) === -1){ %>
+                                <i data-id="<%= openPost._id %>" class="like ri-heart-3-line cursor-pointer"></i>
+                                <% } else { %>
+                                    <i data-id="<%= openPost._id %>" class="like ri-heart-3-fill text-red-500 cursor-pointer"></i>
+                                    <% } %>
+
+
+
+                                        <% if(openPost.commentsEnabled){ %>
+                                            <a href="/view/comments/<%= openPost._id %>"><i id="addtocomment" class="ri-chat-3-line cursor-pointer"></i></a>
+                                            <% } %>
+                                                <i class="ri-share-circle-line"></i>
+                        </div>
+                        <% if(loginuser.savedPosts.indexOf(openPost._id) === -1){ %>
+                            <i data-id="<%= openPost._id %>" class="save ri-bookmark-line cursor-pointer"></i>
+                            <% } else { %>
+                                <i data-id="<%= openPost._id %>" class="save ri-bookmark-fill cursor-pointer"></i>
+                                <% } %>
+                    </div>
+                    <h3 class="px-4 relative mt-2 text-sm leading-none tracking-tight whitespace-nowrap w-fit">
+                        <span class="total-likes main cursor-pointer">
+                            <% if(! openPost.hidelikes){  %>
+                                <a href="/post/likes/<%= openPost._id %>" class="cursor-pointer likedby">
+                                    <%= openPost.likes.length %> likes
+                                </a>
+                          <%  }  %>
+                        </span>
+                    </h3>
+                    <h2 class="text-white pl-3.5 relative font-light text-sm mt-2">
+                        <span class="font-semibold pr-2 whitespace-nowrap"><%= openPost.user.username %></span>
+                        <%= openPost.caption %>
+                    </h2>
+                    <a href="/view/comments/<%= openPost._id %>">
+                        <% if(openPost.commentsEnabled){ %>
+                            <p id="view-comments" data-all="<%= openPost.comments.length %>" data-post="<%= openPost._id %>" class="views ml-3.5 font-light text-sm cursor-pointer" style="color: rgba(192, 192, 192, 0.58);">
+                                <% if(openPost.comments.length == 0){ %> no comments.
+                                    <% } else if(openPost.comments.length == 1){ %> View all <span><%= openPost.comments.length %></span> comment.
+                                        <% } else if(openPost.comments.length > 1){ %> View all <span><%= openPost.comments.length %></span> comments.
+                                            <% } %>
+                            </p>
+                            <% } %>
+                    </a>
+                   
+        </div>
+
+
+
+        <div class="popup hidden fixed bottom-[-5%] z-[9999] flex flex-col gap-5 items-left pt-[5%] px-6 text-white z-auto h-[65vh] w-[93vw] bg-zinc-800 rounded-md">
+            <div class="count flex gap-3 font-medium cursor-pointer">
+
+            </div>
+
+
+            <div class="turn flex gap-3 font-medium cursor-pointer">
+
+
+            </div>
+
+            <div class="editpost flex gap-3 font-medium cursor-pointer">
+                <span><i class="ri-pencil-line text-lg"></i></span>
+                <a class="edit" href="">
+                    <p class=" text-lg cursor-pointer">Edit</p>
+                </a>
+            </div>
+
+            <div class="pinprofile flex gap-3 font-medium cursor-pointer">
+
+            </div>
+
+            <div class="deletepost text-red-600 flex gap-3 font-medium cursor-pointer">
+                <span><i class="ri-delete-bin-7-line text-lg"></i></span>
+                <a class="delete" href="">
+                    <p class=" text-lg cursor-pointer">Delete</p>
+                </a>
+            </div>
+
+            <div class="cancel text-white flex gap-3 font-medium">
+                <span><i class="ri-close-line text-lg"></i></span>
+                <p class="text-lg cursor-pointer cancel">Cancel</p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        let check = true;
+        let check2 = false;
+        let check3 = false;
+
+
+        function onloadcommenttoggle() {
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                if (check) {
+                    document.querySelector(".turn").innerHTML =
+                        `<span><i class="ri-shut-down-line text-lg"></i></span>
+                    <p class="commentswitch text-lg cursor-pointer">Turn off commenting</p>`;
+
+                } else {
+                    document.querySelector(".turn").innerHTML =
+
+                        `<span><i class="ri-donut-chart-line text-lg cursor-pointer"></i></span>
+                    <p class="commentswitch text-lg cursor-pointer">Turn on commenting</p>`;
+
+                }
+            })
+        }
+        onloadcommenttoggle()
+
+
+
+
+
+
+
+        function onloadlikestoggle() {
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                if (check2) {
+                    document.querySelector(".count").innerHTML = ` <span><i class="ri-heart-3-line text-lg"></i></span>
+                     <p id="hide" class="text-lg cursor-pointer">unhide like count</p>`
+
+                } else {
+                    document.querySelector(".count").innerHTML = ` <span><i class="ri-dislike-line text-lg"></i></span>
+                     <p id="hide" class="text-lg cursor-pointer">Hide like count</p>`
+
+                }
+            })
+        }
+        onloadlikestoggle()
+
+
+
+        function onloadpinntoggle() {
+
+            document.addEventListener("DOMContentLoaded", function(event) {
+                if (check3) {
+
+                    document.querySelector(".pinprofile").innerHTML = `<span><i class="ri-unpin-line text-lg"></i></span>
+                    
+                    <p class="pin text-lg cursor-pointer">Unpin to profile</p>`
+
+
+                } else {
+
+
+                    document.querySelector(".pinprofile").innerHTML = `<span><i class="ri-pushpin-line text-lg"></i></span>
+                    <p class="pin text-lg cursor-pointer">Pin to profile</p>`
+
+
+                }
+            })
+
+
+        }
+        onloadpinntoggle();
+
+
+
+
+        let loginuser = `<%= loginuser._id  %>`;
+        let loginusername = `<%= loginuser.username %>`;
+
+
+        function handlelike() {
+            document.querySelector(".posts").addEventListener("click", function(e) {
+                if (e.target.classList.contains(`like`)) {
+
+                    let post = e.target.dataset.id;
+                    var icon = e.target;
+
+                    axios.get(`/like/post/${post}`)
+                        .then((response) => {
+                            if (icon.classList.contains('ri-heart-3-line')) {
+                                icon.classList.add('ri-heart-3-fill', 'text-red-500');
+                                icon.classList.remove('ri-heart-3-line')
+                                icon.classList.add('scale-125');
+                            } else {
+
+                                icon.classList.add('ri-heart-3-line');
+                                icon.classList.remove('ri-heart-3-fill', 'text-red-500');
+                                icon.classList.add('scale-100');
+                            }
+
+                            e.target.parentNode.parentNode.parentNode.querySelector('.total-likes').textContent = response.data.likes.length + "   likes";
+                        })
+                }
+            })
+        }
+
+        handlelike();
+
+
+        function saveandunsavepost() {
+            document.querySelector(".posts").addEventListener("click", function(e) {
+
+                if (e.target.classList.contains(`save`)) {
+                    const post = e.target.dataset.id;
+                    axios.get(`/save/${post}`)
+                        .then(function(res) {
+                            if (e.target.classList.contains('ri-bookmark-line')) {
+                                e.target.classList.add('ri-bookmark-fill');
+                                e.target.classList.remove('ri-bookmark-line');
+
+                            } else {
+                                e.target.classList.add('ri-bookmark-line');
+                                e.target.classList.remove('ri-bookmark-fill');
+
+                            }
+                        })
+
+                }
+            })
+        }
+
+        saveandunsavepost();
+
+
+        function heartaninmation() {
+
+            document.querySelector(".posts")
+                .addEventListener("click", function(ev) {
+                    if (ev.target.classList.contains('postimg')) {
+                        var hearticon = document.createElement('i');
+                        hearticon.classList.add('ri-heart-3-fill', 'text-3xl', 'text-white-600', 'z-[34]');
+                        hearticon.style.scale = 2.5;
+                        hearticon.style.position = 'absolute';
+                        hearticon.style.left = "50%";
+                        hearticon.style.top = "50%";
+                        hearticon.style.transform = "translate(-50%, -50%)";
+
+
+
+
+                        ev.target.parentNode.appendChild(hearticon);
+
+                        axios.get(`/like/post/${ev.target.dataset.id}`)
+                            .then(function(response) {
+                                var icon = ev.target.parentNode.parentNode.querySelector('.like');
+                                if (icon.classList.contains('ri-heart-3-line')) {
+                                    icon.classList.remove('ri-heart-3-line');
+                                    icon.classList.add('ri-heart-3-fill', 'text-red-500');
+                                } else {
+                                    icon.classList.add('ri-heart-3-line');
+                                    icon.classList.remove('ri-heart-3-fill', 'text-red-500');
+                                }
+
+                                var likes = ev.target.parentNode.parentNode.querySelector(".total-likes");
+                                likes.textContent = response.data.likes.length + ' likes';
+                            })
+
+                        gsap.from(hearticon, {
+                            scale: 0,
+                            ease: 'linear',
+                            duration: 1,
+                            onComplete: function() {
+                                ev.target.parentNode.removeChild(hearticon);
+                            }
+                        })
+                    }
+                })
+        }
+
+
+
+        heartaninmation();
+
+
+
+        function handlepopup() {
+
+            document.querySelector(".posts").addEventListener("click", function(event) {
+
+                if (event.target.classList.contains("more")) {
+                    document.querySelector(".popup").classList.replace("hidden", "flex");
+
+                    document.querySelector(".edit").setAttribute("href", `/posts/edit/${event.target.dataset.id}`)
+
+                    document.querySelector(".delete").setAttribute("href", `/posts/delete/${event.target.dataset.id}`)
+
+
+                    document.querySelector(".commentswitch").addEventListener("click", function(e) {
+
+                        if (event.target.dataset.comments) {
+                            check = false;
+
+                        } else {
+                            check = true;
+
+                        }
+
+                        axios.put(`/comments/toggle/${event.target.dataset.id}`).then(function(response) {
+                            console.log(response.data)
+                        }).catch(function(error) {
+                            console.log(error)
+                        })
+
+                        setTimeout(function() {d
+                            document.querySelector(".popup").classList.replace("flex", "hidden")
+                        }, 100)
+
+
+                    })
+
+
+                }
+
+
+
+                document.querySelector("#hide").addEventListener("click", function(dets) {
+
+                    if (dets.target.dataset.likes) {
+
+                        check2 = false;
+
+                    } else {
+                        check2 = true;
+
+                    }
+
+                    axios.put(`/likes/toggle/${event.target.dataset.id}`)
+                        .then(function(response) {
+                            console.log(response.data);
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+
+                    setTimeout(function() {
+                        document.querySelector(".popup").classList.replace("flex", "hidden");
+                    }, 100);
+
+                    location.reload();
+
+                });
+
+
+
+                document.querySelector(".pin").addEventListener("click", function(e) {
+                    if (event.target.dataset.pinned) {
+                        check3 = false;
+                    } else {
+                        check3 = true;
+                    }
+
+
+                    setTimeout(function() {
+                        document.querySelector(".popup").classList.replace("flex", "hidden");
+                    }, 100);
+
+
+                    axios.put(`/posts/pin/${event.target.dataset.id}`).then(function(response) {
+
+                    }).catch(function(error) {
+                        console.error(error)
+
+                    })
+                    location.reload();
+
+                })
+
+
+
+
+                document.querySelector(".cancel").addEventListener("click", function(dets) {
+                    document.querySelector(".popup").classList.replace("flex", "hidden");
+
+                })
+
+
+
+            })
+
+
+        }
+
+        handlepopup()
+    </script>
+
+    <% include ./partials/footer.ejs %>
