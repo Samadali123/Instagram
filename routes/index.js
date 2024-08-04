@@ -1158,10 +1158,11 @@ router.post("/posts/edit/:id", auth, async (req, res) => {
 router.get("/posts/delete/:id", auth, async (req, res, next) => {
     try {
         const post = await postModel.findByIdAndDelete(req.params.id)
-
-        if (!post) return res.status(403).json({ message: "Post not found !" })
-        res.redirect("/profile")
-
+        const loginuser = await userModel.findOne({email : req.user.email})
+        if (!post) return res.status(403).json({ message: "Post not found !" });
+        loginuser.deletedContent.push(post);
+        await loginuser.save();
+        res.redirect("/profile");
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -1527,15 +1528,14 @@ router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
 
 
 
-router.get("/user/deleted/content", async (req, res, next)=>{
+router.get("/user/deleted/content", auth, async (req, res, next)=>{
     try {
         const loginuser = await userModel.findOne({email : req.user.email});
-        res.render("deleted", {footer})
+        res.render("deleted", {footer : true, loginuser})
     } catch (error) {
          res.status(500).json({error: error.message})
     }
 })
-
 
 module.exports = router
 
