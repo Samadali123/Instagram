@@ -7,12 +7,17 @@
   </div>
 
   <div class="user-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
-    <% loginuser.posts.forEach(function(post){ %>
-      <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-        <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="">
-      </div>
-    <% }) %>
-  </div>
+    <% if(loginuser.posts.length > 0) { %>
+      <% loginuser.posts.forEach(function(post){ %>
+        <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="">
+        </div>
+      <% }) %>
+
+   <%  }  else{ %>
+          <p>Sorry, have'nt created any posts yet.</p>
+  <%  } %>
+</div>
 </div>
 
 <style>

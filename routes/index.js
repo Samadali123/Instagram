@@ -105,7 +105,6 @@ router.post(`/register`, async function (req, res, next) {
 
 })
 
-
 router.post("/login", async (req, res, next) => {
     try {
         let { email, password } = req.body
@@ -1605,6 +1604,127 @@ router.get("/user/highlights/:highlightId/:number", auth, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+
+
+router.get("/accountstatus", auth, async (req, res, next)=>{
+    try {
+         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+         res.render("accountstatus", {footer : true, loginuser})
+    } catch (error) {
+         res.status(error.status).json({message : error.message})
+    }
+})
+
+
+router.get("/removecontent", auth, async (req, res, next)=>{
+    try {
+         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+         res.render("removecontent", {footer : true, loginuser})
+    } catch (error) {
+         res.status(error.status).json({message : error.message})
+    }
+})
+
+
+
+
+
+router.get('/content/removed', auth, async (req, res) => {
+    try {
+
+        async function deleteUserContent(userId) {
+            try {
+                // Fetch the user by ID and populate references
+                const user = await userModel.findById(userId).populate('posts highlights stories');
+                if (!user) {
+                    throw new Error('User not found');
+                }
+        
+                // Check if user has content
+                if (user.posts.length === 0 && user.highlights.length === 0 && user.stories.length === 0) {
+                    return 'No content to delete'; // Return a specific message if no content is found
+                }
+        
+                // Delete all posts
+                await postModel.deleteMany({ _id: { $in: user.posts } });
+        
+                // Delete all highlights
+                await HighlightModel.deleteMany({ _id: { $in: user.highlights } });
+        
+                // Delete all stories
+                await storyModel.deleteMany({ _id: { $in: user.stories } });
+        
+                // Clear references in the user document
+                user.posts = [];
+                user.highlights = [];
+                user.stories = [];
+                await user.save();
+        
+                return 'Content removed successfully'; // Return a success message
+            } catch (error) {
+                throw new Error(`Error deleting user content: ${error.message}`);
+            }
+        }
+
+        
+
+        // Find the logged-in user
+        const loginUser = await userModel.findOne({ email: req.user.email });
+
+        if (!loginUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Call the function to delete content
+        const result = await deleteUserContent(loginUser._id);
+
+        if (result === 'No content to delete') {
+            // Send a message if no content was found
+            return res.status(200).json({ message: 'User does not have any content posted yet' });
+        }
+
+        // Redirect to account status page if content was successfully removed
+        res.redirect('/accountstatus');
+    } catch (error) {
+        // Handle errors
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+router.get("/guidelines", auth, async (req, res) => {
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email});
+         res.render("guidelines", {footer: true, loginuser: loginuser})
+    } catch (error) {
+         res.status(500).json({ message: error.message });
+    }
+})
+
+
+
+router.get("/contentlowered", auth, async (req, res) => {
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email});
+         res.render("contentlowered", {footer: true, loginuser: loginuser})
+    } catch (error) {
+         res.status(500).json({ message: error.message });
+    }
+})
+
+
+
+router.get("/featuresnotuse", auth, async (req, res) => {
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email});
+         res.render("features", {footer: true, loginuser: loginuser})
+    } catch (error) {
+         res.status(500).json({ message: error.message });
+    }
+})
+
+
 
 module.exports = router
 

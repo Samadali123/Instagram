@@ -1,0 +1,61 @@
+<% include ./partials/header.ejs %>
+<body class="min-h-screen bg-black text-white flex flex-col items-center py-6 px-4 md:px-10">
+    <div class="w-full max-w-xl rounded-lg shadow-lg p-6 bg-zinc-900 transition transform">
+        
+        <!-- Back Arrow -->
+        <div class="flex items-center mb-6">
+            <a href="/settings" class="text-white">
+                <i class="ri-arrow-left-line ri-xl"></i>
+            </a>
+            <h1 class="text-2xl font-semibold ml-4">Account Status</h1>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="flex items-center bg-zinc-800 rounded-xl p-4 mb-6 hover:bg-zinc-700 transition duration-300 ease-in-out">
+            <img src="/images/uploads/<%= loginuser.profile %>" alt="User Profile" class="w-12 h-12 rounded-full mr-4">
+            <div class="flex-1">
+                <h2 class="text-lg font-bold"><%= loginuser.username %></h2>
+                <p class="text-sm text-gray-400"><%= loginuser.email %></p>
+            </div>
+        </div>
+
+        <!-- Guidelines Text -->
+        <div class="mb-6 text-center">
+            <p class="text-gray-400">
+                See any actions Instagram has taken when your account or content doesn't follow our guidelines. 
+                <a href="#" class="text-blue-500 hover:underline">Learn more about Account Status</a>
+            </p>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="space-y-4">
+            <!-- Removed Content -->
+            <div class="flex items-center justify-between rounded-xl p-4 bg-zinc-800 hover:bg-zinc-700 transition duration-300 ease-in-out cursor-pointer">
+                <div class="flex items-center">
+                    <i class="ri-delete-bin-6-line ri-lg text-white mr-4"></i>
+                    <a class="cursor-pointer" href="/removecontent">Remove Content</a>
+                </div>
+                <i class="ri-checkbox-circle-line ri-lg text-green-500"></i>
+            </div>
+
+            <!-- Content Lowered in Feed -->
+            <div class="flex items-center justify-between rounded-xl p-4 bg-zinc-800 hover:bg-zinc-700 transition duration-300 ease-in-out cursor-pointer">
+                <div class="flex items-center">
+                    <i class="ri-arrow-down-circle-line ri-lg text-white mr-4"></i>
+                  <a href="/contentlowered"><span>Content Lowered in Feed</span></a>
+                </div>
+                <i class="ri-checkbox-circle-line ri-lg text-green-500"></i>
+            </div>
+
+            <!-- Features You Can't Use -->
+            <div class="flex items-center justify-between rounded-xl p-4 bg-zinc-800 hover:bg-zinc-700 transition duration-300 ease-in-out cursor-pointer">
+                <div class="flex items-center">
+                    <i class="ri-forbid-line ri-lg text-white mr-4"></i>
+                    <a href="/featuresnotuse"><span>Features You Can't Use</span></a>
+                </div>
+                <i class="ri-checkbox-circle-line ri-lg text-green-500"></i>
+            </div>
+        </div>
+    </div>
+</body>
+<% include ./partials/footer.ejs %>

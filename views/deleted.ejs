@@ -7,11 +7,16 @@
   </div>
 
   <div class="deleted-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
-     <% loginuser.deletedContent.forEach(function(elem){  %>
-        <div  class="post w-full sm:w-[48%] md:w-[30%] h-[25vh]  cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-            <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
-          </div>
-   <%  })  %>
+     <% if(loginuser.deletedContent.length > 0){ %>
+      <% loginuser.deletedContent.forEach(function(elem){  %>
+         <div  class="post w-full sm:w-[48%] md:w-[30%] h-[25vh]  cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+             <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+           </div>
+    <%  })  %>
+
+      <%  }else{ %>
+            <p>Sorry,you don't have any Recently deleted content.</p>
+    <% } %>
   </div>
 </div>
 
