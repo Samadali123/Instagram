@@ -91,12 +91,17 @@ const userSchema = mongoose.Schema({
     deletedContent :{
         type : Array,
         default : []
-    }
-    // commentPost :[{
-    //     type : mongoose.Schema.Types.ObjectId,
-    //     ref : 'post'
-    // }]
-});
+    },
+    Date : {
+        type : Date,
+        default : Date.now()
+    },
+    privateAccount: {
+        type: Boolean,
+        default: false // Public by default
+    },
+   
+}, {versionKey : false, timeStamps : true});
 
 module.exports = mongoose.model(`user`, userSchema);
 

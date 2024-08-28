@@ -1,0 +1,109 @@
+<% include ./partials/header.ejs %>
+
+<div class="w-full h-full text-white overflow-x-hidden overflow-y-auto">
+    <div class="header fixed top-[5%] z-10 text-lg font-medium w-[94%] flex items-center gap-4 text-white">
+        <a href="/settings">
+            <p><i class="ri-arrow-left-line"></i></p>
+        </a>
+        <p>Account Privacy</p>
+    </div>
+
+    <div class="container mx-auto pt-16 px-4">
+        <div class="flex items-center justify-between mb-4">
+            <h2 id="account-status" class="text-lg font-medium">
+                <%= loginuser.privateAccount ? 'Private account' : 'Public account' %>
+            </h2>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input id="account-toggle" type="checkbox" class="sr-only" <%= loginuser.privateAccount ? 'checked' : '' %>>
+                <div id="toggle-bg" class="w-10 h-6 bg-white rounded-full shadow-inner transition duration-300 ease-in-out"></div>
+                <div id="toggle-knob" class="absolute w-4 h-4 bg-black rounded-full shadow-inner <%=loginuser.privateAccount ? 'translate-x-4' : 'translate-x-1' %> transition duration-300 ease-in-out"></div>
+            </label>
+        </div>
+        <p id="account-description" class="text-sm mb-4">
+            When your account is public, your profile and posts can be seen by anyone, even if they don't follow you. <br>
+            When your account is private, only your followers you approve can see what you share, including posts, stories, and more.
+            <a href="/guidelines" class="text-blue-500 underline cursor-pointer">Learn more</a>
+        </p>
+    </div>
+</div>
+
+<!-- Popup Modal -->
+<div id="popup-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white text-black p-6 rounded-lg shadow-lg max-w-xs w-full">
+        <h3 id="popup-title" class="text-lg font-medium mb-4"></h3>
+        <p id="popup-message" class="text-sm mb-6"></p>
+        <div class="flex justify-end space-x-4">
+            <button id="cancel-btn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md">Cancel</button>
+            <button id="switch-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md">Switch Account</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.5/axios.min.js" integrity="sha512-01Pe9P3mJM/4c80VuoYEGHlspKGbd9uWQe9HtdLsdTqV0CS1kz8ca44sinVEXEvlZNciMmsAjeEbm5ZxHC7yYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accountToggle = document.getElementById('account-toggle');
+        const accountStatus = document.getElementById('account-status');
+        const toggleBg = document.getElementById('toggle-bg');
+        const toggleKnob = document.getElementById('toggle-knob');
+        const popupModal = document.getElementById('popup-modal');
+        const popupTitle = document.getElementById('popup-title');
+        const popupMessage = document.getElementById('popup-message');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const switchBtn = document.getElementById('switch-btn');
+
+        accountToggle.addEventListener('change', function() {
+            if (this.checked) {
+                popupTitle.textContent = 'Switch to Private Account';
+                popupMessage.textContent = 'Only your followers will be able to see your posts, stories, and other content.';
+            } else {
+                popupTitle.textContent = 'Switch to Public Account';
+                popupMessage.textContent = 'Anyone can see your posts, stories, and other content, even if they don\'t follow you.';
+            }
+            showModal();
+        });
+
+        switchBtn.addEventListener('click', function() {
+            // Make the API call using axios to update account privacy
+            axios.get('/account/toggle')
+                .then(response => {
+                    const data = response.data;
+                    if (data.success) {
+                        if (accountToggle.checked) {
+                            accountStatus.textContent = 'Private account';
+                            toggleBg.classList.replace('bg-gray-400', 'bg-white');
+                            toggleKnob.classList.replace('translate-x-1', 'translate-x-4');
+                        } else {
+                            accountStatus.textContent = 'Public account';
+                            toggleBg.classList.replace('bg-white', 'bg-gray-400');
+                            toggleKnob.classList.replace('translate-x-4', 'translate-x-1');
+                        }
+                    } else {
+                        alert('Failed to update account privacy');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating account privacy');
+                })
+                .finally(() => {
+                    hideModal();
+                });
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            accountToggle.checked = !accountToggle.checked;
+            hideModal();
+        });
+
+        function showModal() {
+            popupModal.classList.remove('hidden');
+        }
+
+        function hideModal() {
+            popupModal.classList.add('hidden');
+        }
+    });
+</script>
+
+<% include ./partials/footer.ejs %>

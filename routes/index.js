@@ -1726,5 +1726,58 @@ router.get("/featuresnotuse", auth, async (req, res) => {
 
 
 
+router.get("/aboutus", auth, async (req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        if (loginuser && loginuser.Date) {  // Replace 'dateField' with the actual field name in your model
+            const dateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' });
+            loginuser.formattedDate = dateFormatter.format(new Date(loginuser.Date));
+        }
+
+        res.render("aboutus", { footer: true, loginuser });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
+
+
+router.get("/account/privacy", auth, async (req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+
+        if (loginuser && loginuser.Date) {  // Replace 'dateField' with the actual field name in your model
+            const dateFormatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' });
+            loginuser.formattedDate = dateFormatter.format(new Date(loginuser.Date));
+        }
+
+        res.render("accountprivacy", { footer: true, loginuser });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
+
+router.get("/account/toggle", auth, async (req, res) => {
+    try {
+        // Find the user by email and toggle the privateAccount field
+       const loginuser = await userModel.findOne({email : req.user.email})
+       if (!loginuser) {
+           return res.status(404).json({ success: false, message: "User not found" });
+       }
+       loginuser.privateAccount = ! loginuser.privateAccount;
+       await loginuser.save()
+
+        res.status(200).json({ success: true, loginuser });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
 module.exports = router
 

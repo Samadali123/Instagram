@@ -1,0 +1,36 @@
+<% include ./partials/header.ejs %>
+
+<div class="main w-full h-full bg-black text-silver">
+    <div class="top flex gap-4 items-center px-4 py-3 md:gap-6">
+        <a href="/settings">
+            <i class="ri-arrow-left-line text-xl md:text-lg"></i>
+        </a>
+        <h3 class="text-lg font-medium lowercase md:text-xl">About your account</h3>
+    </div>
+
+    <div class="center flex flex-col items-center mt-5 space-y-5 px-4 md:mt-8 md:space-y-6">
+        <div class="profile w-16 h-16 rounded-full overflow-hidden md:w-20 md:h-20">
+            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="Profile Picture">
+        </div>
+
+        <h3 class="text-sm font-semibold tracking-tighter md:text-base"><%= loginuser.username %></h3>
+
+        <p class="text-center text-gray-400 w-full sm:w-2/3 lg:w-1/2">
+            To keep our community authentic, we're showing information about accounts on InstaVers. People can see this by tapping on our profile.
+            <a class="cursor-pointer text-blue-500 font-light" href="/guidelines">
+                <span>See why this information is important.</span>
+            </a>
+        </p>
+
+        <div class="details flex items-center gap-3 mt-5">
+            <i class="ri-calendar-todo-line l md:text-sm"></i>
+            <h3 class="text-base text-xl md:text-sm">
+                Date Joined
+                <br>
+                <span class="font-light"><%= loginuser.formattedDate %></span>
+            </h3>
+        </div>
+    </div>
+</div>
+
+<% include ./partials/footer.ejs %>
