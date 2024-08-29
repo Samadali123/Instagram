@@ -181,13 +181,27 @@ router.get('/login', function (req, res) {
 });
 
 
+
+
 router.get('/feed', auth, async function (req, res) {
     try {
+        // Find the logged-in user's details
         const loginuser = await userModel.findOne({ email: req.user.email });
-        const allposts = await postModel.find().populate(`user`).populate(`comments`);
+
+        // Find all posts by:
+        // 1. The logged-in user
+        // 2. Users the logged-in user follows
+        // 3. Users with public accounts
+        const allposts = await postModel.find({
+            $or: [
+                { 'user': loginuser._id }, // Posts by the logged-in user
+                { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
+                { 'user.privateAccount': false } // Posts by users with a public account
+            ]
+        }).populate('user').populate('comments');
 
         // Fetch all stories excluding those related to the login user
-        const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate(`user`);
+        const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate('user');
 
         // Filter unique user stories
         const obj = {};
@@ -199,11 +213,15 @@ router.get('/feed', auth, async function (req, res) {
             return false;
         });
 
+        // Render the feed page
         res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
     } catch (error) {
-        res.status(500).json({message: error.message});
+        // Handle any errors that occur during the request
+        res.status(500).json({ message: error.message });
     }
 });
+
+
 
 
 router.get('/profile', auth, async function (req, res) {
@@ -908,8 +926,7 @@ router.post("/forgotpassword", async (req, res, next) => {
                     pass: process.env.Password
                 }
             });
-
-
+             
             var mailOptions = {
                 from: process.env.Email, // Use the email you want to send from
                 to: email, // Make sure this field matches the recipient's email
@@ -918,7 +935,6 @@ router.post("/forgotpassword", async (req, res, next) => {
                     <a style="color: royalblue; font-size:18px; font-weight:600; text-decoration:none;" href="http://localhost:3000/reset-password">Reset Password</a>
                 `
             }
-
 
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
@@ -1255,7 +1271,6 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
         if (!Array.isArray(ids)) {
             return res.status(400).json({ error: "Invalid 'ids' format. It should be an array." });
         }
-
         // Trim any extra spaces from the IDs
         ids = ids.map(id => id.trim());
 
@@ -1279,7 +1294,7 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
 
         // Filter out any null values in case any stories were not found
         const filteredStories = stories.filter(story => story !== null);
-
+         
         // Create new highlight with fetched stories
         const newhighlight = await HighlightModel.create({
             title,
@@ -1777,6 +1792,46 @@ router.get("/account/toggle", auth, async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
+
+
+router.put("/restpassword", auth, async (req, res, next) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const loginuser=  await userModel.findOne({email : req.user.email}); // Assuming user ID is attached to req.user
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        return res.status(400).json({ success: false, message: 'All fields are required.' });
+    }
+   
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ success: false, message: 'New passwords do not match.' });
+    }
+
+    try {
+        // Find user by ID
+        const user = await userModel.findById(loginuser._id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+
+        // Verify current password
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: 'Current password is incorrect, forgot your password' });
+        }
+
+        // Hash new password and update user record
+        user.password = await bcrypt.hash(newPassword, 12);
+        await user.save();
+
+        return res.status(200).json({ success: true, message: 'Password updated successfully.' });
+    } catch (error) {
+        // Log the error details
+        console.error('Error in changePassword controller:', error.message);
+    };
+    })
+
+
 
 
 module.exports = router

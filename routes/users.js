@@ -98,9 +98,12 @@ const userSchema = mongoose.Schema({
     },
     privateAccount: {
         type: Boolean,
-        default: false // Public by default
+        default: false 
     },
-   
+    blockedUsers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    }],
 }, {versionKey : false, timeStamps : true});
 
 module.exports = mongoose.model(`user`, userSchema);
