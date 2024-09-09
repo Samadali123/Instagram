@@ -1834,5 +1834,119 @@ router.put("/restpassword", auth, async (req, res, next) => {
 
 
 
+    router.put("/block/user", auth, async (req, res, next) => {
+        try {
+            // Check if req.user is available from the auth middleware
+            if (!req.user || !req.user.email) {
+                return res.status(403).json({ success: false, message: "Authorization failed. User not authenticated." });
+            }
+    
+            // Fetch the logged-in user from the database
+            const loginUser = await userModel.findOne({ email: req.user.email });
+            if (!loginUser) {
+                return res.status(403).json({ success: false, message: "Logged-in user not found!" });
+            }
+    
+            // Fetch the user to be blocked from the database
+            const userToBlock = await userModel.findById(req.body.userId);
+            if (!userToBlock) {
+                return res.status(403).json({ success: false, message: "User to block not found. Please provide a valid user ID." });
+            }
+    
+            // Prevent the user from blocking themselves
+            if (loginUser._id.equals(userToBlock._id)) {
+                return res.status(403).json({ success: false, message: "You cannot block yourself." });
+            }
+    
+            // Check if the user is already blocked
+            if (loginUser.blockedUsers.includes(userToBlock._id)) {
+                return res.status(200).json({
+                    success: false,
+                    message: "You have already blocked this account.",
+                });
+            }
+    
+            // Add the user to blocked users list and save both users
+            loginUser.blockedUsers.push(userToBlock._id);
+            userToBlock.blockedBy.push(loginUser._id);
+    
+            await loginUser.save();
+            await userToBlock.save();
+    
+            return res.status(200).json({
+                success: true,
+                message: "User successfully blocked.",
+                loginUser,
+                userToBlock
+            });
+    
+        } catch (error) {
+            console.error("Error blocking user:", error); // Log the actual error
+            return res.status(500).json({
+                success: false,
+                message: 'Internal server error.',
+                error: error.message
+            });
+        }
+    });
+    
+
+
+router.get("/blocked/accounts", auth, async (req, res, nect)=>{
+    try {
+         const loginuser = await userModel.findOne({email : req.user.email}).populate("blockedUsers")
+         res.render("blockedAccounts", {footer : true, loginuser});
+    } catch (error) {
+         res.status(500).json({success : false, message : error.message})
+    }
+})
+
+
+// API to unblock a user
+router.put('/unblock/user', auth, async (req, res) => {
+    try {
+        // Find the logged-in user by their email
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        if (!loginuser) {
+            return res.status(403).json({ success: false, message: "Login user not found! Please login to continue." });
+        }
+
+        const userToUnblockId = req.body.id;
+
+        // Ensure the user is not trying to unblock themselves
+        if (loginuser._id.toString() === userToUnblockId.toString()) {
+            return res.status(400).json({ message: "You cannot unblock yourself." });
+        }
+
+        // Find the user to unblock by their ID
+        const userToUnblock = await userModel.findById(userToUnblockId);
+        if (!userToUnblock) {
+            return res.status(404).json({ message: 'User to unblock not found.' });
+        }
+
+        // Check if the user is actually blocked
+        if (!loginuser.blockedUsers.includes(userToUnblockId)) {
+            return res.status(400).json({ message: "This account is not in your blocked list." });
+        }
+
+        // Remove userToUnblockId from loginuser's blockedUsers array
+        loginuser.blockedUsers = loginuser.blockedUsers.filter(id => id.toString() !== userToUnblockId.toString());
+
+        // Remove loginuser._id from userToUnblock's blockedBy array
+        userToUnblock.blockedBy = userToUnblock.blockedBy.filter(id => id.toString() !== loginuser._id.toString());
+
+        // Save both updated user documents
+        await loginuser.save();
+        await userToUnblock.save();
+
+        res.status(200).json({ success: true, message: 'User successfully unblocked.' });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error.', error });
+    }
+});
+
+
+
 module.exports = router
 

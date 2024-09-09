@@ -1,0 +1,88 @@
+<% include ./partials/header.ejs %>
+<body class="bg-black text-white h-auto">
+    <div class="container mx-auto p-4">
+        <div class="flex items-center mb-4">
+            <button onclick="window.history.back()" class="text-xl mr-4">&larr;</button>
+            <h1 class="text-2xl font-semibold">Blocked Accounts</h1>
+        </div>
+        <div>
+            <% if(loginuser.blockedUsers.length > 0){  %>
+                <p class="text-gray-400 mb-4">You can block people anytime from their profiles.</p>
+                <% loginuser.blockedUsers.forEach(user => { %>
+                    <div class="flex items-center justify-between  rounded-lg p-4 mb-2" id="user-<%= user._id %>">
+                        <div class="flex items-center">
+                            <img class="w-10 h-10 rounded-full mr-4" src="/images/uploads/<%= user.profile %>" alt="<%= user.username %>'s profile picture">
+                            <div>
+                                <h2 class="font-bold"><%= user.username %></h2>
+                                <p class="text-gray-400 text-sm"><%= user.fullname %></p>
+                            </div>
+                        </div>
+                        <button class="unblockBtn bg-zinc-900 hover:bg-zinc-800 text-white px-4 py-2 rounded-lg" data-userid="<%= user._id %>">Unblock</button>
+                    </div>
+                <% }) %>
+            <%}else{  %>
+                      <p>You haven't blocked any account.</p>
+            <%}  %>
+        </div>
+    </div>
+
+    <!-- Unblock Confirmation Modal -->
+    <div id="unblockModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg">
+            <p id="modalMessage" class="mb-4 text-black">Are you sure you want to unblock this user?</p>
+            <div class="flex justify-center gap-4 ">
+                <button id="confirmUnblock" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg mr-2">Yes</button>
+                <button id="cancelUnblock" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 text-black bg-green-500 text-white px-4 py-2 rounded-lg">
+        User unblocked successfully!
+    </div>
+
+    <!-- Axios Library -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        let selectedUserId = null;
+
+        document.querySelectorAll('.unblockBtn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                selectedUserId = event.target.dataset.userid;
+                // Show the confirmation popup
+                document.getElementById('unblockModal').classList.remove('hidden');
+            });
+        });
+
+        // Handle 'No' button click
+        document.getElementById('cancelUnblock').addEventListener('click', () => {
+            // Hide the confirmation popup
+            document.getElementById('unblockModal').classList.add('hidden');
+        });
+
+        // Handle 'Yes' button click
+        document.getElementById('confirmUnblock').addEventListener('click', async () => {
+            try {
+                const response = await axios.put('/unblock/user', { id: selectedUserId });
+                // Hide the confirmation popup
+                document.getElementById('unblockModal').classList.add('hidden');
+                // Show success message
+                const successMessage = document.getElementById('successMessage');
+                successMessage.classList.remove('hidden');
+
+                // Remove user from the list
+                document.getElementById(`user-${selectedUserId}`).remove();
+
+                // Hide the success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 3000);
+            } catch (error) {
+                alert(error?.response?.data?.message || 'An error occurred while unblocking the user.');
+            }
+        });
+    </script>
+</body>
+<% include ./partials/footer.ejs %>

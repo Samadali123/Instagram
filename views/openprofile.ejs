@@ -1,171 +1,159 @@
-<!-- <% include ./partials/header.ejs %>
+<% include ./partials/header.ejs %>
     <div class="container relative w-full h-full text-white">
-        <div class="header  px-12 w-full h-[3vh]  fixed top-[5%]  flex gap-10 items-center">
+        <div class="header px-12 w-full h-[3vh] fixed top-[5%] flex gap-10 items-center">
             <a href="/feed">
                 <p><i class="ri-arrow-left-line text-lg font-light"></i></p>
             </a>
-            <h3 class=" text-lg font-medium ml-5">
+            <h3 class="text-lg font-medium ml-5">
                 <%= openuser.username %>
             </h3>
+        </div>
+
+        <!-- More Popup -->
+        <div
+            class="more-popup hidden flex flex-col gap-4 p-6 border border-gray-700 absolute z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-800 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] xl:w-[20%] h-fit">
+
+            <!-- Block/Unblock Options -->
+            <div class="block w-full text-center">
+                <% if(loginuser.blockedUsers.indexOf(openuser._id)===-1){ %>
+                    <a id="blockuser"
+                        class="block text-red-500 hover:bg-red-600 hover:text-white cursor-pointer transition duration-300 ease-in-out px-4 py-2 rounded-lg font-semibold">Block</a>
+                    <% } else { %>
+                        <a href="/blocked/accounts" id="unblockuser"
+                            class="block text-red-500 hover:bg-red-600 hover:text-white transition duration-300 cursor-pointer ease-in-out px-4 py-2 rounded-lg font-semibold">Unblock</a>
+                        <% } %>
+            </div>
+
+            <!-- Cancel Button -->
+            <div class="cancel w-full text-center">
+                <p id="morecancel"
+                    class="text-gray-300 hover:bg-zinc-700 hover:text-white transition duration-300 ease-in-out px-4 py-2 rounded-lg font-semibold cursor-pointer">
+                    Cancel</p>
+            </div>
 
         </div>
 
-        <div class="userdets  mt-7 ml-9  w-full h-[78vh]   overflow-x-hidden overflow-y-auto ">
 
+        <!-- Confirmation Popup -->
+        <div id="confirmPopup"
+            class="hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-zinc-900 text-white p-4 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] xl:w-[20%] z-[9999]">
+            <h3 class="text-lg font-medium text-center">Are you sure you want to block this user?</h3>
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="confirmYes" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Yes</button>
+                <button id="confirmNo" class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded">No</button>
+            </div>
+        </div>
+
+        <!-- Block Success Message -->
+        <div id="blockSuccess"
+            class="hidden fixed top-[5%] left-1/2 -translate-x-1/2 bg-green-600 text-white p-4 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] xl:w-[20%] z-[9999] text-center">
+            <p>Blocked successfully!</p>
+        </div>
+
+
+
+        <div class="userdets mt-7 ml-9 w-full h-[78vh] overflow-x-hidden overflow-y-auto">
             <div class="upper">
                 <div class="top flex items-center gap-8">
-
-                    <% if(openuser.stories.length > 0){  %>
+                    <% if(openuser.stories.length> 0){ %>
                         <a href="/story/<%= openuser._id %>/0">
-                            <div class="profile w-[60px] h-[60px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center  ">
+                            <div
+                                class="profile w-[60px] h-[60px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                                 <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= openuser.profile %>" alt="">
+                                    <img class="w-full h-full object-cover object-center"
+                                        src="/images/uploads/<%= openuser.profile %>" alt="">
                                 </div>
-
                             </div>
                         </a>
-                        <% } else{  %>
-                            <div class="profile w-[60px] h-[60px] ">
+                        <% } else { %>
+                            <div class="profile w-[60px] h-[60px]">
                                 <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= openuser.profile %>" alt="">
+                                    <img class="w-full h-full object-cover object-center"
+                                        src="/images/uploads/<%= openuser.profile %>" alt="">
                                 </div>
-
                             </div>
-                            <%  }  %>
+                            <% } %>
 
-                                <div class="right flex items-center gap-3 text-center cursor-pointer">
-
-                                    <% if(openuser.followers.indexOf(loginuser._id) !== -1){ %>
+                                <div class="right flex items-top gap-3 text-center cursor-pointer">
+                                    <% if(openuser.followers.indexOf(loginuser._id) !==-1){ %>
                                         <h5 class="postbtn">
-                                            <%= openuser.posts.length  %><br> <span>posts</span>
+                                            <%= openuser.posts.length %><br> <span>posts</span>
                                         </h5>
-
                                         <a href="/followers/<%= openuser._id %>">
                                             <h5>
                                                 <%= openuser.followers.length %> <br> <span>followers</span>
                                             </h5>
                                         </a>
-
                                         <a href="/followings/<%= openuser._id %>">
                                             <h5>
                                                 <%= openuser.following.length %><br> <span>following</span>
                                             </h5>
                                         </a>
-                                        <%  } else { %>
-
+                                        <p class="more"><i class="ri-more-fill  "></i></p>
+                                        <% } else { %>
                                             <h5 class="post-btn">
-                                                <%= openuser.posts.length  %><br> <span>posts</span>
+                                                <%= openuser.posts.length %><br> <span>posts</span>
                                             </h5>
-
-
                                             <h5>
                                                 <%= openuser.followers.length %> <br> <span>followers</span>
                                             </h5>
-
-
-
                                             <h5>
                                                 <%= openuser.following.length %><br> <span>following</span>
                                             </h5>
-
-                                            <%   } %>
-
+                                            <% } %>
                                 </div>
                 </div>
                 <div class="bottom mt-2 ml-2">
-                    <p class=" font-light text-sm">
+                    <p class="font-light text-sm">
                         <%= openuser.fullname %>
                     </p>
                     <h3>
                         <%= openuser.bio %>
                     </h3>
                 </div>
-                <div class="buttons mt-2 flex items-cneter gap-4 ml-1">
-
-                    <% if(openuser.username !== loginuser.username){  %>
-
-                        <% if(openuser.followers.indexOf(loginuser._id)   === -1){  %>
-
-                            <button data-user="<%= openuser.username %>" class="follow text-white bg-blue-600 px-6 py-0.5 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                            <% }  else{  %>
-                                <button data-user="<%= openuser.username %>" class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light " style="border-radius: 5px;">Following <span><i class="ri-arrow-drop-down-line"></i></span></button>
-
-                                <%  } %>
-
-                                    <button data-user="" class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light " style="border-radius: 5px;">Message</button>
-
-
-                                    <%  }   %>
-
+                <div class="buttons mt-2 flex items-center gap-4 ml-1">
+                    <% if(openuser.username !==loginuser.username){ %>
+                        <% if(openuser.followers.indexOf(loginuser._id)===-1){ %>
+                            <button data-user="<%= openuser.username %>"
+                                class="follow text-white bg-blue-600 px-6 py-0.5 text-sm font-light"
+                                style="border-radius: 5px;">Follow</button>
+                            <% } else { %>
+                                <button data-user="<%= openuser.username %>"
+                                    class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light"
+                                    style="border-radius: 5px;">Following <span><i
+                                            class="ri-arrow-drop-down-line"></i></span></button>
+                                <% } %>
+                                    <button data-user=""
+                                        class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light"
+                                        style="border-radius: 5px;">Message</button>
+                                    <% } %>
                 </div>
             </div>
 
-
-            <% if(openuser.username === loginuser.username){  %>
-
-                <div id="postcontainer" class=" relative ">
-
-                    <% if(openuser.posts.length > 0){  %>
-
-                        <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line  text-lg  font-light ml-2  "></i></p>
-
-                        <div id="postarea" class="flex gap-3 flex-wrap px-2 relative">
-                            <% openuser.posts.forEach(function(elem){  %>
-
-                                <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
-                                    <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden rounded-md ">
-                                        <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
-                                    </div>
-                                </a>
-                                <% })   %>
-                                    <%    }   else { %>
-                                        <p>No, posts yet.</p>
-
-                                        <%  } %>
+            <% if(openuser.username===loginuser.username || openuser.followers.indexOf(loginuser._id) !==-1){ %>
+                <% if(openuser.privateAccount && openuser.username !==loginuser.username){ %>
+                    <p>Account is private.</p>
+                    <% } else { %>
+                        <div id="postcontainer" class="relative">
+                            <% if(openuser.posts.length> 0){ %>
+                                <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line text-lg font-light ml-2"></i></p>
+                                <div id="postarea" class="flex gap-3 flex-wrap px-2 relative">
+                                    <% openuser.posts.forEach(function(elem){ %>
+                                        <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
+                                            <div class="post w-[19vw] h-[24vmax] bg-sky-100 overflow-hidden rounded-md">
+                                                <img class="w-full h-full object-cover"
+                                                    src="/images/uploads/<%= elem.image %>" alt="">
+                                            </div>
+                                        </a>
+                                        <% }) %>
+                                </div>
+                                <% } else { %>
+                                    <p>No posts yet.</p>
+                                    <% } %>
                         </div>
-
-                </div>
-
-
-                <%   }   else {   %>
-
-                    <% if(openuser.followers.indexOf(loginuser._id) !== -1){  %>
-
-                        <div id="postcontainer" class=" relative ">
-
-                            <% if(openuser.posts.length > 0){  %>
-
-                                <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line  text-lg  font-light ml-2  "></i></p>
-
-                                <a href="">
-                                    <div id="postarea" class="flex gap-3  flex-wrap  relative">
-                                        <% openuser.posts.forEach(function(elem){  %>
-
-                                            <a href="/posts/open/<%= elem._id  %>/<%= openuser._id %>">
-                                                <div class="post w-[19vw]  h-[24vmax] bg-sky-100 overflow-hidden ">
-                                                    <img class="w-full h-full object-cover " src="/images/uploads/<%= elem.image %>" alt="">
-                                                </div>
-                                            </a>
-                                            <% })   %>
-                                                <%    }   else { %>
-                                                    <p>No, posts yet.</p>
-
-                                                    <%  } %>
-                                    </div>
-                                </a>
-
-                        </div>
-
-                        <%  }    %>
-
-
-                            <%   } %>
-
-
+                        <% } %>
+                            <% } %>
         </div>
-
-
-
     </div>
 
     <style>
@@ -174,49 +162,42 @@
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+        integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+
         function followandunfollow() {
-            document.querySelector(".follow").addEventListener("click", function(e) {
+            document.querySelector(".follow").addEventListener("click", function (e) {
                 let user = e.target.dataset.user;
                 let btn = e.target;
                 let postcontainer = document.querySelector("#postcontainer");
                 let icon = document.querySelector("#icon");
-                
+
                 axios.put(`/follow/${user}`)
-                    .then(function(response) {
+                    .then(function (response) {
                         console.log(response);
                         if (btn.classList.contains('bg-blue-600')) {
                             btn.classList.add('bg-zinc-800');
                             btn.classList.remove('bg-blue-600');
-
                         } else {
                             btn.classList.remove('bg-zinc-800');
                             btn.classList.add('bg-blue-600');
-
                         }
 
                         if (btn.textContent === "Follow") {
                             btn.textContent = "Following";
                             postcontainer.style.display = "block";
-
                         } else {
                             btn.textContent = "Follow";
                             postcontainer.style.display = "none";
-                          
                         }
-
-                       
-
-
                     })
-
             })
 
-
             let check = 0;
-            document.querySelector(".postbtn").addEventListener("click", function(evnt) {
+            document.querySelector(".postbtn").addEventListener("click", function (evnt) {
                 if (check == 0) {
                     document.querySelector(".upper").style.display = "none";
                     check = 1;
@@ -228,166 +209,49 @@
         }
 
         followandunfollow();
+
+
+        let morecancel = document.querySelector("#morecancel");
+        let moreicon = document.querySelector(".more");
+        let morepopup = document.querySelector(".more-popup");
+
+        moreicon.addEventListener("click", function (e) {
+            morepopup.classList.replace("hidden", "flex");
+        });
+
+        morecancel.addEventListener("click", function (e) {
+            morepopup.classList.replace("flex", "hidden");
+        });
+
+        // Block User Confirmation Popup
+        function showBlockConfirmationPopup() {
+            document.querySelector("#confirmPopup").classList.remove("hidden");
+        }
+
+        document.querySelector("#blockuser").addEventListener("click", function () {
+            showBlockConfirmationPopup();
+        });
+
+        document.querySelector("#confirmYes").addEventListener("click", async function () {
+            try {
+                const userId = "<%= openuser._id %>";
+                await axios.put(`/block/user`, { userId });
+                morepopup.classList.replace("flex", "hidden");
+                document.querySelector("#confirmPopup").classList.add("hidden");
+                document.querySelector("#blockSuccess").classList.remove("hidden");
+                setTimeout(() => {
+                    document.querySelector("#blockSuccess").classList.add("hidden");
+                }, 2000);
+            } catch (error) {
+                console.error("Error blocking user:", error);
+            }
+        });
+
+        document.querySelector("#confirmNo").addEventListener("click", function () {
+            document.querySelector("#confirmPopup").classList.add("hidden");
+            morepopup.classList.replace("flex", "hidden")
+        });
+
     </script>
 
-    <% include ./partials/footer.ejs %> -->
-
-
-
-
-    <% include ./partials/header.ejs %>
-<div class="container relative w-full h-full text-white">
-    <div class="header px-12 w-full h-[3vh] fixed top-[5%] flex gap-10 items-center">
-        <a href="/feed">
-            <p><i class="ri-arrow-left-line text-lg font-light"></i></p>
-        </a>
-        <h3 class="text-lg font-medium ml-5">
-            <%= openuser.username %>
-        </h3>
-    </div>
-
-    <div class="userdets mt-7 ml-9 w-full h-[78vh] overflow-x-hidden overflow-y-auto">
-        <div class="upper">
-            <div class="top flex items-center gap-8">
-                <% if(openuser.stories.length > 0){ %>
-                    <a href="/story/<%= openuser._id %>/0">
-                        <div class="profile w-[60px] h-[60px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                            <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openuser.profile %>" alt="">
-                            </div>
-                        </div>
-                    </a>
-                <% } else { %>
-                    <div class="profile w-[60px] h-[60px]">
-                        <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                            <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openuser.profile %>" alt="">
-                        </div>
-                    </div>
-                <% } %>
-
-                <div class="right flex items-center gap-3 text-center cursor-pointer">
-                    <% if(openuser.followers.indexOf(loginuser._id) !== -1){ %>
-                        <h5 class="postbtn">
-                            <%= openuser.posts.length %><br> <span>posts</span>
-                        </h5>
-                        <a href="/followers/<%= openuser._id %>">
-                            <h5>
-                                <%= openuser.followers.length %> <br> <span>followers</span>
-                            </h5>
-                        </a>
-                        <a href="/followings/<%= openuser._id %>">
-                            <h5>
-                                <%= openuser.following.length %><br> <span>following</span>
-                            </h5>
-                        </a>
-                    <% } else { %>
-                        <h5 class="post-btn">
-                            <%= openuser.posts.length %><br> <span>posts</span>
-                        </h5>
-                        <h5>
-                            <%= openuser.followers.length %> <br> <span>followers</span>
-                        </h5>
-                        <h5>
-                            <%= openuser.following.length %><br> <span>following</span>
-                        </h5>
-                    <% } %>
-                </div>
-            </div>
-            <div class="bottom mt-2 ml-2">
-                <p class="font-light text-sm">
-                    <%= openuser.fullname %>
-                </p>
-                <h3>
-                    <%= openuser.bio %>
-                </h3>
-            </div>
-            <div class="buttons mt-2 flex items-center gap-4 ml-1">
-                <% if(openuser.username !== loginuser.username){ %>
-                    <% if(openuser.followers.indexOf(loginuser._id) === -1){ %>
-                        <button data-user="<%= openuser.username %>" class="follow text-white bg-blue-600 px-6 py-0.5 text-sm font-light" style="border-radius: 5px;">Follow</button>
-                    <% } else { %>
-                        <button data-user="<%= openuser.username %>" class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light" style="border-radius: 5px;">Following <span><i class="ri-arrow-drop-down-line"></i></span></button>
-                    <% } %>
-                    <button data-user="" class="follow text-white bg-zinc-800 px-3 py-0.5 text-sm font-light" style="border-radius: 5px;">Message</button>
-                <% } %>
-            </div>
-        </div>
-
-        <% if(openuser.username === loginuser.username || openuser.followers.indexOf(loginuser._id) !== -1){ %>
-            <% if(openuser.privateAccount && openuser.username !== loginuser.username){ %>
-                <p>Account is private.</p>
-            <% } else { %>
-                <div id="postcontainer" class="relative">
-                    <% if(openuser.posts.length > 0){ %>
-                        <p id="icon" class="mt-3 mb-2"><i class="ri-grid-line text-lg font-light ml-2"></i></p>
-                        <div id="postarea" class="flex gap-3 flex-wrap px-2 relative">
-                            <% openuser.posts.forEach(function(elem){ %>
-                                <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
-                                    <div class="post w-[19vw] h-[24vmax] bg-sky-100 overflow-hidden rounded-md">
-                                        <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
-                                    </div>
-                                </a>
-                            <% }) %>
-                        </div>
-                    <% } else { %>
-                        <p>No posts yet.</p>
-                    <% } %>
-                </div>
-            <% } %>
-        <% } %>
-    </div>
-</div>
-
-<style>
-    .userdets::-webkit-scrollbar {
-        display: none;
-    }
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-    function followandunfollow() {
-        document.querySelector(".follow").addEventListener("click", function(e) {
-            let user = e.target.dataset.user;
-            let btn = e.target;
-            let postcontainer = document.querySelector("#postcontainer");
-            let icon = document.querySelector("#icon");
-
-            axios.put(`/follow/${user}`)
-                .then(function(response) {
-                    console.log(response);
-                    if (btn.classList.contains('bg-blue-600')) {
-                        btn.classList.add('bg-zinc-800');
-                        btn.classList.remove('bg-blue-600');
-                    } else {
-                        btn.classList.remove('bg-zinc-800');
-                        btn.classList.add('bg-blue-600');
-                    }
-
-                    if (btn.textContent === "Follow") {
-                        btn.textContent = "Following";
-                        postcontainer.style.display = "block";
-                    } else {
-                        btn.textContent = "Follow";
-                        postcontainer.style.display = "none";
-                    }
-                })
-        })
-
-        let check = 0;
-        document.querySelector(".postbtn").addEventListener("click", function(evnt) {
-            if (check == 0) {
-                document.querySelector(".upper").style.display = "none";
-                check = 1;
-            } else {
-                document.querySelector(".upper").style.display = "initial";
-                check = 0;
-            }
-        })
-    }
-
-    followandunfollow();
-</script>
-
-<% include ./partials/footer.ejs %>
+    <% include ./partials/footer.ejs %>
