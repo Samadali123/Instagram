@@ -1,81 +1,140 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram | Email sent </title>
+    <title>Instagram | Email Sent</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/icons/remixicon.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color:black;
-            color: white;
+            background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
             padding: 0;
         }
-        
-        .container {
-            max-width: 1280px;
-            margin: auto;
-        }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-                max-width: 100%;
-            }
-        }
-        
-        .section {
-            padding: 80px 0;
-        }
-        
-        .icon-check {
-            color: #10b981;
-            font-size: 64px;
-            transition: transform 0.3s ease;
-        }
-        
-        .icon-check:hover {
-            transform: scale(1.1);
-        }
-        
-        .success-message {
+
+        .form-container {
+            background-color: #121212;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 32px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            margin-top: 20px;
-            transition: opacity 0.3s ease;
+            position: relative;
         }
-        
-        .success-message.hidden {
-            opacity: 0;
+
+        .logo {
+            margin-bottom: 24px;
+        }
+
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        .form-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+        }
+
+        .form-input {
+            background-color: #1e1e1e;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 16px;
+            color: #e0e0e0;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e94e77; /* Unique accent color for focus */
+        }
+
+        .form-input::placeholder {
+            color: #888888;
+        }
+
+        .btn-submit {
+            background-color: #e94e77; /* Pinkish button color */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-submit:hover {
+            background-color: #d43f63; /* Slightly darker shade on hover */
+            transform: scale(1.02);
+        }
+
+        .icon-check {
+            color: #e94e77; /* Pinkish color for the icon */
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .message-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .message-text {
+            color: #888888;
+            margin-bottom: 24px;
+        }
+
+        .btn-back {
+            background-color: #e94e77; /* Pinkish button color */
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background-color: #d43f63; /* Slightly darker shade on hover */
+            transform: scale(1.02);
         }
     </style>
 </head>
 
-<body class="">
-    <section class="section">
-        <div class="container">
-            <div class="flex flex-col items-center justify-center">
-                <i class="ri-check-line icon-check"></i>
-                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mt-4">
-                    Email Sent Successfully!
-                </h1>
-                <p class="text-sm font-light text-center text-gray-500 dark:text-gray-400 mt-2 success-message hidden">
-                    Check Your Email.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Adding a timeout to show the success message with a slight delay
-        setTimeout(() => {
-            const successMessage = document.querySelector('.success-message');
-            successMessage.classList.remove('hidden');
-        }, 500);
-    </script>
+<body>
+    <div class="form-container">
+        <i class="ri-check-line icon-check"></i>
+        <h1 class="message-title">Email Sent Successfully!</h1>
+        <p class="message-text">Check your email to proceed with the next steps.</p>
+        <a href="/login" class="btn-back">Back to Login</a>
+    </div>
 </body>
 
 </html>

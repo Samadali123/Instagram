@@ -9,14 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <style>
         body {
-            background-color:black;
+            background-color: black;
             color: white;
             font-family: 'Segoe UI', sans-serif;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
         }
         
         .section {
@@ -46,13 +41,15 @@
             font-size: 1rem;
             font-weight: bold;
             color: #fff;
-            background-color: royalblue;
+            background-color: #e94e77; /* Pinkish color */
             border-radius: 0.5rem;
             transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
         
         .btn:hover {
-            background-color: rgba(65, 105, 225, 0.751);
+            background-color: #d43f63; Lighter pink shade */
         }
         
         @media (max-width: 768px) {
@@ -64,6 +61,7 @@
             }
             .btn {
                 font-size: 0.9rem;
+                padding: 0.5rem 1.25rem;
             }
         }
     </style>
@@ -71,12 +69,10 @@
 
 <body class="bg-gray-900 min-h-screen flex justify-center items-center">
     <section class="section">
-        <div class="container">
-            <div class="text-center">
-                <h1 class="heading">Server Down</h1>
-                <p class="text">Our servers are currently experiencing issues. Please try again later.</p>
-                <a href="/login" class="btn">Log In</a>
-            </div>
+        <div class="container text-center">
+            <h1 class="heading">Server Down</h1>
+            <p class="text">Our servers are currently experiencing issues. Please try again later.</p>
+            <a href="/login" class="btn">Log In</a>
         </div>
     </section>
 </body>

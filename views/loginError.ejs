@@ -8,77 +8,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .section {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .heading {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-        
-        .text {
-            font-size: 1.2rem;
-            color: #d1d5db;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
         .btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            background-color: royalblue;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s ease;
+            background-color: #e94e77; /* Pinkish button color */
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
-        
+
         .btn:hover {
-            background-color: rgba(65, 105, 225, 0.751);
-        }
-        
-        @media (max-width: 768px) {
-            .heading {
-                font-size: 1.5rem;
-            }
-            .text {
-                font-size: 1rem;
-            }
-            .btn {
-                font-size: 0.9rem;
-            }
+            background-color: #d43f63; /* Slightly darker shade on hover */
+            transform: scale(1.02);
         }
     </style>
 </head>
 
-<body class=" min-h-screen flex justify-center items-center">
-    <section class="section">
-        <div class="container">
-            <div class="text-center">
-                <h1 class="heading">Oops, Login failed!</h1>
-                <p class="text">Email or password is incorrect. Please try again.</p>
-                <a href="/login" class="btn">Back to Home</a>
-            </div>
+<body class="bg-black text-white flex items-center justify-center min-h-screen">
+
+    <div class="container max-w-md p-6 rounded-lg shadow-md bg-zinc-900">
+        <div class="text-center">
+            <!-- Error Icon -->
+            <i class="ri-error-warning-fill text-5xl lg:text-4xl text-red-500 mb-4"></i>
+            <!-- Heading -->
+            <h1 class="text-2xl font-semibold mb-2">Oops, Login Failed!</h1>
+            <!-- Message -->
+            <p class="text-sm text-gray-400 mb-6">Email or password is incorrect. Please try again.</p>
+            <!-- Button -->
+            <a href="/login" class="btn">
+                Try Again
+            </a>
         </div>
-    </section>
+    </div>
+
 </body>
 
 </html>
