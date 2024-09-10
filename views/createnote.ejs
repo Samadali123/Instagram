@@ -1,95 +1,97 @@
-<% include ./partials/header.ejs %>
-    <div class="container w-full h-full text-white relative">
-        <div class="top w-full relative flex justify-between px-5 text-xl">
-            <a href="/profile"><i class="ri-close-line"></i></a>
-            <p id="share" class="cursor-pointer" style="color: silver;">Share</p>
-        </div>
 
-        <div class="center w-full relative h-[65vh] flex justify-center items-center flex-col">
-            <div class="note absolute bottom-[53%] w-fit bg-zinc-800 rounded-3xl px-3 py-1">
-                <form action="/createnote" method="post">
-                    <input name="note" class="bg-transparent border-none outline-none cursor-pointer note-input" type="text" placeholder="Note....">
-                </form>
-            </div>
 
-            <div class="profile w-[65px] h-[65px] rounded-full overflow-hidden">
-                <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="">
-            </div>
-        </div>
+    <% include ./partials/header.ejs %>
+<div class="container mx-auto h-full text-white relative flex flex-col justify-between">
+    <!-- Top Bar with Close Icon and Share Button -->
+    <div class="top-bar w-full flex justify-between items-center px-6 py-4">
+        <a href="/profile" class="text-gray-400 hover:text-gray-100 transition">
+            <i class="ri-close-line text-2xl"></i>
+        </a>
+        <p id="share" class="cursor-pointer text-gray-400 hover:text-gray-100 transition">Share</p>
     </div>
 
-    <style>
-        .container {
-            padding: 20px;
+    <!-- Center Content with Note Input and Profile Picture -->
+    <div class="center flex flex-col justify-center items-center h-[65vh] px-4">
+        <!-- Note Input -->
+        <div class="note-box bg-zinc-800 rounded-full px-6 py-2 mb-8 shadow-md">
+            <form action="/createnote" method="post">
+                <input name="note" class="bg-transparent border-none outline-none text-center text-lg text-white placeholder-gray-400 focus:ring-0 w-full" type="text" placeholder="Leave a note...">
+            </form>
+        </div>
+
+        <!-- Profile Image -->
+        <div class="profile-picture w-[80px] h-[80px] rounded-full overflow-hidden shadow-md">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="User Profile">
+        </div>
+    </div>
+</div>
+
+<!-- Styles for Responsiveness and Professional Layout -->
+<style>
+    .container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .top-bar {
+        font-size: 1.125rem;
+    }
+
+    .note-box {
+        max-width: 320px;
+        width: 100%;
+    }
+
+    .note-box input {
+        font-size: 1rem;
+        padding: 8px;
+    }
+
+    .profile-picture {
+        width: 75px;
+        height: 75px;
+    }
+
+    /* Responsive for Tablets */
+    @media (max-width: 768px) {
+        .note-box {
+            max-width: 260px;
         }
-        
-        .note-input {
-            width: auto;
-            min-width: 50px;
-            padding: 5px;
-            color: white;
+
+        .profile-picture {
+            width: 60px;
+            height: 60px;
         }
-        
-        .note-input::placeholder {
-            color: silver;
-        }
-        
-        .note {
-            display: flex;
+    }
+
+    /* Responsive for Mobile Devices */
+    @media (max-width: 480px) {
+        .top-bar {
+            padding: 10px 0;
+            flex-direction: column;
             align-items: center;
         }
-        
-        .top {
-            padding: 15px;
-        }
-        
-        .center {
-            margin-top: 50px;
-        }
-        
-        @media (max-width: 768px) {
-            .top {
-                padding: 10px;
-                text-align: center;
-            }
-            .center {
-                height: 60vh;
-            }
-            .profile {
-                width: 50px;
-                height: 50px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .top {
-                flex-direction: column;
-                align-items: center;
-            }
-            .center {
-                height: 50vh;
-            }
-            .profile {
-                width: 40px;
-                height: 40px;
-            }
-        }
-    </style>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const noteInput = document.querySelector('.note-input');
-            noteInput.addEventListener('input', function() {
-                this.style.width = ((this.value.length + 1) * 8) + 'px';
-            });
-        });
+        .note-box input {
+            font-size: 0.875rem;
+            padding: 6px;
+        }
 
+        .profile-picture {
+            width: 50px;
+            height: 50px;
+        }
+    }
+</style>
 
-
-        document.querySelector("#share").addEventListener("click", function(e) {
+<!-- Script for Input Field and Share Button -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector("#share").addEventListener("click", function() {
             document.querySelector("form").submit();
+        });
+    });
+</script>
 
-        })
-    </script>
-
-    <% include ./partials/footer.ejs %>
+<% include ./partials/footer.ejs %>

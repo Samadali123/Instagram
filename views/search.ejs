@@ -1,61 +1,125 @@
 <% include ./partials/header.ejs %>
-    <div class="w-full  min-h-full  px-4 py-5">
-        <div class="border-2 border-zinc-800 flex items-center justify-between px-2 py-1 rounded-md">
+    <div class="w-full h-full px-4 py-2">
+        <!-- Search bar container -->
+        <div class="border-2 border-zinc-800 flex gap-2 items-center justify-between px-4 py-2 lg:py-3 rounded-3xl">
             <i class="text-white ri-search-line"></i>
-            <input id="inp" class="ml-1 w-full bg-transparent outline-none text-zinc-400" type="text" placeholder="search ">
+            <input id="inp" class="ml-1 w-full bg-transparent outline-none text-zinc-400" type="text" placeholder="Search">
+            <i id="clearInp" class="text-zinc-400 text-lg ri-close-line cursor-pointer hidden"></i>
         </div>
-        <div class="users">
-
+        
+        <!-- User results container -->
+        <div class="users mt-5 hidden"></div>
+        
+        <!-- Permanent list of searched users -->
+        <div class="permanent-users  mt-5 space-y-3 ml-2">
+            <h2 class="text-white recents font-medium hidden">Recently searched</h2>
+            <div class="permanent-users-list"></div>
         </div>
     </div>
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         const input = document.querySelector("#inp");
+        const clearIcon = document.querySelector("#clearInp");
+        const usersDiv = document.querySelector(".users");
+        const permanentUsersDiv = document.querySelector(".permanent-users-list");
+        const permanentUsersSection = document.querySelector(".permanent-users");
 
+        // Initially show the "Recently searched" section and hide search results
+        permanentUsersSection.classList.remove("hidden");
+        usersDiv.classList.add("hidden");
 
+        let recentSearches = [];
 
-        document.querySelector("#inp").addEventListener("input", function(e) {
-            var inp = this.value;
+        // Handle input changes
+        input.addEventListener("input", function () {
+            const inp = this.value.trim(); // Trim to avoid empty spaces causing issues
+
             if (inp.length > 0) {
-                axios.get(`/users/${inp}`)
-                    .then(response => {
-                        console.log(response.data)
-                        var clutter = "";
-                        if (response.data.length > 0) {
-                            response.data.forEach(function(elem) {
+                clearIcon.classList.remove("hidden"); // Show the clear (cancel) icon
+                usersDiv.classList.remove("hidden"); // Show search results
+                permanentUsersSection.classList.add("hidden"); // Hide recently searched section
 
-                                clutter += `  <a href="/openprofile/${elem.username}" class="outline-none cursor-pointer">
-                            <div class="text-white flex items-center gap-2 mt-5">
-                                <div class="image w-[11vw] h-[11vw] rounded-full bg-sky-100 overflow-hidden">
-                                    <img class='w-full h-full object-cover' src= "/images/uploads/${elem.profile}"  alt="retry"  >
-                                </div>
-                                <div class="text">
-                                    <a class= "cursor-pointer" href="/openprofile/${elem.username}"><h3>${elem.username}</h3></a>       
-                                    <h4 class="text-xs opacity-30 leading-none">${elem.fullname ?? 'unknown user'}</h4>
+                // Fetch search results via Axios
+                axios.get(`/users/${inp}`).then(response => {
+                    let clutter = "";
+                    if (response.data.length > 0) {
+                        response.data.forEach(function (elem) {
+                            clutter += `
+                                <a href="/openprofile/${elem.username}" class="outline-none cursor-pointer block">
+                                    <div class="text-white flex items-center gap-2 mt-5">
+                                        <div class="flex items-center gap-2">
+                                            <div class="image w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-sky-100 overflow-hidden">
+                                                <img class='w-full h-full object-cover' src="/images/uploads/${elem.profile}" alt="Profile Image">
+                                            </div>
+                                            <div class="text">
+                                                <h3 class="text-base md:text-lg lg:text-xl">${elem.username}</h3>
+                                                <h4 class="text-xs opacity-30 leading-none">${elem.fullname ?? 'Unknown User'}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        usersDiv.innerHTML = clutter;
 
-                                </div>
-                            </div>  
-                        </a>`
-                            })
-                            document.querySelector(".users").innerHTML = clutter;
-                        } else {
+                        // Add to recent searches after search completes
+                        response.data.forEach(function (user) {
+                            addToRecentSearches(user);
+                        });
 
-                            document.querySelector(".users").innerHTML = "";
-                            document.querySelector(".users").innerHTML = ` <p id="result" style="color: rgba(255, 255, 255, 0.858);  " class="ml-2 text-sm font-light ">No results were found.</p>`
-                        }
-
-                    })
+                    } else {
+                        usersDiv.innerHTML = `<p id="result" class="ml-2 text-sm font-light text-white opacity-90">No results were found.</p>`;
+                    }
+                });
+            } else {
+                clearIcon.classList.add("hidden"); // Hide the cancel icon
+                usersDiv.classList.add("hidden"); // Hide search results
+                permanentUsersSection.classList.remove("hidden"); // Show recently searched section
             }
+        });
 
+        // Handle clear icon click to reset the input and user list
+        clearIcon.addEventListener("click", function () {
+            input.value = "";
+            clearIcon.classList.add("hidden"); // Hide the cancel icon
+            usersDiv.classList.add("hidden"); // Hide search results
+            permanentUsersSection.classList.remove("hidden"); // Show recently searched section
+            document.querySelector(".recents").classList.replace("hidden", "block");
+        });
 
-            if (input.value === "") {
-                document.querySelector(".users").innerHTML = "";
+        // Function to add a user to the permanent list of recently searched
+        function addToRecentSearches(user) {
+            // Avoid duplicates in recent searches
+            if (!recentSearches.some(u => u.username === user.username)) {
+                recentSearches.push(user);
+                let userEntry = document.createElement("div");
+                userEntry.classList.add("flex", "items-center", "gap-2");
+                userEntry.innerHTML = `
+                    <div class="image w-12 mb-3 h-12 md:w-16 md:h-16 rounded-full bg-sky-100 overflow-hidden">
+                        <img class="w-full h-full object-cover" src="/images/uploads/${user.profile}" alt="${user.username}">
+                    </div>
+                    <div class="text text-white">
+                        <h3>${user.username}</h3>
+                        <h4 class="text-xs opacity-30">${user.fullname ?? 'Unknown User'}</h4>
+                    </div>
+                    <button class="remove-btn text-red-500 ml-auto mr-3" data-username="${user.username}">Remove</button>
+                `;
+                permanentUsersDiv.appendChild(userEntry);
+
+                // Add remove functionality
+                userEntry.querySelector(".remove-btn").addEventListener("click", function () {
+                    removeRecentUser(user.username);
+                    userEntry.remove();
+                });
             }
+        }
 
-        })
+        // Remove user from recent searches
+        function removeRecentUser(username) {
+            recentSearches = recentSearches.filter(user => user.username !== username);
+        }
+
     </script>
 
-
-    <% include ./partials/footer.ejs %>
+<% include ./partials/footer.ejs %>

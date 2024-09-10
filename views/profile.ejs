@@ -1,13 +1,13 @@
 <% include ./partials/header.ejs %>
     <div class="w-full min-h-full text-white ">
         <div class="upper">
-            <div class="nav flex justify-between items-center px-4">
-                <h3 class="text-lg">
+            <div class="nav flex justify-between items-center px-5">
+                <h3 class="text-md lg:text-lg xl:text-2xl">
                     <%= loginuser.username %>
                 </h3>
                 <div class="icons flex gap-5">
-                    <i id="addicon" class="cursor-pointer  text-[1.4rem] ri-add-box-line"></i>
-                     <a href="/settings"><i id="settings" class="text-[1.4rem] ri-menu-line cursor-pointer"></i></a>
+                    <i id="addicon" class="cursor-pointer  text-[1.2rem] lg:text-[1.4rem] ri-add-box-line"></i>
+                     <a href="/settings"><i id="settings" class="text-[1.2rem] lg:text-[1.4rem] ri-menu-line cursor-pointer"></i></a>
                 </div>
             </div>
  
@@ -15,31 +15,28 @@
 
                 <div class="note absolute top-[-4%]  ml-[7%] z-auto bg-zinc-900 rounded-3xl px-3 py-1 ">
                     <% if (loginuser.note) { %>
-                        <p id="show" class="cursor-pointer font-light">
+                        <p id="show" class="cursor-pointer font-light text-[1.1rem] lg:text-[1.3rem] xl:text-[1.5rem] ">
                             <%= loginuser.note %>
                         </p>
 
                         <% } else { %>
                             <a href="/createnote">
-                                <p class="cursor-pointer font-light">Add a Note</p>
+                                <p class="cursor-pointer font-light text-red-500  ">Add a Note</p>
                             </a>
                             <% } %>
 
                 </div>
 
-
-
-
                 <% if(loginuser.stories.length > 0){  %>
                     <a class="cursor-pointer" href="/story/<%= loginuser._id %>/0">
-                        <div class="w-[19vw] h-[19vw] bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                        <div class="w-[15vw] h-[15vw] lg:w-[19vw] lg:h-[19vw] bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                 <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
                             </div>
                         </div>
                     </a>
                     <%   }  else { %>
-                        <div class="w-[19vw] h-[19vw]  overflow-hidden ">
+                        <div class="w-[15vw] h-[15vw] lg:w-[19vw] lg:h-[19vw]  overflow-hidden ">
                             <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
                                 <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
                             </div>
@@ -47,8 +44,8 @@
                         <%  } %>
 
 
-                            <div class="stats flex gap-5 items-center justify-between">
-                                <div class="flex flex-col items-center justify-center">
+                            <div class="stats  flex  ml-7 justify-end lg:justify-between gap-3 lg:gap-5 items-center  text-xs lg:text-md">
+                                <div class="flex flex-col items-center justify-center ">
                                     <h3 class="cursor-pointer">
                                         <%= loginuser.posts.length %>
                                     </h3>
@@ -74,7 +71,7 @@
                             </div>
             </div>
             <div class="dets px-6 mt-5">
-                <h3 class="text-lg mb-1">
+                <h3 class="text-lg mb-1 text-sm lg:text-lg ">
                     <%= loginuser.fullname %>
                 </h3>
                 <p class="text-xs tracking-tight opacity-50">
@@ -82,15 +79,15 @@
                 </p>
             </div>
             <div class="px-6 mt-5">
-                <a class="px-3 py-2 bg-zinc-800 text-xs rounded-md" href="/edit">Edit Profile</a>
+                <a class="p-2 lg:px-3 py-2 bg-gradient-to-r from-purple-700 to-orange-500  hover:bg-zinc-800 text-xs rounded-3xl" href="/edit">Edit Profile</a>
             </div>
 
-             <div class="highlightscontainer  flex gap-6  px-5  pt-6 relative w-full overflow-y-hidden overflow-x-auto  ">
+             <div class="highlightscontainer  flex gap-5 lg:gap-6   px-5  pt-6 relative w-full overflow-y-hidden overflow-x-auto  ">
 
                     <% loginuser.highlights.forEach(function(highlight) { %>
                        <a href='/highlights/<%= highlight._id %>/0'>
                         <div class="highlight cursor-pointer">
-                            <div class="relative w-20 h-20 rounded-full  overflow-hidden " style="border: 1px solid silver;">
+                            <div class="relative w-16 h-16 lg:w-18 lg:h-18  rounded-full  overflow-hidden " style="border: 1px solid silver;">
                                 <img class="w-full h-full object-cover object-center rounded-full " src="/images/uploads/<%= highlight.coverphoto %>" alt="">
                               </div>
                               <h3 class="whitespace-nowrap text-center ml-1 font-light cursor-pointer "><%= highlight.title %></h3>
@@ -99,19 +96,19 @@
                     <% })  %>
                      
                    <div class="add-highlight-container cursor-pointer">
-                    <div style="border: 1px solid silver;" class="addhighlight flex justify-center items-center text-white  relative w-20 h-20 rounded-full  overflow-hidden">
+                    <div style="border: 1px solid silver;" class="addhighlight flex justify-center items-center text-white  relative w-16 h-16 lg:w-18 lg:h-18 rounded-full  overflow-hidden">
                          <a href="/add/highlights"> <p><i class="ri-add-line text-xl cursor-pointer "></i></p></a>
                     </div>
-                    <h3 class="w-fit ml-6 font-light  ">New</h3>
+                    <h3 class="w-fit ml-4 lg:ml-5 font-light  ">New</h3>
                    </div>
              </div>
 
         </div>
 
 
-        <div class="notepopup hidden flex flex-col  justify-center items-center gap-4 w-[93%] h-[35vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+        <div class="notepopup hidden flex flex-col  justify-center items-center gap-4 w-fit h-fit rounded-xl px-8 py-5 lg:px-[15%] lg:h-2/5  fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2   z-[9999] bg-zinc-800 rounded-md ">
 
-            <div class="profile w-[35px] h-[35px] rounded-full overflow-hidden">
+            <div class="profile w-[30px] h-[30px] rounded-full overflow-hidden">
                 <img class="w-full h-full object-cover rounded-full " src="/images/uploads/02aa3355-e592-4751-803d-5e890474d172.avif" alt="">
             </div>
 
@@ -119,7 +116,7 @@
                 <%= loginuser.note %>
             </p>
 
-            <button class="bg-blue-600 text-white rounded-md  px-[30%] py-2"><a href="/createnote">Leave a new note</a></button>
+            <button class="bg-blue-600 text-white rounded-md px-3  "><a href="/createnote"> new note</a></button>
             <button class=" text-blue-500 "><a href="/deletenote">Delete note</a></button>
 
         </div>
@@ -127,7 +124,7 @@
 
 
 
-        <div class="popup hidden flex flex-col  justify-center gap-4 w-[93%] h-[60vh] py-5 fixed bottom-[0%] z-[9999] bg-zinc-800 rounded-md ">
+        <!-- <div class="popup hidden flex flex-col  justify-center gap-4 w-[50%] h-fit py-5 fixed  top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2  z-[9999] bg-zinc-800 rounded-md ">
 
             <p class="text-xl text-center relative top-[-10%]">Create</p>
 
@@ -170,17 +167,59 @@
 
 
 
+        </div> -->
+
+
+        <div class="popup hidden flex flex-col justify-center gap-6 w-[90vw] max-w-[450px] h-fit py-6 px-6 fixed top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 z-[9999] bg-gradient-to-br from-zinc-800 via-zinc-900 to-black shadow-lg rounded-3xl animate-fade-in">
+
+            <p class="text-lg md:text-2xl font-semibold text-center text-white relative">Create</p>
+            <div class="post flex items-center w-full px-4 md:px-6 gap-4 text-white hover:bg-zinc-700 p-3 rounded-3xl  transition-all ease-in-out duration-300 cursor-pointer">
+                <span><i class="ri-grid-line text-2xl"></i></span>
+                <a href="/upload">
+                    <p class="text-lg md:text-xl">Post</p>
+                </a>
+            </div>
+        
+            <div class="reel flex items-center w-full px-4 md:px-6 gap-4 text-white hover:bg-zinc-700 p-3 rounded-3xl transition-all ease-in-out duration-300 cursor-pointer">
+                <img class="w-7 h-7 md:w-8 md:h-8" src="/images/reel.png" alt="">
+                <p class="text-lg md:text-xl">Reel</p>
+            </div>
+        
+            <div class="story flex items-center w-full px-4 md:px-6 gap-4 text-white hover:bg-zinc-700 p-3 rounded-3xl transition-all ease-in-out duration-300 cursor-pointer">
+                <img class="w-7 h-7 md:w-8 md:h-8" src="/images/story.png" alt="">
+                <p id="story" class="text-lg md:text-xl">Story</p>
+        
+                <form id="storyform" hidden action="/<%= loginuser._id %>/add/story" method="post" enctype="multipart/form-data">
+                    <input id="uploadstory" type="file" name="storyimage">
+                </form>
+            </div>
+        
+            <div class="highlights flex items-center w-full px-4 md:px-6 gap-4 text-white hover:bg-zinc-700 p-3 rounded-3xl transition-all ease-in-out duration-300 cursor-pointer">
+                <img class="w-7 h-7 md:w-8 md:h-8" src="/images/highlights.png" alt="">
+                <a href="/add/highlights">
+                    <p class="text-lg md:text-xl">Story highlights</p>
+                </a>
+            </div>
+        
+            <div class="live flex items-center w-full px-4 md:px-6 gap-4 text-white hover:bg-zinc-700 p-3 rounded-3xl transition-all ease-in-out duration-300 cursor-pointer">
+                <img class="w-7 h-7 md:w-8 md:h-8" src="/images/live.png" alt="">
+                <p class="text-lg md:text-xl">Live</p>
+            </div>
+            
         </div>
+        
+        
+
 
         <p class="px-6 hidden back cursor-pointer text-sm "> <span><i class="ri-arrow-left-line font-medium  mr -2"></i></span> Back to Previous</p>
 
-        <div class="posts w-full pl-5 flex gap-2 py-2 mt-5 flex-wrap">
+        <div class="posts w-full pl-5 flex gap-3  lg:gap-3 py-2 mt-5 flex-wrap">
             <% if(loginuser.posts.length > 0){  %>
 
                 <% loginuser.posts.forEach(function(elem){ %>
 
                     <a href="/myposts/open/<%= elem._id %>">
-                        <div class="post  relative w-[30vw] h-[25vh]  mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
+                        <div class="post  relative w-[30vw] h-[18vh] lg: w-[20w] lg:h-[30vh] mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
                             <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
 
                             <div class="overlay absolute top-[0%] left-[0%] w-full h-full " style="background-color: rgba(0, 0, 0, 0.137);">
@@ -208,7 +247,6 @@
     <style>
         .highlightscontainer::-webkit-scrollbar{
             display: none;
-
         }
     </style>
 
@@ -237,7 +275,7 @@
 
             setInterval(function() {
                 document.querySelector(".popup").classList.replace("flex", "hidden");
-            }, 2500);
+            }, 2000);
 
         })
 
@@ -257,7 +295,7 @@
 
             setInterval(function() {
                 document.querySelector(".notepopup").classList.replace("flex", "hidden")
-            }, 2500)
+            }, 2000)
 
 
         })

@@ -6,7 +6,7 @@
 
     <div class="w-full  min-h-full text-white py-5">
         <div class="flex justify-between items-center px-4">
-            <a class="text-sm text-blue-500" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
+            <a class="text-sm text-pink-500" href="/profile"><i class="ri-arrow-left-s-line"></i> profile</a>
             <h2 class="leading-none text-sm">Edit Profile</h2>
             <a class="text-sm" href="/feed"><i class="ri-home-line"></i> home</a>
         </div>
@@ -29,7 +29,7 @@
                     <%  } %>
 
 
-                        <button id="editprofile" class="text-blue-500 capitalize cursor-pointer">edit picture</button>
+                        <button id="editprofile" class="text-pink-500 capitalize cursor-pointer">edit picture</button>
         </div>
         <div class="gap-5 px-4 mt-10">
             <h3 class="text-lg leading-none">Edit Account Details</h3>
@@ -38,7 +38,7 @@
                 <input required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="username" name="username" value="<%= loginuser.username %>">
                 <input required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900" type="text" placeholder="full name" name="fullname" value="<%= loginuser.fullname %>">
                 <textarea required class="px-3 mt-2 py-2 border-2 border-zinc-800 rounded-md block w-full bg-zinc-900 resize-none" placeholder="Bio" name="bio"><%= loginuser.bio %></textarea>
-                <input class="w-full bg-blue-500 cursor-pointer px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
+                <input class="w-full bg-pink-500 cursor-pointer px-3 py-3 rounded-md mt-2" type="submit" value="Update Details">
             </form>
         </div>
     </div>

@@ -1,4 +1,4 @@
-<% include ./partials/header.ejs %>
+<!-- <% include ./partials/header.ejs %>
 
     <div class="container w-full h-full relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
         <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= storyimage.image %>" alt="">
@@ -62,4 +62,146 @@
             }
 
         }, 50)
-    </script>
+    </script> -->
+
+
+    <% include ./partials/header.ejs %>
+
+<div class="container w-full h-full relative">
+    <!-- Story Image Background with Gradient Overlay -->
+    <div class="story-bg w-full h-full relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
+        <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= storyimage.image %>" alt="Story Image">
+        <div class="overlay absolute inset-0 bg-black/10">
+            <!-- Top Section with User Details and Close Button -->
+            <div class="top absolute top-0 w-full">
+                <!-- Progress Bar -->
+                <div class="progress-container relative w-full h-[4px] bg-gray-300">
+                    <div class="progress bg-white h-full w-[0%]"></div>
+                </div>
+
+                <!-- User Info and Close Button -->
+                <div class="user-info flex items-center justify-between mt-4 px-4">
+                    <!-- Profile and Username -->
+                    <div class="flex items-center gap-2">
+                        <a href="/openprofile/<%= storyuser.username %>" class="profile">
+                            <div class="w-10 h-10 rounded-full overflow-hidden">
+                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= storyuser.profile %>" alt="Profile Image">
+                            </div>
+                        </a>
+                        <div class="flex flex-col">
+                            <a href="/openprofile/<%= storyuser.username %>" class="username text-white text-sm font-medium">
+                                <%= storyuser.username %>
+                            </a>
+                            <span class="time text-xs text-gray-300">
+                                <%= dater(new Date(storyimage.createdAt)) %>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Close Button -->
+                    <a href="/feed" class="close-button text-white text-2xl">
+                        <i class="ri-close-line"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section with Like Button -->
+            <div class="bottom absolute bottom-4 right-4 flex gap-3">
+                <a href="#" class="like-button">
+                    <i class="ri-heart-3-line text-white text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles for Minimalistic and Responsive UI -->
+<style>
+    .container {
+        max-width: 100%;
+        height: 100vh;
+    }
+
+    .story-bg {
+        position: relative;
+        height: 100%;
+        width: 100%;
+    }
+
+    .overlay {
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .top {
+        padding: 15px;
+    }
+
+    .progress-container {
+        margin-top: 10px;
+    }
+
+    .progress {
+        transition: width 0.5s ease;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        padding-top: 12px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .bottom {
+        padding: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .profile img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .progress-container {
+            height: 3px;
+        }
+
+        .close-button {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .profile img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .username {
+            font-size: 0.875rem;
+        }
+
+        .close-button {
+            font-size: 1.25rem;
+        }
+    }
+</style>
+
+<!-- Script for Progress Bar and Story Navigation -->
+<script>
+    let story = `<%= storyimage %>`;
+    var progress = document.querySelector(".progress");
+    var count = 0;
+    var interval = setInterval(function() {
+        if (count < 100) {
+            count++;
+            progress.style.width = `${count}%`;
+        } else {
+            window.location.href = `/story/<%= storyuser._id %>/<%= Number(number) + 1 %>`;
+        }
+    }, 50);
+</script>
+
+<% include ./partials/footer.ejs %>
