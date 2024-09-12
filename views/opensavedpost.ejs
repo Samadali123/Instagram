@@ -1,9 +1,7 @@
 <% include ./partials/header.ejs %>
     <div class="container container relative w-full h-full text-white">
         <div class="header pl-4 w-full flex items-center gap-5 ">
-            <a href="/saved/posts">
-                <p><i class="ri-arrow-left-line text-lg font-medium"></i></p>
-            </a>
+                <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg font-medium"></i></p>
             <h6>Posts</h6>
         </div>
 
@@ -55,7 +53,7 @@
                                 <% if(elem.user.followers.includes(loginuser._id)){  %>
                                     <button data-user="<%= elem.user.username %>" class="follow text-white bg-zinc-800 px-3 text-sm font-light" style="border-radius: 5px;">Following</button>
                                     <%  } else {  %>
-                                        <button data-user="<%= elem.user.username %>" class="follow text-white bg-blue-600 px-3 text-sm font-light" style="border-radius: 5px;">Follow</button>
+                                        <button data-user="<%= elem.user.username %>" class="follow text-white bg-royalblue-600 px-3 text-sm font-light" style="border-radius: 5px;">Follow</button>
                                         <% } %>
                                             <% } %>
 
@@ -324,12 +322,12 @@
                                 console.log(data.data);
 
                                 // Update the button clicked
-                                if (btn.classList.contains('bg-blue-600')) {
+                                if (btn.classList.contains('bg-royalblue-600')) {
                                     btn.classList.add('bg-zinc-800');
-                                    btn.classList.remove('bg-blue-600');
+                                    btn.classList.remove('bg-royalblue-600');
                                 } else {
                                     btn.classList.remove('bg-zinc-800');
-                                    btn.classList.add('bg-blue-600');
+                                    btn.classList.add('bg-royalblue-600');
                                 }
 
                                 if (btn.textContent === "Follow") {
@@ -342,12 +340,12 @@
                                 let allButtons = document.querySelectorAll(`.post .follow[data-user="${user}"]`);
                                 allButtons.forEach(otherBtn => {
                                     if (otherBtn !== btn) { // Avoid updating the clicked button again
-                                        if (otherBtn.classList.contains('bg-blue-600')) {
+                                        if (otherBtn.classList.contains('bg-royalblue-600')) {
                                             otherBtn.classList.add('bg-zinc-800');
-                                            otherBtn.classList.remove('bg-blue-600');
+                                            otherBtn.classList.remove('bg-royalblue-600');
                                         } else {
                                             otherBtn.classList.remove('bg-zinc-800');
-                                            otherBtn.classList.add('bg-blue-600');
+                                            otherBtn.classList.add('bg-royalblue-600');
                                         }
 
                                         if (otherBtn.textContent === "Follow") {

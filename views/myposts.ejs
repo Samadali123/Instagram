@@ -1,9 +1,7 @@
 <% include ./partials/header.ejs %>
     <div class="container container relative w-full h-full text-white">
         <div class="header pl-4 w-full flex items-center gap-5 ">
-            <a href="/profile">
-                <p><i class="ri-arrow-left-line text-lg font-medium"></i></p>
-            </a>
+                <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg font-medium"></i></p>
             <h6> My Posts</h6>
         </div>
 
@@ -112,7 +110,7 @@
 
 
 
-        <div class="popup hidden fixed bottom-[-5%] z-[9999] flex flex-col gap-5 items-left pt-[5%] px-6 text-white z-auto h-[65vh] w-[93vw] bg-zinc-800 rounded-md">
+        <div class="popup hidden fixed top-2/4  left-2/4 -translate-x-1/2 -translate-y-1/2  z-[9999] flex flex-col gap-5 items-left  px-6 text-white z-auto h-fit  w-[93vw] py-3 lg:w-[40vw] h-fit  bg-zinc-800 rounded-md">
             <div class="count flex gap-3 font-medium cursor-pointer">
 
             </div>

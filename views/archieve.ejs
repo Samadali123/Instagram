@@ -2,10 +2,9 @@
 <% include ./partials/header.ejs %>
 <div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
   <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-10">
-    <a href="/settings"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
+    <a onclick="window.history.back()"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
     <p class="text-xl font-semibold text-white">Stories  archieve</p>
   </div>
-
   <div class="archieve-stories relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
  
       <% if(loginuser.myStories.length > 0){  %>

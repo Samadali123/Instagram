@@ -1,22 +1,22 @@
 
-    <% include ./partials/header.ejs %>
+<% include ./partials/header.ejs %>
 <div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
-  <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-10">
-    <a href="/settings"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
+  <div class="header flex gap-6 items-center fixed top-0 left-0 w-full mt-3 p-4  z-[999]">
+ 
+      <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p>
     <p class="text-xl font-semibold text-white">Saved</p>
   </div>
 
-  <div class="saved-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
-    <% if(loginuser.savedPosts.length > 0){  %>
-      <% loginuser.savedPosts.forEach(function(post){ %>
-        <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+  <div class="saved-posts relative w-full h-auto pt-16 flex flex-wrap gap-4 justify-center p-4">
+    <% if(loginuser.savedPosts.length > 0) { %>
+      <% loginuser.savedPosts.forEach(function(post) { %>
+        <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[80%] md:w-[48%] lg:w-[30%] xl:w-[23%] h-[30vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
           <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="">
         </div>
       <% }) %>
-
-   <% }else{ %>
-    <p>Sorry,you have'nt save any poste yet.</p>
-  <%   }  %>
+    <% } else { %>
+      <p class="text-center text-lg text-silver">Sorry, you haven't saved any posts yet.</p>
+    <% } %>
   </div>
 </div>
 
@@ -27,12 +27,10 @@
     align-items: center;
   }
 
-
-
   .saved-posts {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: center; /* Centers posts */
     gap: 1rem;
   }
 
@@ -44,29 +42,24 @@
     transform: scale(1.1);
   }
 
-  @media (min-width: 768px) {
-    .saved-posts {
-      justify-content: space-between;
-    }
-  }
-
-
   .header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding-left: 5%;
-    background-color: rgba(0, 0, 0, 0.8); 
+    /* background-color: rgba(0, 0, 0, 0.8); */
   }
 
   @media (max-width: 640px) {
     .header {
-      padding-left: 14%;
-      padding-right: 14%;
+      padding: 0 14%;
       justify-content: space-between;
     }
     .header p {
       font-size: 1rem; 
+    }
+    /* Center cards on mobile */
+    .post {
+      width: 100%; /* Full width on mobile */
     }
   }
 
@@ -74,24 +67,40 @@
     .header {
       padding-left: 3%;
     }
+    /* Adjust post width for tablets */
+    .post {
+      width: 48%;
+    }
   }
 
   @media (min-width: 1025px) {
     .header {
       padding-left: 5%;
     }
+    /* Adjust post width for larger screens */
+    .post {
+      width: 30%;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .post {
+      width: 23%;
+    }
+  }
+
+  .post {
+    transition: transform 0.3s ease-in-out;
   }
 </style>
 
 <script>
-const loginuserid = `<%= loginuser._id %>`;
 document.querySelector(".saved-posts").addEventListener("click", function(event) {
     let postElement = event.target.closest('.post');
     if (postElement) {
-      const loginuserid = `<%= loginuser._id %>`;
+        const loginuserid = `<%= loginuser._id %>`;
         window.location.href = `/saved/posts/open/${postElement.dataset.id}/${loginuserid}`;
     }
 });
-
 </script>
 <% include ./partials/footer.ejs %>

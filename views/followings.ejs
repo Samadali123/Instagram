@@ -4,7 +4,7 @@
 
         <div style="z-index: 999;" class="header fixed top-[3%] w-full h-[14%]  px-7 ">
             <div class="upper flex gap-6 items-center">
-                <a href="/openprofile/<%= openprofileuser.username %>">
+                <a onclick="window.history.back()">
                     <p><i class="ri-arrow-left-line text-lg font-light"></i></p>
                 </a>
                 <h3 class="text-2xl font-medium">
@@ -85,7 +85,7 @@
 
 
                                 <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                                    <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                                    <button data-user="<%= elem.username %>" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
                                     <%    }   else{   %>
 
                                         <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
@@ -164,7 +164,7 @@
 
 
                                             <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                                                <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
+                                                <button data-user="<%= elem.username %>" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
                                                 <%    }   else{   %>
 
                                                     <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
@@ -257,13 +257,13 @@
                     user = dets.target.dataset.user
                     axios.put(`/follow/${user}`)
                         .then(function(response) {
-                            if (btn.classList.contains('bg-blue-600')) {
+                            if (btn.classList.contains('bg-royalblue-600')) {
                                 btn.classList.add('bg-zinc-800');
-                                btn.classList.remove('bg-blue-600');
+                                btn.classList.remove('bg-royalblue-600');
 
                             } else {
                                 btn.classList.remove('bg-zinc-800');
-                                btn.classList.add('bg-blue-600');
+                                btn.classList.add('bg-royalblue-600');
 
                             }
 
@@ -288,13 +288,13 @@
                     const user = dets.target.dataset.user
                     axios.put(`/follow/${user}`)
                         .then(function(response) {
-                            if (btn.classList.contains('bg-blue-600')) {
+                            if (btn.classList.contains('bg-royalblue-600')) {
                                 btn.classList.add('bg-zinc-800');
-                                btn.classList.remove('bg-blue-600');
+                                btn.classList.remove('bg-royalblue-600');
 
                             } else {
                                 btn.classList.remove('bg-zinc-800');
-                                btn.classList.add('bg-blue-600');
+                                btn.classList.add('bg-royalblue-600');
 
                             }
 
@@ -352,7 +352,7 @@
                             <div class="right  text-center pr-3 ">
         
                                 ${elem.followers.indexOf(loginuser) === -1 ?
-                                    `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                                    `<button data-user="${elem.username}" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
                                     `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
                                 }
     
@@ -439,7 +439,7 @@
                     <div class="right  text-center pr-3 ">
 
                         ${elem.followers.indexOf(loginuser) === -1 ?
-                            `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                            `<button data-user="${elem.username}" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
                             `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
                         }
 

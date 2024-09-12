@@ -1,9 +1,7 @@
 <% include ./partials/header.ejs %>
     <div class="container relative w-full h-full text-white">
         <div class="header px-12 w-full h-[3vh] fixed top-[5%] flex gap-10 items-center">
-            <a href="/feed">
-                <p><i class="ri-arrow-left-line text-lg font-light"></i></p>
-            </a>
+                <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg font-light"></i></p>
             <h3 class="text-lg font-medium ml-5">
                 <%= openuser.username %>
             </h3>
@@ -115,7 +113,7 @@
                     <% if(openuser.username !==loginuser.username){ %>
                         <% if(openuser.followers.indexOf(loginuser._id)===-1){ %>
                             <button data-user="<%= openuser.username %>"
-                                class="follow text-white bg-blue-600 px-6 py-0.5 text-sm font-light"
+                                class="follow text-white bg-royalblue-600 px-6 py-0.5 text-sm font-light"
                                 style="border-radius: 5px;">Follow</button>
                             <% } else { %>
                                 <button data-user="<%= openuser.username %>"
@@ -140,7 +138,7 @@
                                 <div id="postarea" class="flex gap-3 flex-wrap px-2 relative">
                                     <% openuser.posts.forEach(function(elem){ %>
                                         <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
-                                            <div class="post w-[19vw] h-[24vmax] bg-sky-100 overflow-hidden rounded-md">
+                                            <div class="post w-[30vw] h-[20vmax] lg:w-[20vw] lg:h-[22vw]  bg-sky-100 overflow-hidden rounded-md">
                                                 <img class="w-full h-full object-cover"
                                                     src="/images/uploads/<%= elem.image %>" alt="">
                                             </div>
@@ -178,12 +176,12 @@
                 axios.put(`/follow/${user}`)
                     .then(function (response) {
                         console.log(response);
-                        if (btn.classList.contains('bg-blue-600')) {
+                        if (btn.classList.contains('bg-royalblue-600')) {
                             btn.classList.add('bg-zinc-800');
-                            btn.classList.remove('bg-blue-600');
+                            btn.classList.remove('bg-royalblue-600');
                         } else {
                             btn.classList.remove('bg-zinc-800');
-                            btn.classList.add('bg-blue-600');
+                            btn.classList.add('bg-royalblue-600');
                         }
 
                         if (btn.textContent === "Follow") {

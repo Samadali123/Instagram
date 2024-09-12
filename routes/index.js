@@ -183,20 +183,65 @@ router.get('/login', function (req, res) {
 
 
 
+// router.get('/feed', auth, async function (req, res) {
+//     try {
+//         // Find the logged-in user's details
+//         const loginuser = await userModel.findOne({ email: req.user.email });
+
+//         // Find all posts by:
+//         // 1. The logged-in user
+//         // 2. Users the logged-in user follows
+//         // 3. Users with public accounts
+//         const allposts = await postModel.find({
+//             $or: [
+//                 { 'user': loginuser._id }, // Posts by the logged-in user
+//                 { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
+//                 { 'user.privateAccount': false },
+              
+//                 // Posts by users with a public account
+//             ]
+//         }).populate('user').populate('comments');
+
+//         // Fetch all stories excluding those related to the login user
+//         const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate('user');
+
+//         // Filter unique user stories
+//         const obj = {};
+//         const userStories = allstory.filter(story => {
+//             if (!obj[story.user._id]) {
+//                 obj[story.user._id] = true;
+//                 return true;
+//             }
+//             return false;
+//         });
+
+//         // Render the feed page
+//         res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
+//     } catch (error) {
+//         // Handle any errors that occur during the request
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+
+
 router.get('/feed', auth, async function (req, res) {
     try {
         // Find the logged-in user's details
         const loginuser = await userModel.findOne({ email: req.user.email });
 
-        // Find all posts by:
-        // 1. The logged-in user
-        // 2. Users the logged-in user follows
-        // 3. Users with public accounts
+        // Exclude posts by blocked users
         const allposts = await postModel.find({
-            $or: [
-                { 'user': loginuser._id }, // Posts by the logged-in user
-                { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
-                { 'user.privateAccount': false } // Posts by users with a public account
+            $and: [
+                {
+                    $or: [
+                        { 'user': loginuser._id }, // Posts by the logged-in user
+                        { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
+                        { 'user.privateAccount': false } // Posts by users with a public account
+                    ]
+                },
+                {
+                    'user': { $nin: loginuser.blockedUsers } // Exclude posts from blocked users
+                }
             ]
         }).populate('user').populate('comments');
 
@@ -220,7 +265,6 @@ router.get('/feed', auth, async function (req, res) {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 
 
@@ -277,16 +321,41 @@ router.get('/search', auth, async function (req, res) {
 });
 
 
-router.get(`/users/:input`, async (req, res) => {
+
+
+router.get('/users/:input',auth, async (req, res) => {
     try {
+    
+        // Find the logged-in user's details
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        if (!loginuser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Debugging: Check if loginuser.blockedUsers is correctly retrieved
+        console.log('Blocked users:', loginuser.blockedUsers);
+        // Get the input parameter and create a regex for case-insensitive search
         const input = req.params.input;
         const regex = new RegExp(`^${input}`, 'i');
-        const users = await userModel.find({ username: regex });
+
+        // Debugging: Check the regex pattern
+        console.log('Regex pattern:', regex);
+        // Find users matching the regex and exclude those in the blockedUsers array
+        const users = await userModel.find({
+            username: regex,
+            _id: { $nin: loginuser.blockedUsers } // Exclude users that are in the blockedUsers array
+        });
+
+        // Debugging: Check the users returned by the query
+        console.log('Found users:', users);
+        // Return the list of users as JSON
         res.json(users);
     } catch (error) {
-        res.status(500).json({ error })
+        // Handle any errors and respond with a 500 status
+        console.error('Error:', error); // Log error details for debugging
+        res.status(500).json({ error: error.message });
     }
-})
+});
 
 
 router.get('/edit', auth, async function (req, res) {
@@ -1514,7 +1583,7 @@ router.get('/user/posts/comments/:postId', auth, async (req, res, next) => {
         });
 
         const loginuser = await userModel.findOne({ email: req.user.email });
-        res.render('postcomments', { header: true, loginuser, comments, post });
+        res.render('postcomments', { header: true,footer:false, loginuser, comments, post });
     } catch (error) {
         res.status(500).json({ error })
     }

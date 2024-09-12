@@ -1,23 +1,22 @@
 
+
 <% include ./partials/header.ejs %>
 <div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
-  <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-10">
-    <a href="/activity"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
-    <p class="text-xl font-semibold text-white">Likes</p>
+  <div class="header flex items-center fixed top-0 left-0 w-full p-4 z-[999]">
+      <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p>
+    <p class="text-xl font-semibold text-white ml-4">Likes</p>
   </div>
 
   <div class="liked-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
-  
-     <% if(userPosts.length > 0){  %>
-      <% userPosts.forEach(function(post){  %>
-        <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-            <img class="w-full h-full object-cover" src="/images/uploads/<%=  post.image %>" alt="">
-          </div>
-   <% })  %>
-   <%  }  else{  %>
-            <p>Sorry, you have'nt any post you liked recently</p>
- <%  }  %>
-
+    <% if(userPosts.length > 0) { %>
+      <% userPosts.forEach(function(post) { %>
+        <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] lg:w-[23%] h-[25vh] bg-red-600 cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="">
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center text-lg text-silver">Sorry, you haven't liked any posts recently.</p>
+    <% } %>
   </div>
 </div>
 
@@ -28,7 +27,16 @@
     align-items: center;
   }
 
-
+  .header {
+    display: flex;
+    align-items: center;
+    /* background-color: rgba(0, 0, 0, 0.8); */
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); */
+    padding-left: 5%;
+    padding-right: 5%;
+    top: 0;
+    z-index: 999;
+  }
 
   .liked-posts {
     display: flex;
@@ -45,29 +53,18 @@
     transform: scale(1.1);
   }
 
-  @media (min-width: 768px) {
-    .liked-posts {
-      justify-content: space-between;
-    }
-  }
-
-
-  .header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 5%;
-    background-color: rgba(0, 0, 0, 0.8); 
-  }
-
   @media (max-width: 640px) {
     .header {
-      padding-left: 14%;
-      padding-right: 14%;
+      padding-left: 10%;
+      padding-right: 10%;
       justify-content: space-between;
     }
     .header p {
       font-size: 1rem; 
+    }
+    .post {
+      width: 100%; /* Full width on mobile */
+      height: auto; /* Adjust height for better aspect ratio on mobile */
     }
   }
 
@@ -75,25 +72,34 @@
     .header {
       padding-left: 3%;
     }
+    .post {
+      width: 48%;
+    }
   }
 
   @media (min-width: 1025px) {
     .header {
       padding-left: 5%;
     }
+    .post {
+      width: 30%;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .post {
+      width: 23%;
+    }
   }
 </style>
 
 <script>
-
-const loginuserid = `<%= loginuser._id %>`;
 document.querySelector(".liked-posts").addEventListener("click", function(event) {
     let postElement = event.target.closest('.post');
     if (postElement) {
-      const loginuserid = `<%= loginuser._id %>`;
+        const loginuserid = `<%= loginuser._id %>`;
         window.location.href = `/liked/posts/${postElement.dataset.id}/${loginuserid}`;
     }
 });
-
 </script>
 <% include ./partials/footer.ejs %>

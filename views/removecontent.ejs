@@ -1,37 +1,35 @@
 <% include ./partials/header.ejs %>
-<body class="min-h-screen bg-black text-white flex flex-col items-center p-6">
-    <div class="w-full max-w-xl">
+<body class="min-h-screen bg-black text-white flex flex-col items-center sm:p-6">
+    <div class="w-full py-6 flex flex-col justify-start pl-[5%]">
         <!-- Back Arrow and Header -->
-        <div class="flex items-center text-lg mb-4">
-            <a href="/accountstatus" class="mr-3">
-                <i class="ri-arrow-left-line ri-lg text-white"></i>
-            </a>
-            <h1 class="font-medium">Removed content</h1>
+        <div class="flex gap-3 items-center text-lg mb-4">
+            <i onclick="window.history.back()" class="ri-arrow-left-line ri-lg text-white mr-3 cursor-pointer"></i>
+            <h1 class="text-xl sm:text-2xl font-semibold">Removed Content</h1>
         </div>
 
         <!-- Status Section -->
-        <div class="bg-zinc-900 rounded-xl p-4 flex items-center mb-6">
-            <div class="bg-gradient-to-r from-yellow-500 to-pink-500 rounded-full p-1 mr-3">
-                <div class="bg-zinc-900 p-2 rounded-full">
-                    <i class="ri-checkbox-circle-line ri-2x text-pink-500"></i>
+        <div class=" rounded-lg p-4 flex items-center mb-6">
+            <div class="bg-gradient-to-r from-yellow-500 to-pink-500 rounded-full p-2 sm:p-3 mr-3">
+                <div class="bg-zinc-900 p-2 rounded-full flex items-center justify-center">
+                    <i class="ri-checkbox-circle-line ri-xl text-royalblue-500"></i>
                 </div>
             </div>
             <div>
-                <h2 class="font-medium">Your content is not affected right now</h2>
-                <p class="text-gray-400">Thank you for following our <a id="guidelinesLink" href="#" class="text-blue-500 hover:underline">Community Guidelines</a>.</p>
+                <h2 class="text-lg sm:text-xl font-semibold">Your content is not affected right now</h2>
+                <p class="text-gray-400">Thank you for following our <a id="guidelinesLink" href="#" class="text-royalblue-500 hover:underline">Community Guidelines</a>.</p>
             </div>
         </div>
 
         <!-- Information Section -->
         <div class="mb-6">
-            <h3 class="text-lg font-medium mb-2">What this means</h3>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">What this means</h3>
             <p class="text-gray-400 mb-4">You are not at risk of losing access to your account right now.</p>
             <p class="text-gray-400">We may still take down your account without warning if something you post is a risk to the Instagram community.</p>
         </div>
 
         <!-- Action Section -->
         <div>
-            <h3 class="text-lg font-medium mb-2">What you can do</h3>
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">What you can do</h3>
             <div class="flex items-center text-blue-500 cursor-pointer">
                 <i class="ri-shield-check-line ri-lg mr-2"></i>
                 <span id="guidelinesLinkAction">Learn about our Community Guidelines</span>
@@ -40,7 +38,7 @@
 
         <!-- Remove Content Button -->
         <div class="mt-8">
-            <button id="removeContentBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300">
+            <button id="removeContentBtn" class="bg-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition">
                 Remove Content
             </button>
         </div>
@@ -48,37 +46,44 @@
 
     <!-- Confirmation Popup -->
     <div id="confirmationPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
-        <div class="bg-zinc-800 p-6 rounded-lg text-center shadow-lg max-w-sm w-full">
-            <h2 class="text-lg font-semibold mb-4">Are you sure you want to remove this content?</h2>
-            <div class="flex justify-center">
-                <button id="confirmRemoveBtn" class="bg-red-600 text-white px-4 py-2 rounded mr-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300">
+        <div class="bg-zinc-900 p-6 rounded-lg text-center shadow-lg max-w-sm w-full border border-zinc-800">
+            <h2 class="text-lg sm:text-xl font-semibold mb-4">Are you sure you want to remove this content?</h2>
+            <div class="flex justify-center gap-4">
+                <button id="confirmRemoveBtn" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 transition">
                     Yes, Remove
                 </button>
-                <button id="cancelRemoveBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                <button id="cancelRemoveBtn" class="bg-zinc-700 text-white px-4 py-2 rounded-lg hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">
                     Cancel
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Community Guidelines Popup -->
-    <div id="guidelinesPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
-        <div class="bg-zinc-800 p-6 rounded-lg max-w-lg w-full shadow-lg">
-            <h2 class="text-xl font-medium mb-4">Community Guidelines</h2>
-            <p class="text-gray-400 mb-4">Our Community Guidelines are designed to ensure a positive experience for everyone. Please review them to understand what is allowed and what is not.</p>
-            <ul class="list-disc list-inside text-gray-400 mb-4">
-                <li>Respect others and their opinions.</li>
-                <li>No harassment or hate speech.</li>
-                <li>Avoid sharing inappropriate content.</li>
-            </ul>
-            <p class="text-gray-400 mb-4">For more details, please visit our <a href="/guidelines" class="text-blue-500 hover:underline">Guidelines Page</a>.</p>
-            <div class="flex justify-center mt-6">
-                <button id="closeGuidelinesBtn" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400">
-                    Close
-                </button>
-            </div>
+ <!-- Community Guidelines Popup -->
+<div id="guidelinesPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+    <div class="bg-zinc-900 p-4 sm:p-6 rounded-lg w-11/12 max-w-md sm:max-w-lg shadow-lg border border-zinc-800">
+        <h2 class="text-base sm:text-lg md:text-xl font-semibold mb-4">Community Guidelines</h2>
+        <p class="text-gray-400 text-sm sm:text-base mb-4">
+            Our Community Guidelines are designed to ensure a positive experience for everyone. 
+            Please review them to understand what is allowed and what is not.
+        </p>
+        <ul class="list-disc list-inside text-gray-400 mb-4 text-sm sm:text-base">
+            <li>Respect others and their opinions.</li>
+            <li>No harassment or hate speech.</li>
+            <li>Avoid sharing inappropriate content.</li>
+        </ul>
+        <p class="text-gray-400 text-sm sm:text-base mb-4">
+            For more details, please visit our 
+            <a href="/guidelines" class="text-blue-500 hover:underline">Guidelines Page</a>.
+        </p>
+        <div class="flex justify-start mt-6">
+            <button id="closeGuidelinesBtn" class="bg-zinc-700 text-white px-6 py-2 rounded-lg hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition">
+                Close
+            </button>
         </div>
     </div>
+</div>
+
 
     <!-- JavaScript -->
     <script>
@@ -100,7 +105,7 @@
         confirmRemoveBtn.addEventListener('click', () => {
             window.location.href = '/content/removed'; // Redirect to the desired route
         });
-
+       
         // Cancel and hide popup
         cancelRemoveBtn.addEventListener('click', () => {
             confirmationPopup.classList.add('hidden');

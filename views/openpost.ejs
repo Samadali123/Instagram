@@ -1,9 +1,7 @@
 <% include ./partials/header.ejs %>
     <div class="container container relative w-full h-full text-white">
         <div class="header pl-4 w-full flex items-center gap-5 ">
-            <a href="/openprofile/<%= openUser.username %>">
-                <p><i class="ri-arrow-left-line text-lg font-medium"></i></p>
-            </a>
+                <p onclick="window.history.back()"><i class="ri-arrow-left-line text-lg font-medium"></i></p>
             <h6>Posts</h6>
         </div>
 
@@ -55,7 +53,7 @@
                                 <% if(elem.user.followers.includes(loginuser._id)){  %>
                                     <button data-user="<%= elem.user.username %>" class="follow text-white bg-zinc-800 px-3 text-sm font-light" style="border-radius: 5px;">Following</button>
                                     <%  } else {  %>
-                                        <button data-user="<%= elem.user.username %>" class="follow text-white bg-blue-600 px-3 text-sm font-light" style="border-radius: 5px;">Follow</button>
+                                        <button data-user="<%= elem.user.username %>" class="follow text-white bg-royalblue-600 px-3 text-sm font-light" style="border-radius: 5px;">Follow</button>
                                         <% } %>
                                             <% } %>
 

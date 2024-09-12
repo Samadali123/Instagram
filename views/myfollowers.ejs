@@ -12,22 +12,24 @@
             </div>
 
 
-            <% if(loginuser.followers.length > 0){ %>
+            <% if(loginuser.followers.length> 0){ %>
                 <div class="bottom flex gap-6  items-center mt-3  cursor-pointer">
                     <p id="followers" class="text-lg silver " style="border-bottom: 1px solid silver;">
-                        <%= loginuser.followers.length %> followers</p>
+                        <%= loginuser.followers.length %> followers
+                    </p>
                     <p id="following" class="text-lg black">
-                        <%= loginuser.following.length %> following</p>
+                        <%= loginuser.following.length %> following
+                    </p>
                 </div>
-                <% } else{  %>
+                <% } else{ %>
                     <h3 class="mt-4 ">Don't have any followers.</h3>
-                    <% }  %>
-
+                    <% } %>
 
         </div>
 
 
-        <div class="popup hidden flex py-4 px-3 text-white gap-4 fixed  ml-5  bottom-[0%] z-50 w-[90%] h-[30vh] bg-zinc-800 rounded-md  ">
+        <div
+            class="popup hidden flex py-4 px-3 text-white gap-4 fixed  ml-5  bottom-[0%] z-50 w-[90%] h-[30vh] bg-zinc-800 rounded-md  ">
             <div class="left  h-full flex flex-col justify-between py-4">
                 <div class="profile w-[45px] h-[45px] overflow-hidden rounded-full">
                     <img class="w-full h-full object-cover object-center rounded-full" src="" alt="">
@@ -42,9 +44,7 @@
                 <p class="font-light">We won't tell </p>
                 <h4 class="font-light"></h4>
                 <p class="font-light">they were removed from your <br>followers.</p>
-
-
-
+                 
                 <h3 class="font-light tracking-tight mt-7 cursor-pointer cross ">Cancel</h3>
 
             </div>
@@ -52,12 +52,14 @@
         </div>
 
 
-        <% if(loginuser.followers.length > 0){  %>
-            <div class="followerscontainer pt-5  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
-                <div id="followersinp" class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
+        <% if(loginuser.followers.length> 0){ %>
+            <div class="followerscontainer pt-5  relative mt-6 px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+                <div id="followersinp"
+                    class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
                     <div class="left flex items-center gap-3  w-11/12 ">
                         <p><i class="ri-search-line"></i></p>
-                        <input class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+                        <input class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light "
+                            style="outline:none; border:none; " type="text" placeholder="Search">
 
                     </div>
                     <div class="right pr-8">
@@ -69,28 +71,31 @@
 
                 <div id="followerusers" class="users mt-5 ">
 
-                    <% loginuser.followers.forEach(function(elem){  %>
+                    <% loginuser.followers.forEach(function(elem){ %>
 
-                        <div class="user mt-2 w-full relative mb-5  flex justify-between items-center ">
+                        <div class="user mt-2 w-full relative mb-3  flex justify-between items-center ">
 
                             <div class="left flex gap-3 items-center  ">
-                                <% if(elem.stories.length > 0){  %>
+                                <% if(elem.stories.length> 0){ %>
                                     <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
-                                        <div class="w-[50px] h-[50px]  gradient  overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                        <div
+                                            class="w-[50px] h-[50px]  gradient  overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                <img class="w-full h-full object-center object-cover rounded-full "
+                                                    src="/images/uploads/<%= elem.profile %> " alt="">
                                             </div>
                                         </div>
                                     </a>
-                                    <%   }  else { %>
+                                    <% } else { %>
                                         <a href="/openprofile/<%= elem.username %>">
                                             <div class="w-[50px] h-[50px]  overflow-hidden ">
                                                 <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                                    <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                    <img class="w-full h-full object-center object-cover rounded-full "
+                                                        src="/images/uploads/<%= elem.profile %> " alt="">
                                                 </div>
                                             </div>
                                         </a>
-                                        <%  } %>
+                                        <% } %>
 
                                             <div class="dets text-sm ">
                                                 <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
@@ -107,12 +112,15 @@
                             </div>
 
                             <div class="right  text-center pr-3 ">
-                                <button data-profile="<%= elem.profile %>" data-username="<%= elem.username %>" data-id="<%= elem._id %>" class="remove text-white bg-zinc-800  px-6 py-1 text-sm font-light " style="border-radius: 5px;">Remove</button>
+                                <button data-profile="<%= elem.profile %>" data-username="<%= elem.username %>"
+                                    data-id="<%= elem._id %>"
+                                    class="remove text-white bg-zinc-800  px-6 py-1 text-sm font-light "
+                                    style="border-radius: 5px;">Remove</button>
                             </div>
 
                         </div>
 
-                        <% })  %>
+                        <% }) %>
 
 
                 </div>
@@ -122,19 +130,21 @@
                 </div>
 
             </div>
-            <%     }   %>
+            <% } %>
 
 
 
-                <% if(loginuser.following.length > 0){ %>
+                <% if(loginuser.following.length> 0){ %>
 
-                    <div class="followingcontainer pt-5 hidden  relative mt-[5%] px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
+                    <div
+                        class="followingcontainer pt-5 hidden  relative mt-6 px-7 h-[75vh] overflow-x-hidden overflow-y-auto">
 
 
                         <div class="search  mt-[4vh] flex justify-between  bg-zinc-800 py-1.5 rounded-2xl px-3">
                             <div class="left flex items-center gap-3  w-11/12 ">
                                 <p><i class="ri-search-line"></i></p>
-                                <input id="followinginp" class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light " style="outline:none; border:none; " type="text" placeholder="Search">
+                                <input id="followinginp" class="cursor-pointer w-9/12 bg-zinc-800 text-lg font-light "
+                                    style="outline:none; border:none; " type="text" placeholder="Search">
                             </div>
                             <div class="right pr-8">
                                 <p><i class="cancel ri-close-line hidden"></i></p>
@@ -142,41 +152,46 @@
                         </div>
 
 
-                        <div id="followingusers" class="users pt-1 mt-6">
+                        <div id="followingusers" class="users pt-1 mt-3">
 
-                            <% loginuser.following.forEach(function(elem){  %>
+                            <% loginuser.following.forEach(function(elem){ %>
 
                                 <div class="user w-full relative mb-5  flex justify-between items-center ">
 
                                     <div class="left flex gap-3 items-center  ">
 
-                                        <% if(elem.stories.length > 0){  %>
+                                        <% if(elem.stories.length> 0){ %>
                                             <a class="cursor-pointer" href="/story/<%= elem._id %>/0">
-                                                <div class="w-[50px] h-[50px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
+                                                <div
+                                                    class="w-[50px] h-[50px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                                                     <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                                        <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                        <img class="w-full h-full object-center object-cover rounded-full "
+                                                            src="/images/uploads/<%= elem.profile %> " alt="">
                                                     </div>
                                                 </div>
                                             </a>
-                                            <%   }  else { %>
+                                            <% } else { %>
                                                 <a href="/openprofile/<%= elem.username %>">
                                                     <div class="w-[50px] h-[50px]  rounded-full overflow-hidden ">
                                                         <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= elem.profile %> " alt="">
+                                                            <img class="w-full h-full object-center object-cover rounded-full "
+                                                                src="/images/uploads/<%= elem.profile %> " alt="">
                                                         </div>
                                                     </div>
                                                 </a>
-                                                <%  } %>
+                                                <% } %>
 
 
 
                                                     <div class="dets text-sm ">
-                                                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                        <a href="/openprofile/<%= elem.username %>"
+                                                            class="cursor-pointer">
                                                             <h3>
                                                                 <%= elem.username %>
                                                             </h3>
                                                         </a>
-                                                        <a href="/openprofile/<%= elem.username %>" class="cursor-pointer">
+                                                        <a href="/openprofile/<%= elem.username %>"
+                                                            class="cursor-pointer">
                                                             <p>
                                                                 <%= elem.fullname %>
                                                             </p>
@@ -187,19 +202,23 @@
                                     <div class="right  text-center pr-3 ">
 
 
-                                        <% if(elem.followers.indexOf(loginuser._id) === -1){  %>
-                                            <button data-user="<%= elem.username %>" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light " style="border-radius: 5px;">Follow</button>
-                                            <%    }   else{   %>
+                                        <% if(elem.followers.indexOf(loginuser._id)===-1){ %>
+                                            <button data-user="<%= elem.username %>"
+                                                class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light "
+                                                style="border-radius: 5px;">Follow</button>
+                                            <% } else{ %>
 
-                                                <button data-user="<%= elem.username  %>" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light " style="border-radius: 5px;">Following</button>
-                                                <%  }  %>
+                                                <button data-user="<%= elem.username  %>"
+                                                    class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light "
+                                                    style="border-radius: 5px;">Following</button>
+                                                <% } %>
 
                                     </div>
 
                                 </div>
 
 
-                                <% })  %>
+                                <% }) %>
 
 
 
@@ -211,9 +230,9 @@
                         </div>
                     </div>
 
-                    <%  }  else{  %>
+                    <% } else{ %>
                         <h3 class="text-white ml-7 mt-[8vh] ">No followings till yet.</h3>
-                        <% }  %>
+                        <% } %>
 
 
     </div>
@@ -223,13 +242,15 @@
         .followerscontainer::-webkit-scrollbar {
             display: none;
         }
-        
+
         .followingcontainer::-webkit-scrollbar {
             display: none;
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+        integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         let loginuser = `<%= loginuser._id %>`;
@@ -278,19 +299,19 @@
             })
 
 
-            document.querySelector("#followerusers ").addEventListener("click", function(dets) {
+            document.querySelector("#followerusers ").addEventListener("click", function (dets) {
                 if (dets.target.classList.contains('follow')) {
                     const btn = dets.target;
                     user = dets.target.dataset.user
                     axios.put(`/follow/${user}`)
-                        .then(function(response) {
-                            if (btn.classList.contains('bg-blue-600')) {
+                        .then(function (response) {
+                            if (btn.classList.contains('bg-royalblue-600')) {
                                 btn.classList.add('bg-zinc-800');
-                                btn.classList.remove('bg-blue-600');
+                                btn.classList.remove('bg-royalblue-600');
 
                             } else {
                                 btn.classList.remove('bg-zinc-800');
-                                btn.classList.add('bg-blue-600');
+                                btn.classList.add('bg-royalblue-600');
 
                             }
 
@@ -309,19 +330,19 @@
             })
 
 
-            document.querySelector("#followingusers ").addEventListener("click", function(dets) {
+            document.querySelector("#followingusers ").addEventListener("click", function (dets) {
                 if (dets.target.classList.contains('follow')) {
                     const btn = dets.target;
                     const user = dets.target.dataset.user
                     axios.put(`/follow/${user}`)
-                        .then(function(response) {
-                            if (btn.classList.contains('bg-blue-600')) {
+                        .then(function (response) {
+                            if (btn.classList.contains('bg-royalblue-600')) {
                                 btn.classList.add('bg-zinc-800');
-                                btn.classList.remove('bg-blue-600');
+                                btn.classList.remove('bg-royalblue-600');
 
                             } else {
                                 btn.classList.remove('bg-zinc-800');
-                                btn.classList.add('bg-blue-600');
+                                btn.classList.add('bg-royalblue-600');
 
                             }
 
@@ -341,21 +362,21 @@
 
 
         function searchFollower() {
-            followersinput.addEventListener("input", function(event) {
+            followersinput.addEventListener("input", function (event) {
 
-                        input1 = event.target.value;
-                        cancel1.style.display = "block"
+                input1 = event.target.value;
+                cancel1.style.display = "block"
 
-                        document.querySelector("#all").classList.replace("flex", "hidden")
+                document.querySelector("#all").classList.replace("flex", "hidden")
 
-                        axios.get(`/search/${openprofileuser}/followers/${input1}`)
-                            .then(function(data) {
-                                    followerusers.style.display = "none";
+                axios.get(`/search/${openprofileuser}/followers/${input1}`)
+                    .then(function (data) {
+                        followerusers.style.display = "none";
 
-                                    if (input1.value !== "" && data.data.length > 0) {
-                                        followersclutter = "";
-                                        data.data.forEach(function(elem) {
-                                                    followersclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
+                        if (input1.value !== "" && data.data.length > 0) {
+                            followersclutter = "";
+                            data.data.forEach(function (elem) {
+                                followersclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
 
                             <div class="left flex gap-3 items-center  ">
                                 <a href="/openprofile/${elem.username}">
@@ -381,65 +402,65 @@
                             <div class="right  text-center pr-3 ">
         
                                 ${elem.followers.indexOf(loginuser) === -1 ?
-                                    `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
-                                    `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
-                                }
+                                        `<button data-user="${elem.username}" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                                        `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                                    }
     
 
                             </div>
         
                         </div>`
+                            })
+
+                            searchfollowers.innerHTML = followersclutter;
+
+                        } else {
+
+                            const noResultsMsg = document.createElement("p");
+                            noResultsMsg.textContent = "No users were found";
+                            noResultsMsg.classList.add('ml-3')
+                            searchfollowers.innerHTML = "";
+                            searchfollowers.appendChild(noResultsMsg);
+
+                        }
+
                     })
 
-                    searchfollowers.innerHTML = followersclutter;
+                cancel1.addEventListener("click", function (e) {
+                    input1.value = "";
+                    followersinput.value = ""
+                    e.target.style.display = "none";
+                    followerusers.style.display = "initial";
+                    document.querySelector("#all").classList.replace("hidden", "flex");
+                    const noResultsMsg = searchfollowers.querySelector("p");
 
-                } else {
-
-                    const noResultsMsg = document.createElement("p");
-                    noResultsMsg.textContent = "No users were found";
-                    noResultsMsg.classList.add('ml-3')
+                    if (noResultsMsg) {
+                        noResultsMsg.remove();
+                    }
                     searchfollowers.innerHTML = "";
-                    searchfollowers.appendChild(noResultsMsg);
-
-                }
+                });
 
             })
 
-                cancel1.addEventListener("click", function(e){
-                input1.value = "";
-                followersinput.value = ""
-                e.target.style.display = "none";
-                followerusers.style.display = "initial";
-                document.querySelector("#all").classList.replace("hidden", "flex");
-                const noResultsMsg = searchfollowers.querySelector("p");
-                
-                if (noResultsMsg) {
-                    noResultsMsg.remove();
-                }
-                searchfollowers.innerHTML = "";
-            });
 
-    })
-
-    
         }
-      
+
 
         searchFollower()
 
-        function searchFollowing(){
-            followinginput.addEventListener("input", function(event) {
+        function searchFollowing() {
+            followinginput.addEventListener("input", function (event) {
                 input2 = event.target.value;
                 cancel2.style.display = "block"
 
                 axios.get(`/search/${openprofileuser}/following/${input2}`)
-                    .then(function(data) {
+                    .then(function (data) {
                         console.log(data)
-                            followingusers.style.display = "none";
-                            if (input2.value !== "" && data.data.length > 0) {
-                                followingclutter = "";
-                                data.data.forEach(function(elem) {
-                                            followingclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
+                        followingusers.style.display = "none";
+                        if (input2.value !== "" && data.data.length > 0) {
+                            followingclutter = "";
+                            data.data.forEach(function (elem) {
+                                followingclutter += `<div class="user w-full relative mb-5  flex justify-between items-center ">
 
                     <div class="left flex gap-3 items-center  ">
                         <a href="/openprofile/${elem.username}">
@@ -465,70 +486,70 @@
                     <div class="right  text-center pr-3 ">
 
                         ${elem.followers.indexOf(loginuser) === -1 ?
-                            `<button data-user="${elem.username}" class="follow text-white bg-blue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
-                            `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
-                        }
+                                        `<button data-user="${elem.username}" class="follow text-white bg-royalblue-600 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Follow</button>` :
+                                        `<button data-user="${elem.username}" class="follow text-white bg-zinc-800 px-3 py-1 text-sm font-light" style="border-radius: 5px;">Following</button>`
+                                    }
 
 
                     </div>
 
                 </div>`
+                            })
+
+                            searchfollowing.innerHTML = followingclutter;
+
+                        } else {
+
+                            const noResultsMsg = document.createElement("p");
+                            noResultsMsg.textContent = "No users were found";
+                            noResultsMsg.classList.add('ml-3')
+                            searchfollowing.innerHTML = "";
+                            searchfollowing.appendChild(noResultsMsg);
+
+                        }
+
+                    })
+
+                cancel2.addEventListener("click", function (e) {
+                    e.target.style.display = "none";
+                    input2.value = "";
+                    followinginput.value = "";
+                    followingusers.style.display = "initial";
+                    const noResultsMsg = searchfollowing.querySelector("p");
+                    if (noResultsMsg) {
+                        noResultsMsg.remove();
+                    }
+                    searchfollowing.innerHTML = "";
+                });
+
             })
-
-            searchfollowing.innerHTML = followingclutter;
-
-        } else {
-
-            const noResultsMsg = document.createElement("p");
-            noResultsMsg.textContent = "No users were found";
-            noResultsMsg.classList.add('ml-3')
-            searchfollowing.innerHTML = "";
-            searchfollowing.appendChild(noResultsMsg);
-
-        }
-
-    })
-
-    cancel2.addEventListener("click", function(e){
-        e.target.style.display = "none";
-        input2.value = "";
-        followinginput.value = "";
-        followingusers.style.display = "initial";
-        const noResultsMsg = searchfollowing.querySelector("p");
-        if (noResultsMsg) {
-            noResultsMsg.remove();
-        }
-        searchfollowing.innerHTML = "";
-    });
-
-})
 
         }
 
         searchFollowing();
 
 
-        document.querySelector(".cross").addEventListener("click", function(e){
+        document.querySelector(".cross").addEventListener("click", function (e) {
             document.querySelector(".popup").classList.replace("flex", "hidden");
         })
 
 
-        document.querySelector(".users").addEventListener("click", function(dets){
-         
-            if(dets.target.classList.contains("remove")){
-              document.querySelector(".popup").classList.replace("hidden", "flex");
-              let src = `/images/uploads/${dets.target.dataset.profile}`
-              document.querySelector(".popup .left .profile img").setAttribute("src",  src);
-              document.querySelector(".popup .right h4 ").textContent =  dets.target.dataset.username;
-               
-              document.querySelector(".popup .left h3").addEventListener("click", function(event){
-                document.querySelector(".popup").classList.replace("flex", "hidden");
+        document.querySelector(".users").addEventListener("click", function (dets) {
 
-                axios.delete(`/myfollowers/remove/${dets.target.dataset.id}`).then(function(response){
-                    document.querySelector(".users").innerHTML = "";
-                    let newFollowers = "";
-                    response.data.forEach(function(elem) {
-                        newFollowers += `<div class="user mt-2 w-full relative mb-5 flex justify-between items-center">
+            if (dets.target.classList.contains("remove")) {
+                document.querySelector(".popup").classList.replace("hidden", "flex");
+                let src = `/images/uploads/${dets.target.dataset.profile}`
+                document.querySelector(".popup .left .profile img").setAttribute("src", src);
+                document.querySelector(".popup .right h4 ").textContent = dets.target.dataset.username;
+
+                document.querySelector(".popup .left h3").addEventListener("click", function (event) {
+                    document.querySelector(".popup").classList.replace("flex", "hidden");
+
+                    axios.delete(`/myfollowers/remove/${dets.target.dataset.id}`).then(function (response) {
+                        document.querySelector(".users").innerHTML = "";
+                        let newFollowers = "";
+                        response.data.forEach(function (elem) {
+                            newFollowers += `<div class="user mt-2 w-full relative mb-5 flex justify-between items-center">
                             <div class="left flex gap-3 items-center">
                                 ${elem.stories.length > 0 ? `
                                     <a class="cursor-pointer" href="/story/${elem._id}/0">
@@ -560,20 +581,20 @@
                                 <button data-profile="${elem.profile}" data-username="${elem.username}" data-id="${elem._id}" class="remove text-white bg-zinc-800 px-6 py-1 text-sm font-light" style="border-radius: 5px;">Remove</button>
                             </div>
                         </div>`;
-                    });
-                    document.querySelector(".users").innerHTML = newFollowers;
+                        });
+                        document.querySelector(".users").innerHTML = newFollowers;
 
-                  }).catch(function(error){
-                    console.log(error)
-    
-                  })
-                
-              })
-            
-             
+                    }).catch(function (error) {
+                        console.log(error)
+
+                    })
+
+                })
+
+
 
             }
-            
+
         })
     </script>
 

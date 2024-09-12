@@ -2,7 +2,7 @@
 
     <div class="container w-full h-full relative ">
         <div class="top w-full h-[5%]  flex  items-center  justify-between pb-3 " style="border-bottom: 1px solid rgba(192, 192, 192, 0.103);">
-            <a href="/feed"> <i class="ri-arrow-left-line text-lg font-light cursor-pointer "></i></a>
+            <a onclick="window.history.back()"> <i class="ri-arrow-left-line text-lg font-light cursor-pointer "></i></a>
             <h3 class="text-lg font-normal  relative right-[18%] ">Comments</h3>
         </div>
 
@@ -22,7 +22,7 @@
 
                                     <% if(elem.user.stories.length > 0){  %>
                                         <a href="/story/<%= elem.user._id %>/0">
-                                            <div class="comment-profile mt-1 max-w-[40px] max-h-[40px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                                            <div class="comment-profile mt-1 w-[40px] h-[40px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                                                 <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
                                                     <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
                                                 </div>
@@ -43,11 +43,11 @@
                                                         <h3>
                                                             <%= elem.user.username %>
                                                         </h3>
-                                                        <p class="font-light ">
+                                                        <p class="font-light hidden lg:flex font-sm  ">
                                                             <%= elem.formattedDate %>
                                                         </p>
                                                     </a>
-                                                    <p class="text-sm font-light whitespace-wrap max-w-xl">
+                                                    <p class="text-sm font-light w-full max-w-full sm:max-w-[90%] md:max-w-[75%] lg:max-w-[60%] break-words">
                                                         <%= elem.text %>
                                                     </p>
                                                 </div>
@@ -138,7 +138,6 @@
 
             axios.post(`/comment/${data}/${postid}`)
                 .then(function(response) {
-                    location.reload();
                     clutter += ` <div class="comment-one mb-4 flex justify-between w-[85%] ">
                         <div class="left flex gap-2 ">
                             <a href="/openprofile/${response.data.user.username}">
@@ -170,7 +169,7 @@
 
                     allcomments.innerHTML += clutter;
                     document.querySelector(".center").style.display = "none";
-
+                    location.reload();
 
                 })
                 .catch(function(error) {
@@ -199,11 +198,6 @@
                             btn.parentNode.parentNode.childNodes[3].textContent = response.data.length - 1;
 
                         }
-
-
-
-
-
                     })
                     .catch(error => {
                         console.error('Error:', error);

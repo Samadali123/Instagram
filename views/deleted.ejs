@@ -2,20 +2,21 @@
 <% include ./partials/header.ejs %>
 <div class="container w-full min-h-full text-white overflow-x-hidden overflow-y-auto">
   <div class="header flex gap-6 items-center fixed top-0 left-0 w-full p-4 bg-black z-10">
-    <a href="/activity"><p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p></a>
+    <a onclick="window.history.back()">
+      <p><i class="ri-arrow-left-line text-lg cursor-pointer text-white"></i></p>
+    </a>
     <p class="text-xl font-semibold text-white">Recently deleted</p>
   </div>
 
-  <div class="deleted-posts relative w-full h-auto pt-16 flex flex-wrap gap-6 p-4">
-     <% if(loginuser.deletedContent.length > 0){ %>
+  <div class="deleted-posts relative w-full h-auto pt-20 flex flex-wrap gap-6 p-4 justify-center md:justify-between">
+    <% if(loginuser.deletedContent.length > 0){ %>
       <% loginuser.deletedContent.forEach(function(elem){  %>
-         <div  class="post w-full sm:w-[48%] md:w-[30%] h-[25vh]  cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-             <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
-           </div>
-    <%  })  %>
-
-      <%  }else{ %>
-            <p>Sorry,you don't have any Recently deleted content.</p>
+        <div class="post w-full sm:w-[48%] md:w-[30%] lg:w-[22%] h-[200px] cursor-pointer rounded-lg overflow-hidden shadow-lg transition duration-500 hover:scale-105">
+          <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+        </div>
+      <%  })  %>
+    <%  }else{ %>
+      <p class="text-center text-lg">Sorry, you don't have any recently deleted content.</p>
     <% } %>
   </div>
 </div>
@@ -27,13 +28,14 @@
     align-items: center;
   }
 
-
+  .header {
+    background-color: rgba(0, 0, 0, 0.9);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 
   .deleted-posts {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 1rem;
   }
 
   .post img {
@@ -41,32 +43,15 @@
   }
 
   .post:hover img {
-    transform: scale(1.1);
-  }
-
-  @media (min-width: 768px) {
-    .deleted-posts {
-      justify-content: space-between;
-    }
-  }
-
-
-  .header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding-left: 5%;
-    background-color: rgba(0, 0, 0, 0.8); 
+    transform: scale(1.05);
   }
 
   @media (max-width: 640px) {
     .header {
-      padding-left: 14%;
-      padding-right: 14%;
       justify-content: space-between;
     }
     .header p {
-      font-size: 1rem; 
+      font-size: 1rem;
     }
   }
 
@@ -83,8 +68,4 @@
   }
 </style>
 
-<script>
-
-
-</script>
 <% include ./partials/footer.ejs %>

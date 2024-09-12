@@ -1,212 +1,177 @@
-<% include ./partials/header.ejs %>
 
-    <div class="container w-full h-full relative ">
-        <div class="top w-full h-[5%]  flex  items-center  justify-between pb-3 " style="border-bottom: 1px solid rgba(192, 192, 192, 0.103);">
-            <a href="/user/comments"> <i class="ri-arrow-left-line text-lg font-light cursor-pointer "></i></a>
-            <h3 class="text-lg font-normal  relative right-[18%] ">Comments</h3>
+    <% include ./partials/header.ejs %>
+
+<div class="container w-full h-full relative">
+    <div class="top w-full h-[5%] flex items-center justify-between pb-3">
+            <i onclick="window.history.back()" class="ri-arrow-left-line text-lg font-light cursor-pointer"></i>
+        <h3 class="text-base sm:text-lg font-normal relative right-0 sm:right-[18%]">Comments</h3>
+    </div>
+
+    <div class="middle relative w-full h-[70vh] overflow-x-hidden overflow-y-auto">
+        <% if(comments.length == 0){ %>
+        <div class="center text-center my-8">
+            <h2 class="text-sm sm:text-base font-light">
+                <span class="text-lg sm:text-2xl font-semibold">No comments yet.</span> <br>Start the conversation.
+            </h2>
         </div>
+        <% } %>
 
-        <div class="middle relative w-full h-[70vh]  overflow-x-hidden overflow-y-auto">
-
-            <% if(comments.length == 0){ %>
-                <div class="center text-center   my-[8vw]">
-                    <h2 class="text-sm font-light"><span class="text-2xl font-semibold">No comments yet.</span> <br>Start the conversation.</h2>
-                </div>
-                <%   }  %>
-
-                    <div class="all-comments py-7 px-5 ">
-                        <% comments.forEach(function(elem){    %>
-
-                            <div class="comment-one mb-4 flex justify-between w-[85%] ">
-                                <div class="left flex gap-2 ">
-
-                                    <% if(elem.user.stories.length > 0){  %>
-                                        <a href="/story/<%= elem.user._id %>/0">
-                                            <div class="comment-profile mt-1 max-w-[40px] max-h-[40px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
-                                                <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
-                                                    <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <% }  else{  %>
-                                            <a href="/openprofile/<%= elem.user.username %>">
-                                                <div class="comment-profile mt-1 max-w-[40px] max-h-[40px]  rounded-full overflow-hidden">
-                                                    <div class="inner w-full  h-full rounded-full overflow-hidden">
-                                                        <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <% }  %>
-
-                                                <div class="comment-dets flex flex-col ">
-                                                    <a class="cursor-pointer flex gap-1" href="/openprofile/<%= elem.user.username %>">
-                                                        <h3>
-                                                            <%= elem.user.username %>
-                                                        </h3>
-                                                        <p class="font-light ">
-                                                            <%= elem.formattedDate %>
-                                                        </p>
-                                                    </a>
-                                                    <p class="text-sm font-light whitespace-wrap max-w-xl">
-                                                        <%= elem.text %>
-                                                    </p>
-                                                </div>
-                                </div>
-                                <div class="right text-center">
-                                    <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
-                                        <p><i data-id="<%= elem._id %>" class="like cursor-pointer ri-heart-3-line text-silver-600 text-lg"></i></p>
-                                        <%  }  else{  %>
-                                            <p><i data-id="<%=elem._id %>" class="like cursor-pointer ri-heart-3-fill text-red-600 text-lg"></i></p>
-                                            <%  }   %>
-                                                <p id="comments">
-                                                    <%= elem.likes.length %>
-                                                </p>
-                                </div>
-
-                            </div>
-
-                            <%   })   %>
-
-                    </div>
-        </div>
-
-        <div class="bottom pt-5 w-full  h-[10%]  flex items-center gap-4" style="border-top: 1px solid rgba(192, 192, 192, 0.103); z-index: 999;">
-
-
-            <% if(loginuser.stories.length > 0){ %>
-                <a href="/story/<%= loginuser._id %>/0">
-                    <div class="loginprofile w-[55px] h-[55px]  relative gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center  ">
-                        <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                            <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= loginuser.profile %>" alt="">
-                        </div>
-                    </div>
-                </a>
-
-                <%  } else{ %>
-                    <a href="/openprofile/<%= loginuser.username %>">
-                        <div class="loginprofile w-[55px] h-[55px]  relative  bg-sky-100 overflow-hidden rounded-full  ">
-                            <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= loginuser.profile %>" alt="">
+        <div class="all-comments py-7 px-5">
+            <% comments.forEach(function(elem){ %>
+            <div class="comment-one mb-4 flex justify-between w-full md:w-[90%]">
+                <div class="left flex gap-3">
+                    <% if(elem.user.stories.length > 0){ %>
+                    <a href="/story/<%= elem.user._id %>/0">
+                        <div class="comment-profile mt-1 w-10 h-10 sm:w-12 sm:h-12 gradient bg-sky-100 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-700 to-orange-500">
+                            <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
+                                <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
                             </div>
                         </div>
                     </a>
-
-                    <% }  %>
-
-
-
-
-
-
-                        <input id="commentinp" class="cu caption-bottom  bg-transparent w-[75%]" autocomplete="off" type="text" placeholder="Add a comment..." style="outline: none; border:none; ">
-                        <div id="commenticon" class="icon hidden  ml-4 px-2.5 py-0.5 rounded-3xl flex items-center justify-center " style="background-color: royalblue;">
-                            <i class="ri-arrow-up-line cursor-pointer"></i>
+                    <% } else { %>
+                    <a href="/openprofile/<%= elem.user.username %>">
+                        <div class="comment-profile mt-1 w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden">
+                            <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
                         </div>
+                    </a>
+                    <% } %>
+
+                    <div class="comment-dets flex flex-col">
+                        <a class="cursor-pointer flex gap-1" href="/openprofile/<%= elem.user.username %>">
+                            <h3 class="text-sm sm:text-base"><%= elem.user.username %></h3>
+                            <p class="text-xs sm:text-sm text-gray-500">
+                                <%= elem.formattedDate %>
+                            </p>
+                        </a>
+                        <p class="text-xs sm:text-sm font-light max-w-xs sm:max-w-md">
+                            <%= elem.text %>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="right text-center">
+                    <% if(elem.likes.indexOf(loginuser._id) === -1){ %>
+                    <p>
+                        <i data-id="<%= elem._id %>" class="like cursor-pointer ri-heart-3-line text-gray-400 text-lg"></i>
+                    </p>
+                    <% } else { %>
+                    <p>
+                        <i data-id="<%= elem._id %>" class="like cursor-pointer ri-heart-3-fill text-red-600 text-lg"></i>
+                    </p>
+                    <% } %>
+                    <p id="comments" class="text-xs sm:text-sm"><%= elem.likes.length %></p>
+                </div>
+            </div>
+            <% }) %>
         </div>
     </div>
 
+    <div class="bottom pt-5 w-full h-[10%] flex items-center gap-4 z-[999]">
+        <% if(loginuser.stories.length > 0){ %>
+        <a href="/story/<%= loginuser._id %>/0">
+            <div class="loginprofile w-12 h-12 sm:w-14 sm:h-14 gradient bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
+                <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
+                    <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                </div>
+            </div>
+        </a>
+        <% } else { %>
+        <a href="/openprofile/<%= loginuser.username %>">
+            <div class="loginprofile w-12 h-12 sm:w-14 sm:h-14 bg-sky-100 rounded-full overflow-hidden">
+                <div class="inner w-full h-full rounded-full overflow-hidden">
+                    <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                </div>
+            </div>
+        </a>
+        <% } %>
 
+        <input id="commentinp" class="bg-transparent w-[75%] text-sm sm:text-base" autocomplete="off" type="text" placeholder="Add a comment..." style="outline: none; border:none;">
+        <div id="commenticon" class="icon hidden ml-4 px-2.5 py-0.5 rounded-3xl flex items-center justify-center bg-blue-500">
+            <i class="ri-arrow-up-line cursor-pointer"></i>
+        </div>
+    </div>
+</div>
 
-    <style>
-        .middle::-webkit-scrollbar {
-            display: none;
+<style>
+    .middle::-webkit-scrollbar {
+        display: none;
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    let postid = `<%= post._id %>`;
+    let data;
+    let loginuser = ` <%= loginuser._id %>`;
+    let commenticon = document.querySelector(".bottom #commenticon");
+    let allcomments = document.querySelector(".all-comments");
+    let clutter = "";
+    let commentLength = `<%= comments.length %>`;
+
+    document.querySelector(".bottom input").addEventListener("input", function(event) {
+        data = event.target.value;
+        commenticon.style.display = "initial";
+    });
+
+    commenticon.addEventListener("click", function() {
+        document.querySelector(".bottom input").value = "";
+        if (commentLength == 0) {
+            document.querySelector(".center").style.display = "none";
         }
-    </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        let postid = `<%= post._id %>`; // Ensure post._id is correctly populated from your server-side rendering engine
-        let data;
-        let loginuser = ` <%= loginuser._id %>`
-        let commenticon = document.querySelector(".bottom #commenticon");
-        let allcomments = document.querySelector(".all-comments");
-        let clutter = "";
-        let commentLength = `<%= comments.length %>`;
+        axios.post(`/comment/${data}/${postid}`)
+            .then(function(response) {
 
-
-
-        document.querySelector(".bottom input").addEventListener("input", function(event) {
-            data = event.target.value;
-            commenticon.style.display = "initial";
-        });
-
-        commenticon.addEventListener("click", function(dets) {
-            document.querySelector(".bottom input").value = "";
-            if (commentLength == 0) {
-                document.querySelector(".center").style.display = "none";
-            }
-
-            axios.post(`/comment/${data}/${postid}`)
-                .then(function(response) {
-                    location.reload();
-                    clutter += ` <div class="comment-one mb-4 flex justify-between w-[85%] ">
-                        <div class="left flex gap-2 ">
-                            <a href="/openprofile/${response.data.user.username}">
-                                <div class="comment-profile mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
-                                    <img class="w-full h-full object-cover rounded-full" src="/images/uploads/${response.data.user.profile}" alt="">
-                                </div>
-                            </a>
-
-                            
-                            <div class="comment-dets flex flex-col ">
-                                <a class="cursor-pointer flex gap-1" href="">
-                                    <h3>
-                                        ${response.data.user.username}
-                                    </h3>
-                                    
-                                    <h3>
-                                       ${response.data.createdAt}
-                                    </h3>
-
-                                </a>
-                            
+                clutter += `<div class="comment-one mb-4 flex justify-between w-[85%]">
+                    <div class="left flex gap-2">
+                        <a href="/openprofile/${response.data.user.username}">
+                            <div class="comment-profile mt-1 max-w-[35px] max-h-[35px] rounded-full overflow-hidden">
+                                <img class="w-full h-full object-cover rounded-full" src="/images/uploads/${response.data.user.profile}" alt="">
                             </div>
+                        </a>
+
+                        <div class="comment-dets flex flex-col">
+                            <a class="cursor-pointer flex gap-1" href="">
+                                <h3>${response.data.user.username}</h3>
+                                <h3>${response.data.createdAt}</h3>
+                            </a>
                         </div>
-                        <div class="right text-center"  
+                    </div>
+                    <div class="right text-center">
                         ${response.data.likes.indexOf(loginuser._id) === -1 ? '<p><i class="ri-heart-3-line text-silver-600 text-lg"></i></p>' : '<p><i class="ri-heart-3-fill text-red-600 text-lg"></i></p>'}
                         <p id="comments">${response.data.likes.length}</p>
-                      </div>
-                    </div>`
+                    </div>
+                </div>`;
 
-                    allcomments.innerHTML += clutter;
-                    document.querySelector(".center").style.display = "none";
-        
+                allcomments.innerHTML += clutter;
+                document.querySelector(".center").style.display = "none";
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    });
+
+    allcomments.addEventListener("click", function(details) {
+        if (details.target.classList.contains("like")) {
+            let btn = details.target;
+            const commentId = details.target.dataset.id;
+
+            axios.put(`/comment/like/${commentId}`)
+                .then(response => {
+                    if (btn.classList.contains("ri-heart-3-line")) {
+                        btn.classList.remove("ri-heart-3-line");
+                        btn.classList.add("ri-heart-fill", "text-red-600");
+                        btn.parentNode.parentNode.childNodes[3].textContent = response.data.length + 1;
+                    } else {
+                        btn.classList.remove("ri-heart-fill", "text-red-600");
+                        btn.classList.add("ri-heart-3-line", "text-silver-600");
+                        btn.parentNode.parentNode.childNodes[3].textContent = response.data.length - 1;
+                    }
                 })
-                .catch(function(error) {
-                    console.error(error);
+                .catch(error => {
+                    console.error('Error:', error);
                 });
-        });
-
-
-
-        allcomments.addEventListener("click", function(details) {
-            if (details.target.classList.contains("like")) {
-                let btn = details.target;
-                const commentId = details.target.dataset.id;
-
-                axios.put(`/comment/like/${commentId}`)
-                    .then(response => {
-
-                        if (btn.classList.contains("ri-heart-3-line")) {
-                            btn.classList.remove("ri-heart-3-line");
-                            btn.classList.add("ri-heart-fill", "text-red-600");
-                            btn.parentNode.parentNode.childNodes[3].textContent = response.data.length + 1;
-
-                        } else {
-                            btn.classList.remove("ri-heart-fill", "text-red-600");
-                            btn.classList.add("ri-heart-3-line", "text-silver-600");
-                            btn.parentNode.parentNode.childNodes[3].textContent = response.data.length - 1;
-
-                        }
-
-
-
-
-
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }
-        });
-    </script>
+        }
+    });
+</script>
+<% include ./partials/footer.ejs %>
