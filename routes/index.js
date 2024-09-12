@@ -197,7 +197,7 @@ router.get('/login', function (req, res) {
 //                 { 'user': loginuser._id }, // Posts by the logged-in user
 //                 { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
 //                 { 'user.privateAccount': false },
-              
+
 //                 // Posts by users with a public account
 //             ]
 //         }).populate('user').populate('comments');
@@ -272,7 +272,7 @@ router.get('/profile', auth, async function (req, res) {
     try {
 
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`).populate("highlights")
-    
+
         res.render('profile', { footer: true, loginuser });
     } catch (error) {
         res.status(500).json({ error })
@@ -323,9 +323,9 @@ router.get('/search', auth, async function (req, res) {
 
 
 
-router.get('/users/:input',auth, async (req, res) => {
+router.get('/users/:input', auth, async (req, res) => {
     try {
-    
+
         // Find the logged-in user's details
         const loginuser = await userModel.findOne({ email: req.user.email });
         if (!loginuser) {
@@ -495,7 +495,7 @@ router.post('/comment/:data/:postid', auth, async (req, res) => {
         });
 
         commentpost.comments.push(createdcomment._id);
-         loginuser.commentPost.push(commentpost._id);  
+        loginuser.commentPost.push(commentpost._id);
         await commentpost.save();
         await loginuser.save();
 
@@ -800,7 +800,7 @@ router.get(`/story/:number`, auth, async (req, res) => {
         const storyuser = await userModel.findOne({ email: req.user.email }).populate(`stories`)
         const loginuser = await userModel.findOne({ email: req.user.email })
         const storyimage = storyuser.stories[req.params.number];
-        
+
         if (storyuser.stories.length > req.params.number) {
             res.render("mystory", { footer: false, storyuser, loginuser: true, storyimage, number: req.params.number, dater: utils.formatRelativeTime });
         } else {
@@ -812,10 +812,6 @@ router.get(`/story/:number`, auth, async (req, res) => {
     }
 
 });
-
-
-
-
 
 
 router.put("/story/like/:StoryId", auth, async (req, res, next) => {
@@ -897,27 +893,73 @@ router.get("/forgot-password", async (req, res, next) => {
 })
 
 
+// router.get("/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
+//     try {
+//         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
+
+//         const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
+
+//         const openPost = await postModel.findById(req.params.openpost).populate("user");
+//         if (!openPost) return res.status(403).json({ message: "Post not found!" });
+
+//         const count = await postModel.countDocuments();
+//         const randomIndex = Math.floor(Math.random() * count);
+//         const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
+//         let posts = [openPost, ...randomPosts];
+//         res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+//     } catch (error) {
+//         res.status(500).json({ error })
+//     }
+// });
+
+
+
 router.get("/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
     try {
-        const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
+        // Fetch the logged-in user and open user details
+        const loginuser = await userModel.findOne({ email: req.user.email })
+            .populate("followers")
+            .populate("following")
+            .populate("blockedUsers");  // Ensure blockedUsers is populated
 
-        const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
-        
+        const openUser = await userModel.findById(req.params.openuser)
+            .populate("followers")
+            .populate("following");
+
+        // Find the specific open post and populate its user
         const openPost = await postModel.findById(req.params.openpost).populate("user");
         if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
-        const count = await postModel.countDocuments();
+        // Find random posts excluding blocked users and users with private accounts
+        const count = await postModel.countDocuments({
+            user: { $nin: loginuser.blockedUsers },  // Exclude blocked users
+        });
+
         const randomIndex = Math.floor(Math.random() * count);
-        const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
-        let posts =  [openPost, ...randomPosts];
-       res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+
+        const randomPosts = await postModel.find({
+            user: { $nin: loginuser.blockedUsers }  // Exclude blocked users
+        })
+        .skip(randomIndex)
+        .limit(19)
+        .populate({
+            path: "user",
+            match: { privateAccount: false }  // Only include users whose privateAccount is false
+        });
+
+        // Filter out posts where the user is null (due to match excluding some users)
+        const filteredRandomPosts = randomPosts.filter(post => post.user);
+
+        // Combine the openPost with the filtered random posts
+        let posts = [openPost, ...filteredRandomPosts];
+
+        // Render the page with posts, loginuser, openUser, and footer
+        res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime });
+        
     } catch (error) {
-        res.status(500).json({ error })
+        res.status(500).json({ error });
     }
 });
-
-
-
 
 
 router.get("/myposts/open/:openpost", auth, async (req, res, next) => {
@@ -995,7 +1037,7 @@ router.post("/forgotpassword", async (req, res, next) => {
                     pass: process.env.Password
                 }
             });
-             
+
             var mailOptions = {
                 from: process.env.Email, // Use the email you want to send from
                 to: email, // Make sure this field matches the recipient's email
@@ -1242,7 +1284,7 @@ router.post("/posts/edit/:id", auth, async (req, res) => {
 router.get("/posts/delete/:id", auth, async (req, res, next) => {
     try {
         const post = await postModel.findByIdAndDelete(req.params.id)
-        const loginuser = await userModel.findOne({email : req.user.email})
+        const loginuser = await userModel.findOne({ email: req.user.email })
         if (!post) return res.status(403).json({ message: "Post not found !" });
         loginuser.deletedContent.push(post);
         await loginuser.save();
@@ -1291,7 +1333,7 @@ router.get("/deletenote", auth, async (req, res, next) => {
 router.get("/add/highlights", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("myStories")
-        res.render("highlights", { footer: true, loginuser})
+        res.render("highlights", { footer: true, loginuser })
 
     } catch (error) {
         res.status(500).json({ error })
@@ -1303,7 +1345,7 @@ router.get("/add/highlights", auth, async (req, res, next) => {
 router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email })
-        
+
         const idsArray = req.params.Ids.split(",")
         if (idsArray.length > 0) {
             // Assuming you have a Story model to find the stories by their IDs
@@ -1325,17 +1367,17 @@ router.get("/add/highlights/cover/:Ids", auth, async (req, res, next) => {
 });
 
 
-   
+
 
 router.post("/upload/highlight/:cover", auth, async (req, res) => {
     try {
         // Ensure the user is authenticated
         const loginuser = await userModel.findOne({ email: req.user.email });
-        
+
         // Extract ids and title from request body
         let { ids, title } = req.body;
         title = title || "Untitled";
-        
+
         // Ensure ids is an array
         if (!Array.isArray(ids)) {
             return res.status(400).json({ error: "Invalid 'ids' format. It should be an array." });
@@ -1363,7 +1405,7 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
 
         // Filter out any null values in case any stories were not found
         const filteredStories = stories.filter(story => story !== null);
-         
+
         // Create new highlight with fetched stories
         const newhighlight = await HighlightModel.create({
             title,
@@ -1377,10 +1419,10 @@ router.post("/upload/highlight/:cover", auth, async (req, res) => {
         await newhighlight.save();
         await loginuser.save();
         // console.log(newhighlight.stories)
-        req.flash("success", "Highlight created Successfully.")   
+        req.flash("success", "Highlight created Successfully.")
 
-       const message =  req.flash("success")
-       res.json({ message});
+        const message = req.flash("success")
+        res.json({ message });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -1418,23 +1460,23 @@ router.get("/highlights/:highlightId/:number", auth, async (req, res) => {
 
 
 
-router.get("/settings", auth, async (req, res)=>{
-    try { 
-        const loginuser = await userModel.findOne({email : req.user.email});
-        res.render("settings", {loginuser, footer : true})
-        
+router.get("/settings", auth, async (req, res) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render("settings", { loginuser, footer: true })
+
     } catch (error) {
-         res.status(500).json({error})
+        res.status(500).json({ error })
     }
 })
 
 
-router.get("/saved/posts", auth, async (req, res, next)=>{
+router.get("/saved/posts", auth, async (req, res, next) => {
     try {
-          const loginuser = await userModel.findOne({email : req.user.email}).populate("savedPosts")
-          res.render("saved", {footer:true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("savedPosts")
+        res.render("saved", { footer: true, loginuser })
     } catch (error) {
-          res.status(500).json({error})
+        res.status(500).json({ error })
     }
 })
 
@@ -1445,15 +1487,15 @@ router.get("/saved/posts/open/:openpost/:openuser", auth, async (req, res, next)
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
 
         const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
-        
+
         const openPost = await postModel.findById(req.params.openpost).populate("user");
         if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
         const count = await postModel.countDocuments();
         const randomIndex = Math.floor(Math.random() * count);
         const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
-        let posts =  [openPost, ...randomPosts];
-       res.render("opensavedpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+        let posts = [openPost, ...randomPosts];
+        res.render("opensavedpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -1461,7 +1503,7 @@ router.get("/saved/posts/open/:openpost/:openuser", auth, async (req, res, next)
 
 router.get("/archieve/stories", auth, async (req, res, next) => {
     try {
-      const loginuser = await userModel.findOne({email : req.user.email});
+        const loginuser = await userModel.findOne({ email: req.user.email });
         res.render("archieve", { footer: true, loginuser });
     } catch (error) {
         res.status(500).json({ error });
@@ -1470,26 +1512,26 @@ router.get("/archieve/stories", auth, async (req, res, next) => {
 
 
 router.get(`/archieve/story/:id`, auth, async (req, res) => {
-    try { 
-       const loginuser = await userModel.findOne({email : req.user.email});
-       const story = await storyModel.findById(req.params.id).populate("user");
-      if(story){
-          res.render("archievestory", { footer: false, loginuser: false, story, dater: utils.formatRelativeTime });
-      }else{
-        if(! story) return res.redirect("/archieve/stories")
-      }
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        const story = await storyModel.findById(req.params.id).populate("user");
+        if (story) {
+            res.render("archievestory", { footer: false, loginuser: false, story, dater: utils.formatRelativeTime });
+        } else {
+            if (!story) return res.redirect("/archieve/stories")
+        }
     } catch (error) {
         res.status(500).json({ error })
     }
 
 })
 
-router.get("/activity", auth, async (req, res, next)=>{
+router.get("/activity", auth, async (req, res, next) => {
     try {
-         const loginuser = await userModel.findOne({email : req.user.email})
-         res.render("activity", { footer: true, loginuser });
+        const loginuser = await userModel.findOne({ email: req.user.email })
+        res.render("activity", { footer: true, loginuser });
     } catch (error) {
-         res.status(500).json({error});
+        res.status(500).json({ error });
     }
 })
 
@@ -1497,8 +1539,8 @@ router.get("/activity", auth, async (req, res, next)=>{
 router.get("/user/likes", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
-        const userPosts = await postModel.find({ likes: loginuser._id }).populate("user"); 
-        res.render("userlikes", {footer : true, loginuser, userPosts });
+        const userPosts = await postModel.find({ likes: loginuser._id }).populate("user");
+        res.render("userlikes", { footer: true, loginuser, userPosts });
 
     } catch (error) {
         res.status(500).json({ error });
@@ -1583,7 +1625,7 @@ router.get('/user/posts/comments/:postId', auth, async (req, res, next) => {
         });
 
         const loginuser = await userModel.findOne({ email: req.user.email });
-        res.render('postcomments', { header: true,footer:false, loginuser, comments, post });
+        res.render('postcomments', { header: true, footer: false, loginuser, comments, post });
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -1595,15 +1637,15 @@ router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
 
         const openUser = await userModel.findById(req.params.userid).populate("followers").populate("following")
-        
+
         const openPost = await postModel.findById(req.params.postid).populate("user");
         if (!openPost) return res.status(403).json({ message: "Post not found!" });
 
         const count = await postModel.countDocuments();
         const randomIndex = Math.floor(Math.random() * count);
         const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
-        let posts =  [openPost, ...randomPosts];
-       res.render("openuserliked", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
+        let posts = [openPost, ...randomPosts];
+        res.render("openuserliked", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
     } catch (error) {
         res.status(500).json({ error })
     }
@@ -1611,28 +1653,28 @@ router.get("/liked/posts/:postid/:userid", auth, async (req, res, next) => {
 
 
 
-router.get("/user/deleted/content", auth, async (req, res, next)=>{
+router.get("/user/deleted/content", auth, async (req, res, next) => {
     try {
-        const loginuser = await userModel.findOne({email : req.user.email});
-        res.render("deleted", {footer : true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render("deleted", { footer: true, loginuser })
     } catch (error) {
-         res.status(500).json({error: error.message})
+        res.status(500).json({ error: error.message })
     }
 })
 
 
-router.get("/user/posts", auth, async (req, res, next)=>{
+router.get("/user/posts", auth, async (req, res, next) => {
     try {
-         const loginuser = await userModel.findOne({email : req.user.email}).populate("posts")
-         res.render("posts", {footer : true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("posts")
+        res.render("posts", { footer: true, loginuser })
 
     } catch (error) {
-         res.status(500).json({error})
+        res.status(500).json({ error })
     }
 })
 
 
-router.get("/user/posts/open/:postid", auth, async (req, res, next)=>{
+router.get("/user/posts/open/:postid", auth, async (req, res, next) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
         // const openPost = await postModel.findById(req.params.openpost).populate("user").populate("comments");
@@ -1647,17 +1689,17 @@ router.get("/user/posts/open/:postid", auth, async (req, res, next)=>{
             dater: utils.formatRelativeTime
         });
     } catch (error) {
-        res.status(err.status).json({message : err.message })
+        res.status(err.status).json({ message: err.message })
     }
 })
 
 
-router.get("/user/highlights", auth, async (req, res, next)=>{
+router.get("/user/highlights", auth, async (req, res, next) => {
     try {
-         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
-         res.render("userhighlights", {footer : true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+        res.render("userhighlights", { footer: true, loginuser })
     } catch (error) {
-         res.status(error.status).json({message : error.message})
+        res.status(error.status).json({ message: error.message })
     }
 })
 
@@ -1691,22 +1733,22 @@ router.get("/user/highlights/:highlightId/:number", auth, async (req, res) => {
 
 
 
-router.get("/accountstatus", auth, async (req, res, next)=>{
+router.get("/accountstatus", auth, async (req, res, next) => {
     try {
-         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
-         res.render("accountstatus", {footer : true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+        res.render("accountstatus", { footer: true, loginuser })
     } catch (error) {
-         res.status(error.status).json({message : error.message})
+        res.status(error.status).json({ message: error.message })
     }
 })
 
 
-router.get("/removecontent", auth, async (req, res, next)=>{
+router.get("/removecontent", auth, async (req, res, next) => {
     try {
-         const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
-         res.render("removecontent", {footer : true, loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("highlights");
+        res.render("removecontent", { footer: true, loginuser })
     } catch (error) {
-         res.status(error.status).json({message : error.message})
+        res.status(error.status).json({ message: error.message })
     }
 })
 
@@ -1724,34 +1766,34 @@ router.get('/content/removed', auth, async (req, res) => {
                 if (!user) {
                     throw new Error('User not found');
                 }
-        
+
                 // Check if user has content
                 if (user.posts.length === 0 && user.highlights.length === 0 && user.stories.length === 0) {
                     return 'No content to delete'; // Return a specific message if no content is found
                 }
-        
+
                 // Delete all posts
                 await postModel.deleteMany({ _id: { $in: user.posts } });
-        
+
                 // Delete all highlights
                 await HighlightModel.deleteMany({ _id: { $in: user.highlights } });
-        
+
                 // Delete all stories
                 await storyModel.deleteMany({ _id: { $in: user.stories } });
-        
+
                 // Clear references in the user document
                 user.posts = [];
                 user.highlights = [];
                 user.stories = [];
                 await user.save();
-        
+
                 return 'Content removed successfully'; // Return a success message
             } catch (error) {
                 throw new Error(`Error deleting user content: ${error.message}`);
             }
         }
 
-        
+
 
         // Find the logged-in user
         const loginUser = await userModel.findOne({ email: req.user.email });
@@ -1779,10 +1821,10 @@ router.get('/content/removed', auth, async (req, res) => {
 
 router.get("/guidelines", auth, async (req, res) => {
     try {
-         const loginuser = await userModel.findOne({email : req.user.email});
-         res.render("guidelines", {footer: true, loginuser: loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render("guidelines", { footer: true, loginuser: loginuser })
     } catch (error) {
-         res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 })
 
@@ -1790,10 +1832,10 @@ router.get("/guidelines", auth, async (req, res) => {
 
 router.get("/contentlowered", auth, async (req, res) => {
     try {
-         const loginuser = await userModel.findOne({email : req.user.email});
-         res.render("contentlowered", {footer: true, loginuser: loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render("contentlowered", { footer: true, loginuser: loginuser })
     } catch (error) {
-         res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 })
 
@@ -1801,10 +1843,10 @@ router.get("/contentlowered", auth, async (req, res) => {
 
 router.get("/featuresnotuse", auth, async (req, res) => {
     try {
-         const loginuser = await userModel.findOne({email : req.user.email});
-         res.render("features", {footer: true, loginuser: loginuser})
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        res.render("features", { footer: true, loginuser: loginuser })
     } catch (error) {
-         res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 })
 
@@ -1848,12 +1890,12 @@ router.get("/account/privacy", auth, async (req, res) => {
 router.get("/account/toggle", auth, async (req, res) => {
     try {
         // Find the user by email and toggle the privateAccount field
-       const loginuser = await userModel.findOne({email : req.user.email})
-       if (!loginuser) {
-           return res.status(404).json({ success: false, message: "User not found" });
-       }
-       loginuser.privateAccount = ! loginuser.privateAccount;
-       await loginuser.save()
+        const loginuser = await userModel.findOne({ email: req.user.email })
+        if (!loginuser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        loginuser.privateAccount = !loginuser.privateAccount;
+        await loginuser.save()
 
         res.status(200).json({ success: true, loginuser });
 
@@ -1866,12 +1908,12 @@ router.get("/account/toggle", auth, async (req, res) => {
 
 router.put("/restpassword", auth, async (req, res, next) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
-    const loginuser=  await userModel.findOne({email : req.user.email}); // Assuming user ID is attached to req.user
+    const loginuser = await userModel.findOne({ email: req.user.email }); // Assuming user ID is attached to req.user
 
     if (!currentPassword || !newPassword || !confirmPassword) {
         return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
-   
+
     if (newPassword !== confirmPassword) {
         return res.status(400).json({ success: false, message: 'New passwords do not match.' });
     }
@@ -1898,75 +1940,75 @@ router.put("/restpassword", auth, async (req, res, next) => {
         // Log the error details
         console.error('Error in changePassword controller:', error.message);
     };
-    })
+})
 
 
 
 
-    router.put("/block/user", auth, async (req, res, next) => {
-        try {
-            // Check if req.user is available from the auth middleware
-            if (!req.user || !req.user.email) {
-                return res.status(403).json({ success: false, message: "Authorization failed. User not authenticated." });
-            }
-    
-            // Fetch the logged-in user from the database
-            const loginUser = await userModel.findOne({ email: req.user.email });
-            if (!loginUser) {
-                return res.status(403).json({ success: false, message: "Logged-in user not found!" });
-            }
-    
-            // Fetch the user to be blocked from the database
-            const userToBlock = await userModel.findById(req.body.userId);
-            if (!userToBlock) {
-                return res.status(403).json({ success: false, message: "User to block not found. Please provide a valid user ID." });
-            }
-    
-            // Prevent the user from blocking themselves
-            if (loginUser._id.equals(userToBlock._id)) {
-                return res.status(403).json({ success: false, message: "You cannot block yourself." });
-            }
-    
-            // Check if the user is already blocked
-            if (loginUser.blockedUsers.includes(userToBlock._id)) {
-                return res.status(200).json({
-                    success: false,
-                    message: "You have already blocked this account.",
-                });
-            }
-    
-            // Add the user to blocked users list and save both users
-            loginUser.blockedUsers.push(userToBlock._id);
-            userToBlock.blockedBy.push(loginUser._id);
-    
-            await loginUser.save();
-            await userToBlock.save();
-    
+router.put("/block/user", auth, async (req, res, next) => {
+    try {
+        // Check if req.user is available from the auth middleware
+        if (!req.user || !req.user.email) {
+            return res.status(403).json({ success: false, message: "Authorization failed. User not authenticated." });
+        }
+
+        // Fetch the logged-in user from the database
+        const loginUser = await userModel.findOne({ email: req.user.email });
+        if (!loginUser) {
+            return res.status(403).json({ success: false, message: "Logged-in user not found!" });
+        }
+
+        // Fetch the user to be blocked from the database
+        const userToBlock = await userModel.findById(req.body.userId);
+        if (!userToBlock) {
+            return res.status(403).json({ success: false, message: "User to block not found. Please provide a valid user ID." });
+        }
+
+        // Prevent the user from blocking themselves
+        if (loginUser._id.equals(userToBlock._id)) {
+            return res.status(403).json({ success: false, message: "You cannot block yourself." });
+        }
+
+        // Check if the user is already blocked
+        if (loginUser.blockedUsers.includes(userToBlock._id)) {
             return res.status(200).json({
-                success: true,
-                message: "User successfully blocked.",
-                loginUser,
-                userToBlock
-            });
-    
-        } catch (error) {
-            console.error("Error blocking user:", error); // Log the actual error
-            return res.status(500).json({
                 success: false,
-                message: 'Internal server error.',
-                error: error.message
+                message: "You have already blocked this account.",
             });
         }
-    });
-    
 
+        // Add the user to blocked users list and save both users
+        loginUser.blockedUsers.push(userToBlock._id);
+        userToBlock.blockedBy.push(loginUser._id);
 
-router.get("/blocked/accounts", auth, async (req, res, nect)=>{
-    try {
-         const loginuser = await userModel.findOne({email : req.user.email}).populate("blockedUsers")
-         res.render("blockedAccounts", {footer : true, loginuser});
+        await loginUser.save();
+        await userToBlock.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "User successfully blocked.",
+            loginUser,
+            userToBlock
+        });
+
     } catch (error) {
-         res.status(500).json({success : false, message : error.message})
+        console.error("Error blocking user:", error); // Log the actual error
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error.',
+            error: error.message
+        });
+    }
+});
+
+
+
+router.get("/blocked/accounts", auth, async (req, res, nect) => {
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email }).populate("blockedUsers")
+        res.render("blockedAccounts", { footer: true, loginuser });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message })
     }
 })
 
