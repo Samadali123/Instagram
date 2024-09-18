@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const highlights = require('./highlights');
 
+
 const userSchema = mongoose.Schema({
     username: {
         type: String,
@@ -105,7 +106,11 @@ const userSchema = mongoose.Schema({
     blockedBy :[{
         type : mongoose.Schema.Types.ObjectId,
         ref : "user"
-    }]
+    }],
+    sockedId : {
+        type : String
+    }
+
 
 }, {versionKey : false, timeStamps : true});
 

@@ -1,5 +1,4 @@
 var express = require('express');
-var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const passport = require('passport');
@@ -11,6 +10,9 @@ require("dotenv").config({ path: "./.env" });
 var usersRouter = require('./routes/users');
 const { connectDB } = require('./config/db');
 var app = express();
+const path = require('path');
+
+
 app.use(session({
     secret: process.env.GOOGLE_SECRET_KEY,
     resave: false,
@@ -41,7 +43,6 @@ passport.deserializeUser(function(user, cb) {
 
 //db connection
 connectDB();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

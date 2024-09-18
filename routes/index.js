@@ -22,7 +22,6 @@ const highlights = require('./highlights');
 const upload = require("./multer");
 
 
-
 // Login with Google Api
 router.get('/login/federated/google', passport.authenticate('google'));
 

@@ -6,7 +6,7 @@ require("dotenv").config();
             await mongoose.connect(process.env.MONGO_URI)
             console.log("Db Connected  Successfully.");
         } catch (error) {
-            console.log("Error connecting to MongoDB");
+            console.log("Error connecting to MongoDB", error);
         }
 }
 
