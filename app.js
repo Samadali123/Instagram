@@ -6,36 +6,29 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require("connect-mongo");
 const flash = require("connect-flash")
-
-
-require("dotenv").config({ path: "./.env" });
-
 var indexRouter = require('./routes/index');
+require("dotenv").config({ path: "./.env" });
 var usersRouter = require('./routes/users');
-
+const { connectDB } = require('./config/db');
 var app = express();
-
 app.use(session({
     secret: process.env.GOOGLE_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 2 * 60 * 60 * 1000 },
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URL,
+        mongoUrl: process.env.MONGO_URI,
         autoRemove: 'disabled'
     }),
 }));
 
 app.use(flash());
 
-
-
-
 app.use(passport.authenticate('session'));
 
 passport.serializeUser(function(user, cb) {
+    cb(null, { id: user.id, username: user.username, name: user.name });
     process.nextTick(function() {
-        cb(null, { id: user.id, username: user.username, name: user.name });
     });
 });
 
@@ -46,6 +39,8 @@ passport.deserializeUser(function(user, cb) {
     });
 });
 
+//db connection
+connectDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

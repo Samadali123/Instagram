@@ -1,8 +1,11 @@
+// require("dotenv").config({ path: "./.env" });
+require("dotenv").config();
 var express = require('express');
 var router = express.Router();
 const localStrategy = require(`passport-local`)
 const passport = require(`passport`)
-const upload = require('./multer');
+// const upload = require("./multer");
+const uploadMiddleware = require("./multer");
 const userModel = require(`./users`);
 const postModel = require(`./post`);
 const storyModel = require(`./story`);
@@ -16,6 +19,7 @@ const { v4: uuidV4 } = require(`uuid`);
 const secretKey = process.env.JWT_SECRET_KEY;
 const nodemailer = require("nodemailer");
 const highlights = require('./highlights');
+const upload = require("./multer");
 
 
 
@@ -23,8 +27,8 @@ const highlights = require('./highlights');
 router.get('/login/federated/google', passport.authenticate('google'));
 
 passport.use(new GoogleStrategy({
-    clientID: process.env['GOOGLE_CLIENT_ID'],
-    clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/oauth2/redirect/google',
     scope: ['profile', 'email'],
     passReqToCallback: true // Passes req object to the verify callback
@@ -35,7 +39,6 @@ passport.use(new GoogleStrategy({
         const token = jwt.sign({ email: profile.emails[0].value, userid: user._id },
             secretKey, { algorithm: 'HS256', expiresIn: '1h' }
         );
-
         // Set token as a cookie using res object from request
         req.res.cookie('token', token, { maxAge: 3600000, httpOnly: true }); // Expires in 1 hour
         return cb(null, user);
@@ -228,7 +231,6 @@ router.get('/feed', auth, async function (req, res) {
     try {
         // Find the logged-in user's details
         const loginuser = await userModel.findOne({ email: req.user.email });
-
         // Exclude posts by blocked users
         const allposts = await postModel.find({
             $and: [
@@ -245,8 +247,25 @@ router.get('/feed', auth, async function (req, res) {
             ]
         }).populate('user').populate('comments');
 
-        // Fetch all stories excluding those related to the login user
-        const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate('user');
+
+        // const allstory = await storyModel.find(
+        //     { 
+        //      user:
+        //      { $ne: loginuser._id }
+        //      }).populate('user');
+
+        const allstory = await storyModel.find({
+            $and: [
+              { user: { $ne: loginuser._id } },
+              {
+                $or: [
+                  { 'user.privateAccount': false },
+                  { user: { $in: loginuser.following } }
+                ]
+              },
+              { user: { $nin: loginuser.blockedUsers } }
+            ]
+          }).populate('user');
 
         // Filter unique user stories
         const obj = {};
@@ -292,7 +311,6 @@ router.post(`/uploadprofile`, auth, upload.single(`profile`), async (req, res, n
     }
 
 })
-
 
 router.post(`/edit/profile`, auth, async (req, res) => {
     try {
@@ -800,7 +818,7 @@ router.get(`/story/:number`, auth, async (req, res) => {
         const storyuser = await userModel.findOne({ email: req.user.email }).populate(`stories`)
         const loginuser = await userModel.findOne({ email: req.user.email })
         const storyimage = storyuser.stories[req.params.number];
-
+       
         if (storyuser.stories.length > req.params.number) {
             res.render("mystory", { footer: false, storyuser, loginuser: true, storyimage, number: req.params.number, dater: utils.formatRelativeTime });
         } else {
