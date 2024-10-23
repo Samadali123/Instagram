@@ -185,46 +185,6 @@ router.get('/login', function (req, res) {
 
 
 
-// router.get('/feed', auth, async function (req, res) {
-//     try {
-//         // Find the logged-in user's details
-//         const loginuser = await userModel.findOne({ email: req.user.email });
-
-//         // Find all posts by:
-//         // 1. The logged-in user
-//         // 2. Users the logged-in user follows
-//         // 3. Users with public accounts
-//         const allposts = await postModel.find({
-//             $or: [
-//                 { 'user': loginuser._id }, // Posts by the logged-in user
-//                 { 'user': { $in: loginuser.following } }, // Posts by users the login user follows
-//                 { 'user.privateAccount': false },
-
-//                 // Posts by users with a public account
-//             ]
-//         }).populate('user').populate('comments');
-
-//         // Fetch all stories excluding those related to the login user
-//         const allstory = await storyModel.find({ user: { $ne: loginuser._id } }).populate('user');
-
-//         // Filter unique user stories
-//         const obj = {};
-//         const userStories = allstory.filter(story => {
-//             if (!obj[story.user._id]) {
-//                 obj[story.user._id] = true;
-//                 return true;
-//             }
-//             return false;
-//         });
-
-//         // Render the feed page
-//         res.render('feed', { footer: true, loginuser, allposts, userStories, dater: utils.formatRelativeTime });
-//     } catch (error) {
-//         // Handle any errors that occur during the request
-//         res.status(500).json({ message: error.message });
-//     }
-// });
-
 
 router.get('/feed', auth, async function (req, res) {
     try {
@@ -906,25 +866,6 @@ router.get("/forgot-password", async (req, res, next) => {
     }
 })
 
-
-// router.get("/posts/open/:openpost/:openuser", auth, async (req, res, next) => {
-//     try {
-//         const loginuser = await userModel.findOne({ email: req.user.email }).populate("followers").populate("following")
-
-//         const openUser = await userModel.findById(req.params.openuser).populate("followers").populate("following")
-
-//         const openPost = await postModel.findById(req.params.openpost).populate("user");
-//         if (!openPost) return res.status(403).json({ message: "Post not found!" });
-
-//         const count = await postModel.countDocuments();
-//         const randomIndex = Math.floor(Math.random() * count);
-//         const randomPosts = await postModel.find().skip(randomIndex).limit(19).populate("user");
-//         let posts = [openPost, ...randomPosts];
-//         res.render("openpost", { footer: true, posts, loginuser, openUser, dater: utils.formatRelativeTime })
-//     } catch (error) {
-//         res.status(500).json({ error })
-//     }
-// });
 
 
 
