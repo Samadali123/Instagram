@@ -5,7 +5,7 @@
             <img class="w-1/4" src="/images/instalogo.png" alt="">
             <div class="icons -mt-2 flex gap-5 items-center">
                 <i class="text-[1.4rem] ri-heart-3-line"></i>
-                <i class="text-[1.4rem] ri-messenger-line"></i>
+                <a class="cursor-pointer" href="/messages"><i class="text-[1.4rem] ri-messenger-line"></i></a>
             </div>
         </div>
         <div class="mystory px-2 flex gap-3 overflow-auto mt-5">
@@ -318,13 +318,14 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
+        // var socket = io();
         let loginuser = `<%= loginuser._id  %>`;
         let loginusername = `<%= loginuser.username %>`;
 
-        socket.emit('join-server', {
-            username: loginusername,
-        })
+        // socket.emit('join-server', {
+        //     username: loginusername,
+        // })
+
 
            
         function handlelike() {

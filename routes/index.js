@@ -285,12 +285,9 @@ router.get('/feed', auth, async function (req, res) {
 });
 
 
-
 router.get('/profile', auth, async function (req, res) {
     try {
-
         const loginuser = await userModel.findOne({ email: req.user.email }).populate(`posts`).populate("highlights")
-
         res.render('profile', { footer: true, loginuser });
     } catch (error) {
         res.status(500).json({ error })
@@ -2073,6 +2070,20 @@ router.put('/unblock/user', auth, async (req, res) => {
         res.status(500).json({ message: 'Internal server error.', error });
     }
 });
+
+
+router.get("/messages", auth, async (req, res, next)=>{
+    try {
+        const loginuser = await userModel.findOne({ email: req.user.email });
+        if (!loginuser) {
+            return res.status(403).json({ success: false, message: "Login user not found! Please login to continue." });
+        }
+        res.render("messages", {footer : false, loginuser})
+    } catch (error) {
+        res.status(error.status).json({success:false, message : error.message})
+    }
+})
+
 
 
 

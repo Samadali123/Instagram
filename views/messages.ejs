@@ -1,0 +1,461 @@
+<% include ./partials/header.ejs %>
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<div class="bg-black  w-full h-full fixed top-[0] right-[0] px-6 py-12 text-white flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <div class="w-full sidebar md:w-1/3 lg:w-1/4 p-4 border-r border-gray-700 h-full overflow-y-auto">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+            <h1 class="text-xl font-bold"><%= loginuser.username %></h1>
+            <button  class="openModal" >
+                <svg aria-label="New message" class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                    <title>New message</title>
+                    <path d="M12.202 3.203H5.25a3 3 0 0 0-3 3V18.75a3 3 0 0 0 3 3h12.547a3 3 0 0 0 3-3v-6.952" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <path d="M10.002 17.226H6.774v-3.228L18.607 2.165a1.417 1.417 0 0 1 2.004 0l1.224 1.225a1.417 1.417 0 0 1 0 2.004Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    <line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="16.848" x2="20.076" y1="3.924" y2="7.153"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="flex items-center space-x-4 mb-4">
+            <div class="relative">
+                <img class="w-12 h-12 rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="Profile">
+                <span class="absolute bottom-0 right-0 block h-3 w-3 bg-green-500 rounded-full ring-2 ring-white"></span>
+            </div>
+            <div>
+                <p class="text-sm text-gray-400"><%= loginuser.note %></p>
+            </div>
+        </div>
+
+        <!-- Messages Section -->
+        <div>
+            <h2 class="text-lg font-semibold mb-2">Messages</h2>
+            <div id="message-list" class="space-y-4">
+                <!-- Message Item -->
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">Samadfitnessfighters</p>
+                        <p class="text-sm text-gray-400">You sent an attachment. <span class="text-xs">1h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <!-- Repeat similar blocks for other messages -->
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">AHSAN AHMED</p>
+                        <p class="text-sm text-gray-400">You sent an attachment. <span class="text-xs">1h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">Harsh Vandana Sharma</p>
+                        <p class="text-sm text-gray-400">You: Kaafi down to earth b bhaiyya <span class="text-xs">4h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">Code Yatra</p>
+                        <p class="text-sm text-gray-400">Code sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">deen keh baatein</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">mOhD_zUbAiR_aLaM</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">mOhD_zUbAiR_aLaM</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">mOhD_zUbAiR_aLaM</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">mOhD_zUbAiR_aLaM</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <div id="messageitem"  class="messageitem flex items-center space-x-4 cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div class="flex-1">
+                        <p class="font-semibold">mOhD_zUbAiR_aLaM</p>
+                        <p class="text-sm text-gray-400">mOhD_zUbAiR_aLaM sent an attachment. <span class="text-xs">16h</span></p>
+                    </div>
+                    <span class="text-blue-500">•</span>
+                </div>
+                <!-- Add more message items as needed -->
+            </div>
+        </div>
+    </div>
+
+
+    <div id="messageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div  class="openpopup bg-zinc-800 text-white rounded-lg w-full max-w-md mx-4 md:mx-auto p-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">New message</h2>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-200">
+                    <svg aria-label="Close" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M18.3 5.71a1 1 0 0 0-1.42 0L12 10.59 7.12 5.71a1 1 0 0 0-1.42 1.42L10.59 12l-4.89 4.88a1 1 0 0 0 1.42 1.42L12 13.41l4.88 4.89a1 1 0 0 0 1.42-1.42L13.41 12l4.89-4.88a1 1 0 0 0 0-1.42z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-4 border-1">
+                <input type="text" id="searchInput" class="w-full p-2 rounded bg-zinc-800 text-white outline-none" placeholder="To:">
+            </div>
+            <div class="space-y-4 max-h-64 overflow-y-auto">
+                <p class="ml-3 heading hidden">No users Found</p>
+                <!-- User Item -->
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+                <div class="flex scrollbar-none  items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+
+
+
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Sapna Sourabh Raikwar</p>
+                        <p class="text-sm text-gray-400">sraikwar08</p>
+                    </div>
+                </div>
+                <!-- Repeat similar blocks for other users -->
+                <div class="flex items-center space-x-4 p-2 rounded hover:shadow-2xl hover:delay-100 hover:bg-zinc-800 rounded-full cursor-pointer">
+                    <img class="w-10 h-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile">
+                    <div>
+                        <p class="font-semibold">Samadfitnessfighters</p>
+                        <p class="text-sm text-gray-400">yoursfitnessinspiration</p>
+                    </div>
+                </div>
+                <!-- Add more user items as needed -->
+            </div>
+            <div class="mt-4">
+                <button class="bg-blue-900 text-white w-full py-2 rounded">Chat</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Main Content -->
+    <div class="flex-1 h-full overflow-y-auto overflow-x-hidden flex items-center justify-center p-4 hidden md:flex lg:flex xl:flex">
+        <div class="text-center">
+            <svg aria-label="" class="mx-auto mb-4" fill="currentColor" height="96" role="img" viewBox="0 0 96 96" width="96">
+                <title></title>
+                <path d="M48 0C21.532 0 0 21.533 0 48s21.532 48 48 48 48-21.532 48-48S74.468 0 48 0Zm0 94C22.636 94 2 73.364 2 48S22.636 2 48 2s46 20.636 46 46-20.636 46-46 46Zm12.227-53.284-7.257 5.507c-.49.37-1.166.375-1.661.005l-5.373-4.031a3.453 3.453 0 0 0-4.989.921l-6.756 10.718c-.653 1.027.615 2.189 1.582 1.453l7.257-5.507a1.382 1.382 0 0 1 1.661-.005l5.373 4.031a3.453 3.453 0 0 0 4.989-.92l6.756-10.719c.653-1.027-.615-2.189-1.582-1.453ZM48 25c-12.958 0-23 9.492-23 22.31 0 6.706 2.749 12.5 7.224 16.503.375.338.602.806.62 1.31l.125 4.091a1.845 1.845 0 0 0 2.582 1.629l4.563-2.013a1.844 1.844 0 0 1 1.227-.093c2.096.579 4.331.884 6.659.884 12.958 0 23-9.491 23-22.31S60.958 25 48 25Zm0 42.621c-2.114 0-4.175-.273-6.133-.813a3.834 3.834 0 0 0-2.56.192l-4.346 1.917-.118-3.867a3.833 3.833 0 0 0-1.286-2.727C29.33 58.54 27 53.209 27 47.31 27 35.73 36.028 27 48 27s21 8.73 21 20.31-9.028 20.31-21 20.31Z"></path>
+            </svg>
+            <h2 class="text-lg font-semibold mb-2">Your messages</h2>
+            <p class="text-gray-400 mb-4">Send a message to start a chat.</p>
+            <button  class="openModal bg-blue-500 text-white px-4 py-2 rounded">Send message</button>
+        </div>
+    </div>
+
+    <div class="chatarea bg-black hidden w-full h-full fixed top-0 right-0 flex flex-col text-white">
+        <!-- Header -->
+        <div class="flex items-center justify-between p-4 border-b border-zinc-700">
+              
+            <div class="flex items-center space-x-4">
+                <img class="w-10 h-10 rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="Profile">
+                <div class="openuser">
+                    <h1 class="text-xl font-bold">Harsh Vandana Sharma</h1>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <p id="backbtn"><i class="ri-arrow-left-s-line text-lg cursor-pointer"></i></p>
+                <button class="text-zinc-400 hover:text-zinc-200">
+                    <svg aria-label="Call" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1.003 1.003 0 0 1 1.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1C10.29 22 2 13.71 2 3.5A1 1 0 0 1 3 2.5h3.5a1 1 0 0 1 1 1c0 1.25.24 2.46.69 3.58a1.003 1.003 0 0 1-.27 1.11l-2.2 2.2z"></path>
+                    </svg>
+                </button>
+                <button class="text-zinc-400 hover:text-zinc-200">
+                    <svg aria-label="Video Call" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M17 10.5V7c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-3.5l4 4v-11l-4 4z"></path>
+                    </svg>
+                </button>
+                <button class="text-zinc-400 hover:text-zinc-200">
+                    <svg aria-label="Info" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    
+        <!-- Messages Section -->
+        <div id="messagelist" class="flex  flex-col px-10 space-y-4 p-4 overflow-y-auto">
+          
+           <div class="profile-dets flex flex-col items-center justify-center p-4">
+            <div class="profile w-28 h-28 md:w-40 md:h-40 overflow-hidden rounded-full">
+                <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="Profile Picture">
+            </div>
+            <h3 class="mt-2 text-lg md:text-sm font-semibold">Harsh Vandana Sharma</h3>
+            <p class="text-sm  text-zinc-400 font-light">Full Stack Developer</p>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-full mt-2 hover:bg-blue-600 transition-colors">View Profile</button>
+        </div>
+
+            <!-- Incoming Message -->
+            <!-- <div class="flex flex-col gap-1 mb-3 incoming-message">
+                <div class="bg-zinc-800 text-white p-2 rounded-lg max-w-full md:max-w-xs w-auto break-words">
+                    <p>Itne achhe se ek dam basics se koi nhi h padhane wala poore YouTube pe</p>
+                </div>
+                <p class="text-sm text-zinc-500">Harsh Vandana Sharma replied to you</p>
+            </div> -->
+        
+            <!-- Outgoing Message -->
+             <!-- <div class="flex flex-col gap-1 mb-3 outgoing-message self-end">
+                <div class="bg-blue-500 text-white p-2 rounded-lg max-w-full md:max-w-xs w-auto break-words">
+                    <p>Ek aur aa rahi aa</p>
+                </div>
+                <p class="text-sm text-zinc-500 text-right">You replied to Harsh Vandana Sharma</p>
+            </div>  -->
+            
+          
+        </div>
+        
+        <!-- Input Section -->
+        <div class="fixed bottom-0 left-0 w-full bg-black p-4 flex items-center space-x-3 border-t border-zinc-700">
+            <button class="text-gray-400 hover:text-gray-200">
+                <svg aria-label="Emoji" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-7h8c0 2.21-1.79 4-4 4s-4-1.79-4-4zm4-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                </svg>
+            </button>
+            <input id="messageinput" type="text" class="flex-1 py-2 px-4 rounded-3xl bg-zinc-800 text-white outline-none" placeholder="Message...">
+            <p class="sendbtn hidden cursor-pointer text-blue-500">send</p>
+             <div class="btns flex gap-2 ">
+                 <i class="ri-mic-line text-lg text-zinc-400 hover:text-zinc-200 "></i>
+                 <i class="ri-gallery-upload-fill text-lg text-zinc-400 hover:text-zinc-200"></i>
+                 <i class="ri-heart-3-line text-lg text-zinc-400 hover:text-zinc-200"></i>
+             </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .sidebar::-webkit-scrollbar{
+        display: none;
+    }
+    
+    .openpopup::-webkit-scrollbar{
+        display: none;
+    }
+
+    #messagelist::-webkit-scrollbar{
+        display: none;
+    }
+
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+    integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    // const {io} = require('socket.io-client');
+    // const socket = io();
+    let loginuser = `<%= loginuser._id  %>`;
+    let loginusername = `<%= loginuser.username %>`;
+
+    socket.emit('join-server', {
+        username: loginusername,
+    });
+
+    socket.on("online-users",(onlineUsers)=>{
+        console.log("received online users")
+    })
+    
+    document.querySelector(".openModal").addEventListener("click", function(){
+        document.getElementById('messageModal').classList.remove('hidden');
+    })
+
+    document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('messageModal').classList.add('hidden');
+    });
+
+    const chatarea = document.querySelector(".chatarea");
+    document.querySelector("#message-list").addEventListener("click", function(e){
+        // Check if the clicked element or its parent has the class "messageitem"
+        let target = e.target;
+        while (target && !target.classList.contains("messageitem")) {
+            target = target.parentElement;
+        }
+        if (target && target.classList.contains("messageitem")) {
+            chatarea.classList.remove("hidden");
+        }
+    });
+
+    const btns = document.querySelector(".btns");
+    const sendbtn = document.querySelector(".sendbtn");
+    let message = "";
+    const messageInput = document.querySelector("#messageinput");
+    messageInput.addEventListener("input", function(e){
+        message = messageInput.value;
+      btns.style.display = "none";
+      sendbtn.classList.remove("hidden");
+      if (messageInput.value.trim() === "") {
+            btns.style.display = "flex";
+            sendbtn.classList.add("hidden");
+        } else {
+            btns.style.display = "none";
+            sendbtn.classList.remove("hidden");
+        }
+
+    })
+
+    sendbtn.addEventListener("click", function(dets){
+         sendbtn.classList.add("hidden");
+         btns.style.display = "flex";
+         messageInput.value = "";
+         sendMessage(message, "66ea9d6f47eb957c2ee9d05d")
+    })
+  
+    document.querySelector("#backbtn").addEventListener("click", function(){
+        chatarea.classList.add("hidden");
+    })
+
+
+   function sendMessage(message,receiver){
+        socket.emit("send-message", {
+            message : message,
+            receiver : receiver,
+            sender: loginuser
+        })
+
+        document.querySelector("#messagelist").innerHTML +=  ` <div class="flex flex-col gap-1 mb-3 outgoing-message self-end">
+                <div class="bg-blue-500 text-white p-2 rounded-lg max-w-full md:max-w-xs w-auto break-words">
+                    <p>${message}</p>
+                </div>
+                <p class="text-sm text-zinc-500 text-right">You sent a message</p>
+            </div> `
+
+   }
+
+
+
+   function receiveMessage(message){
+
+    document.querySelector("#messagelist").innerHTML += `<div class="flex flex-col gap-1 mb-3 incoming-message">
+                <div class="bg-zinc-800 text-white p-2 rounded-lg max-w-full md:max-w-xs w-auto break-words">
+                    <p>${message}</p>
+                </div>
+                <p class="text-sm text-zinc-500">received a message</p>
+            </div>`
+   }
+
+   socket.on("recieve-message", function(message){
+    console.log("recieved message")
+      receiveMessage(message.message)
+   })
+   
+
+</script>
+
+<% include ./partials/footer.ejs %>

@@ -81,6 +81,7 @@ const userSchema = mongoose.Schema({
     },
     note: {
         type: String,
+        default: "Add a note"
     },
     highlights :[{
         type : mongoose.Schema.Types.ObjectId,
@@ -107,8 +108,9 @@ const userSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "user"
     }],
-    sockedId : {
-        type : String
+    socketId: {
+        type: String,
+        default: null
     }
 
 
