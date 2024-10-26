@@ -11,7 +11,7 @@ router.get("/createnote", authentication, createNotePage )
 router.post("/createnote", authentication, createNote)
 
 // delete note
-router.get("/deletenote", auth, deleteNote )
+router.get("/deletenote", authentication, deleteNote )
 
 
 

@@ -1,4 +1,4 @@
-
+const userModel = require("../models/user.model")
 
 exports.messagesPage = async (req, res, next) => {
     try {

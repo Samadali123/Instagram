@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const highlights = require('./highlights');
+const highlights = require('../models/highlights.model');
 
 
 const userSchema = mongoose.Schema({

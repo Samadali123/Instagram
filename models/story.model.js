@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./users'); // Ensure the correct path to the User model
+const User = require('../models/user.model'); 
 
 const storySchema = new mongoose.Schema({
     user: {

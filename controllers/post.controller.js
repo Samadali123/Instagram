@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model")
 const postModel = require("../models/post.model")
-const commentModel = require("../models/comment.model")
+const commentModel = require("../models/comments.model")
 
 
 exports.uploadPostPage = async (req, res)=>{

@@ -4,8 +4,6 @@ const HighlightModel = require("../models/highlights.model")
 const storyModel = require("../models/story.model")
 const commentModel = require("../models/comments.model")
 
-
-
 exports.settingsPage = async (req, res) => {
     try {
         const loginuser = await userModel.findOne({ email: req.user.email });
@@ -160,7 +158,7 @@ exports.userCommentsPage = async (req, res, next) => {
 
 
 
-exports.postCommentsPage = sync (req, res, next) => {
+exports.postCommentsPage = async (req, res) => {
     try {
         const post = await postModel.findById(req.params.postId);
         const comments = await commentModel.find({ post: post._id }).populate('user')

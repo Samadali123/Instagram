@@ -9,7 +9,7 @@ const { profilePage, uploadProfile, editProfileDetails, editProfilePage } = requ
 router.get("/profile", authentication, profilePage )
 
 // upload profile
-router.post("/uploadprofile", authentication, upload.single("profile"), uploadProfile )
+router.post("/uploadprofile", [authentication, upload.single("profile")], uploadProfile )
 
 // edit profile page
 router.get("/edit", authentication,  editProfilePage)

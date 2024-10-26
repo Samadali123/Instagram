@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
 const secretKey = process.env.JWT_SECRET_KEY;
 const { v4: uuidV4 } = require(`uuid`);
-const { SignUp, SignIn, SignOut, homePage, SignInPage, sentMail, sendMailPage, resetPasswordPage, resetPassword } = require('../controllers/user.controller');
+const { SignUp, SignIn, SignOut, homePage, SignInPage, sentMail, sendMailPage, resetPasswordPage, resetPassword, forgotPasswordPage } = require('../controllers/user.controller');
 const { authentication } = require('../middlewares/auth');
 
 
@@ -72,11 +72,11 @@ router.post("/login", SignIn)
 router.get("/logout", authentication,SignOut);
 
 // /loginpage
-router.get("/login",   SignInPage)
+router.get("/login", SignInPage)
 
 
 // /forgotPassword page
-router.get("/forgot-password",forgotPasswordPage )
+router.get("/forgot-password", forgotPasswordPage)
 
 
 // /forgotPassword
@@ -91,8 +91,6 @@ router.get("/reset-password",  resetPasswordPage)
 
 // /resetpassword
 router.post("/resetpassword",  resetPassword)
-
-
 
 
 

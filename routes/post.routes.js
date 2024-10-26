@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const upload = require("../utils/multer")
-
 const {authentication} = require("../middlewares/auth");
 const { uploadPostPage, uploadPost, likePost, savePost, addComment, viewPostComment, likedPostPage, likedPostUserSearch, likeComment, openRandomUserPostPage, openLoginUserPostPage, postCommentToggle, postLikeToggle, postPinnedToggle, editPostPage, editPost, deletePost } = require('../controllers/post.controller');
 

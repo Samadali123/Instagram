@@ -134,4 +134,4 @@ exports.deleteStory =  async (req, res, next) => {
         // res.status(500).json({ error })
         res.status(500).render("server")
     }
-})
+}
