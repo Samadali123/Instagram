@@ -50,7 +50,7 @@
                                     <div class="text-white flex items-center gap-2 mt-5">
                                         <div class="flex items-center gap-2">
                                             <div class="image w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-full bg-sky-100 overflow-hidden">
-                                                <img class='w-full h-full object-cover' src="/images/uploads/${elem.profile}" alt="Profile Image">
+                                                <img class='w-full h-full object-cover' src="${elem.profile}" alt="Profile Image">
                                             </div>
                                             <div class="text">
                                                 <h3 class="text-base md:text-lg lg:text-xl">${elem.username}</h3>
@@ -97,7 +97,7 @@
                 userEntry.classList.add("flex", "items-center", "gap-2");
                 userEntry.innerHTML = `
                     <div class="image w-12 mb-3 h-12 md:w-16 md:h-16 rounded-full bg-sky-100 overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/images/uploads/${user.profile}" alt="${user.username}">
+                        <img class="w-full h-full object-cover" src="${user.profile}" alt="${user.username}">
                     </div>
                     <div class="text text-white">
                         <h3>${user.username}</h3>

@@ -2,7 +2,7 @@
 <% include ./partials/header.ejs %>
 
 <div class="container relative w-full h-full">
-    <img class="background-image w-full h-full object-cover" src="/images/uploads/<%= highlightimage %>" alt="">
+    <img class="background-image w-full h-full object-cover" src="<%= highlightimage %>" alt="">
     <div class="overlay absolute w-full h-full top-0 left-0">
         <div class="top flex flex-col h-full">
             <!-- Progress Bar -->
@@ -13,7 +13,7 @@
             <div class="user-details flex items-center gap-2 px-4 py-2 bg-black bg-opacity-50">
                 <a href="/openprofile/<%= loginuser.username %>" class="profile-link">
                     <div class="profile w-10 h-10 rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                        <img class="w-full h-full object-cover" src="<%= loginuser.profile %>" alt="">
                     </div>
                 </a>
                 <div class="user-info flex-1 ml-2 text-white">

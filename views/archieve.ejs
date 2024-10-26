@@ -10,7 +10,7 @@
       <% if(loginuser.myStories.length > 0){  %>
         <% loginuser.myStories.forEach(function(story){ %>
           <div id="story" class="story relative w-full sm:w-[48%] md:w-[30%] h-[25vh] cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
-              <img class="w-full h-full object-cover" src="/images/uploads/<%= story.image %>" alt="Story-image">
+              <img class="w-full h-full object-cover" src="<%= story.image %>" alt="Story-image">
       
             <a href="/archieve/story/<%= story._id %>">
               <div class="overlay w-full h-full absolute top-0 left-0" style="background-color: rgba(0, 0, 0, 0.041);">

@@ -11,6 +11,18 @@ var usersRouter = require('./routes/users');
 const { connectDB } = require('./config/db');
 var app = express();
 const path = require('path');
+const usersRoutes = require("./routes/user.routes")
+const profileRoutes = require("./routes/profile.routes")
+const userFeedRoutes = require("./routes/feed.routes")
+const postRoutes = require("./routes/post.routes")
+const followRoutes = require("./routes/follow.routes")
+const notesRoutes = require("./routes/notes.routes")
+const storyRoutes = require("./routes/story.routes")
+const highlightsRoutes = require("./routes/highlights.routes")
+const settingsRoutes = require("./routes/settings.routes")
+const messagesRoutes = require("./routes/messages.routes")
+
+
 
 
 app.use(session({
@@ -58,13 +70,44 @@ app.use(express.urlencoded({ extended: false }));
 // active cookie-parser for reading a cookie in the backend
 app.use(cookieParser());
 
+// user routes
+app.use("/", usersRoutes)
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// profile routes
+app.use("/", profileRoutes)
+
+// user feed routes
+app.use("/", userFeedRoutes)
+
+// post routes
+app.use("/", postRoutes)
+
+//follow routes
+app.use("/", followRoutes)
+
+// notes routes
+app.use("/", notesRoutes)
+
+// stroy routes
+app.use("/", storyRoutes)
+
+// highlights  routes
+app.use("/", highlightsRoutes)
+
+// settings routes
+app.use("/", settingsRoutes)
+
+// messages routes
+app.use("/", messagesRoutes)
+
+
+
 
 // unknown routes
 app.all("*", function(req, res) {
     res.status(404).render("error");
+    // res.status(404).json({success:false, message : `${req.url} not found`})
+
 })
 
 

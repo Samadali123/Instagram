@@ -15,7 +15,7 @@
                                     <div class="circle flex-shrink-0 relative cursor-pointer">
                                         <div class="w-[8vw] h-[8vw] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openPost.user.profile %>" alt="">
+                                                <img class="w-full h-full object-cover object-center" src="<%= openPost.user.profile %>" alt="">
                                             </div>
                                         </div>
                                     </div>
@@ -24,7 +24,7 @@
                                     <a href="/openprofile/<%= openPost.user.username %>">
                                         <div class="circle flex-shrink-0 relative cursor-pointer">
                                             <div class="w-[8vw] h-[8vw] bg-sky-100 overflow-hidden rounded-full">
-                                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= openPost.user.profile %>" alt="">
+                                                <img class="w-full h-full object-cover object-center" src="<%= openPost.user.profile %>" alt="">
                                             </div>
                                         </div>
                                     </a>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="w-full h-96 flex items-center justify-center relative mt-4 bg-sky-100 overflow-hidden">
-                        <img data-id="<%= openPost._id %>" class="postimg w-full h-full object-cover" src="/images/uploads/<%= openPost.image %>" alt="">
+                        <img data-id="<%= openPost._id %>" class="postimg w-full h-full object-cover" src="<%= openPost.image %>" alt="">
                     </div>
                     <div class="options relative w-full px-4 flex justify-between items-center text-[1.4rem]">
                         <div class="flex gap-3 mt-2">

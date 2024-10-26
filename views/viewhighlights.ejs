@@ -1,49 +1,55 @@
+<% include ./partials/header.ejs %>
 
+    <div class="container w-full h-full relative"
+        style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
+        <img class="w-full h-full object-cover object-center " src="<%= highlightimage %>" alt="">
+        <div class="overlay absolute w-full h-full top-[0%] left-[0%]" style="background-color: rgba(0, 0, 0, 0.096);">
+            <div class="top">
+                <div class="progresscontainer relative w-full h-[5px]"
+                    style="background-color: rgba(215, 215, 215, 0.792);">
+                    <div class="progress w-[0%] h-full" style="background-color: white;"></div>
+                </div>
+                <div class="userdets mt-2 flex items-top gap-1 px-3">
+                    <a href="/openprofile/<%= loginuser.username %>">
+                        <div class="profile w-[40px] h-[40px] rounded-full overflow-hidden cursor-pointer">
+                            <img class="w-full h-full object-cover object-center" src="<%= loginuser.profile %>" alt="">
+                        </div>
+                    </a>
+                    <div class="flex w-full justify-between items-center px-8">
+                        <div class="whitespace-nowrap flex gap-1">
+                            <a href="/openprofile/<%= loginuser.username %>">
+                                <p class="font-medium mt-1 cursor-pointer">
+                                    <%= loginuser.username %>
+                                </p>
+                            </a>
+                        </div>
+                        <div>
 
-    <% include ./partials/header.ejs %>
-
-<div class="container w-full h-full relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
-    <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= highlightimage %>" alt="">
-    <div class="overlay absolute w-full h-full top-[0%] left-[0%]" style="background-color: rgba(0, 0, 0, 0.096);">
-        <div class="top">
-            <div class="progresscontainer relative w-full h-[5px]" style="background-color: rgba(215, 215, 215, 0.792);">
-                <div class="progress w-[0%] h-full" style="background-color: white;"></div>
-            </div>
-            <div class="userdets mt-2 flex items-top gap-1 px-3">
-                <a href="/openprofile/<%= loginuser.username %>">
-                    <div class="profile w-[40px] h-[40px] rounded-full overflow-hidden cursor-pointer">
-                        <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= loginuser.profile %>" alt="">
-                    </div>
-                </a>
-                <div class="flex w-full justify-between items-center px-8">
-                    <div class="whitespace-nowrap flex gap-1">
-                        <a href="/openprofile/<%= loginuser.username %>">
-                            <p class="font-medium mt-1 cursor-pointer">
-                                <%= loginuser.username %>
-                            </p>
-                        </a>
-                    </div>
-                    <div>
-                    
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    var progress = document.querySelector(".progress");
-var count = 0;
-let number = Number('<%= number %>');
+    <script>
+        var progress = document.querySelector(".progress");
+        var count = 0;
+        let number = Number('<%= number %>');
 
-var int = setInterval(function() {
-    if (count < 100) {
-        count++;
-        progress.style.width = `${count}%`;
-    } else {
-        window.location = `http://localhost:3000/highlights/<%= loginuser._id %>/${number + 1}`;
-    }
-}, 50);
+        var int = setInterval(function () {
+            if (count < 100) {
+                count++;
+                progress.style.width = `${count}%`;
+            } else {
+                // window.location = `http://localhost:3000/highlights/<%= loginuser._id %>/${number + 1}`;
+                const { protocol, host } = window.location; // Get protocol and host dynamically
+                const userId = "<%= loginuser._id %>"; // EJS variable for user ID
+                const nextNumber = `<%= number + 1 %>`
 
-</script>
+                window.location.href = `${protocol}//${host}/highlights/${userId}/${nextNumber}`;
+
+            }
+        }, 50);
+
+    </script>

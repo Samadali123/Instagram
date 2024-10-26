@@ -12,7 +12,7 @@
     <% if(loginuser.deletedContent.length > 0){ %>
       <% loginuser.deletedContent.forEach(function(elem){  %>
         <div class="post w-full sm:w-[48%] md:w-[30%] lg:w-[22%] h-[200px] cursor-pointer rounded-lg overflow-hidden shadow-lg transition duration-500 hover:scale-105">
-          <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+          <img class="w-full h-full object-cover" src="<%= elem.image %>" alt="">
         </div>
       <%  })  %>
     <%  }else{ %>

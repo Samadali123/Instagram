@@ -15,7 +15,7 @@
     <% if(loginuser.posts.length > 0) { %>
       <% loginuser.posts.forEach(function(post){ %>
         <div id="post" data-id="<%= post._id %>" class="post w-full sm:w-[48%] md:w-[30%] lg:w-[22%] xl:w-[18%] h-[30vh] lg:h-[35vh] xl:h-[40vh] cursor-pointer rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105 bg-gray-900">
-          <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="User post">
+          <img class="w-full h-full object-cover" src="<%= post.image %>" alt="User post">
         </div>
       <% }) %>
     <% } else { %>

@@ -31,14 +31,14 @@
                     <a class="cursor-pointer" href="/story/<%= loginuser._id %>/0">
                         <div class="w-[15vw] h-[15vw] lg:w-[19vw] lg:h-[19vw] bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                                <img class="w-full h-full object-center object-cover rounded-full " src="<%= loginuser.profile %> " alt="">
                             </div>
                         </div>
                     </a>
                     <%   }  else { %>
                         <div class="w-[15vw] h-[15vw] lg:w-[19vw] lg:h-[19vw]  overflow-hidden ">
                             <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                                <img class="w-full h-full object-center object-cover rounded-full " src="<%= loginuser.profile %> " alt="">
                             </div>
                         </div>
                         <%  } %>
@@ -88,7 +88,7 @@
                        <a href='/highlights/<%= highlight._id %>/0'>
                         <div class="highlight cursor-pointer">
                             <div class="relative w-16 h-16 lg:w-18 lg:h-18  rounded-full  overflow-hidden " style="border: 1px solid silver;">
-                                <img class="w-full h-full object-cover object-center rounded-full " src="/images/uploads/<%= highlight.coverphoto %>" alt="">
+                                <img class="w-full h-full object-cover object-center rounded-full " src="<%= highlight.coverphoto %>" alt="">
                               </div>
                               <h3 class="whitespace-nowrap text-center ml-1 font-light cursor-pointer "><%= highlight.title %></h3>
                         </div>
@@ -220,7 +220,7 @@
 
                     <a href="/myposts/open/<%= elem._id %>">
                         <div class="post  relative w-[30vw] h-[18vh] lg: w-[20w] lg:h-[30vh] mb-2 rounded-md bg-sky-100 overflow-hidden relative ">
-                            <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="">
+                            <img class="w-full h-full object-cover" src="<%= elem.image %>" alt="">
 
                             <div class="overlay absolute top-[0%] left-[0%] w-full h-full " style="background-color: rgba(0, 0, 0, 0.137);">
 
@@ -275,7 +275,7 @@
 
             setInterval(function() {
                 document.querySelector(".popup").classList.replace("flex", "hidden");
-            }, 2000);
+            }, 4000);
 
         })
 
@@ -295,7 +295,7 @@
 
             setInterval(function() {
                 document.querySelector(".notepopup").classList.replace("flex", "hidden")
-            }, 2000)
+            }, 4000)
 
 
         })

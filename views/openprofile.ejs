@@ -59,7 +59,7 @@
                                 class="profile w-[60px] h-[60px] gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                                 <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                     <img class="w-full h-full object-cover object-center"
-                                        src="/images/uploads/<%= openuser.profile %>" alt="">
+                                        src="<%= openuser.profile %>" alt="">
                                 </div>
                             </div>
                         </a>
@@ -67,7 +67,7 @@
                             <div class="profile w-[60px] h-[60px]">
                                 <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
                                     <img class="w-full h-full object-cover object-center"
-                                        src="/images/uploads/<%= openuser.profile %>" alt="">
+                                        src="<%= openuser.profile %>" alt="">
                                 </div>
                             </div>
                             <% } %>
@@ -140,7 +140,7 @@
                                         <a href="/posts/open/<%= elem._id %>/<%= openuser._id %>">
                                             <div class="post w-[30vw] h-[20vmax] lg:w-[20vw] lg:h-[22vw]  bg-sky-100 overflow-hidden rounded-md">
                                                 <img class="w-full h-full object-cover"
-                                                    src="/images/uploads/<%= elem.image %>" alt="">
+                                                    src="<%= elem.image %>" alt="">
                                             </div>
                                         </a>
                                         <% }) %>

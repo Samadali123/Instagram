@@ -12,7 +12,7 @@
          <div class="flex flex-col sm:flex-row gap-4 mb-7">
            <!-- Profile Image -->
            <div class="profile cursor-pointer w-12 h-12 sm:w-16 sm:h-16 md:w-[3rem] md:h-[3rem] rounded-full">
-             <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= comment.post.user.profile %>" alt="">
+             <img class="w-full h-full object-cover rounded-full" src="<%= comment.post.user.profile %>" alt="">
            </div>
  
            <!-- Comment Content -->
@@ -42,7 +42,7 @@
            <!-- Post Image -->
            <a href="/user/posts/comments/<%=comment.post._id %>" class="mt-3 sm:mt-0">
              <div class="postimage cursor-pointer w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] md:w-[150px] md:h-[150px] rounded-md">
-               <img class="w-full h-full object-cover hover:scale-110 transition-transform" src="/images/uploads/<%= comment.post.image %>" alt="">
+               <img class="w-full h-full object-cover hover:scale-110 transition-transform" src="<%= comment.post.image %>" alt="">
              </div>
            </a>
          </div>

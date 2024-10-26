@@ -24,14 +24,14 @@
                     <a href="/story/<%= elem.user._id %>/0">
                         <div class="comment-profile mt-1 w-10 h-10 sm:w-12 sm:h-12 gradient bg-sky-100 rounded-full flex items-center justify-center bg-gradient-to-r from-purple-700 to-orange-500">
                             <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
-                                <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                                <img class="w-full h-full object-cover object-center rounded-full" src="<%= elem.user.profile %>" alt="">
                             </div>
                         </div>
                     </a>
                     <% } else { %>
                     <a href="/openprofile/<%= elem.user.username %>">
                         <div class="comment-profile mt-1 w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden">
-                            <img class="w-full h-full object-cover object-center rounded-full" src="/images/uploads/<%= elem.user.profile %>" alt="">
+                            <img class="w-full h-full object-cover object-center rounded-full" src="<%= elem.user.profile %>" alt="">
                         </div>
                     </a>
                     <% } %>
@@ -71,7 +71,7 @@
         <a href="/story/<%= loginuser._id %>/0">
             <div class="loginprofile w-12 h-12 sm:w-14 sm:h-14 gradient bg-sky-100 rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                 <div class="inner w-[90%] h-[90%] rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                    <img class="w-full h-full object-cover object-center" src="<%= loginuser.profile %>" alt="">
                 </div>
             </div>
         </a>
@@ -79,7 +79,7 @@
         <a href="/openprofile/<%= loginuser.username %>">
             <div class="loginprofile w-12 h-12 sm:w-14 sm:h-14 bg-sky-100 rounded-full overflow-hidden">
                 <div class="inner w-full h-full rounded-full overflow-hidden">
-                    <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= loginuser.profile %>" alt="">
+                    <img class="w-full h-full object-cover object-center" src="<%= loginuser.profile %>" alt="">
                 </div>
             </div>
         </a>

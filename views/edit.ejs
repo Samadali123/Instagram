@@ -16,14 +16,14 @@
                 <a class="cursor-pointer" href="/story/<%= loginuser._id %>/0">
                     <div class="w-20 h-20 bg-sky-100 gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                         <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                            <img class="w-full h-full object-center object-cover rounded-full " src="<%= loginuser.profile %> " alt="">
                         </div>
                     </div>
                 </a>
                 <%   }  else { %>
                     <div class="w-20  h-20  overflow-hidden ">
                         <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                            <img class="w-full h-full object-center object-cover rounded-full " src="/images/uploads/<%= loginuser.profile %> " alt="">
+                            <img class="w-full h-full object-center object-cover rounded-full " src="<%= loginuser.profile %> " alt="">
                         </div>
                     </div>
                     <%  } %>

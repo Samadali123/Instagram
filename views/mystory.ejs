@@ -4,7 +4,7 @@
 <div class="container w-full h-full relative">
     <!-- Story Image Background with Gradient Overlay -->
     <div class="story-bg w-full h-full relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
-        <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= storyimage.image %>" alt="Story Image">
+        <img class="w-full h-full object-cover object-center" src="<%= storyimage.image %>" alt="Story Image">
         <div class="overlay absolute inset-0 bg-black/10">
             <!-- Top Section with User Details and Close Button -->
             <div class="top absolute top-0 w-full">
@@ -19,7 +19,7 @@
                     <div class="flex items-center gap-2">
                         <a href="/openprofile/<%= storyuser.username %>" class="profile">
                             <div class="w-10 h-10 rounded-full overflow-hidden">
-                                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= storyuser.profile %>" alt="Profile Image">
+                                <img class="w-full h-full object-cover object-center" src="<%= storyuser.profile %>" alt="Profile Image">
                             </div>
                         </a>
                         <div class="flex flex-col">

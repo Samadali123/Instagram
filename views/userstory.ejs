@@ -1,16 +1,18 @@
 <% include ./partials/header.ejs %>
 
-    <div class="container w-full h-full  relative" style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
-        <img class="w-full h-full object-cover object-center " src="/images/uploads/<%= storyimage.image %>" alt="">
+    <div class="container w-full h-full  relative"
+        style="background: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.5), transparent);">
+        <img class="w-full h-full object-cover object-center " src="<%= storyimage.image %>" alt="">
         <div class="overlay absolute w-full h-full  top-[0%] left-[0%]" style="background-color: rgba(0, 0, 0, 0.096);">
             <div class="top ">
-                <div class="progresscontainer relative w-full h-[5px]  " style="background-color: rgba(215, 215, 215, 0.792);">
+                <div class="progresscontainer relative w-full h-[5px]  "
+                    style="background-color: rgba(215, 215, 215, 0.792);">
                     <div class="progress w-[0%] h-full " style="background-color: white;"></div>
                 </div>
                 <div class="userdets mt-2 flex items-top gap-1 px-3 ">
                     <a href="/openprofile/<%= storyuser.username %>">
                         <div class="profile w-[40px] h-[40px] rounded-full overflow-hidden cursor-pointer">
-                            <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= storyuser.profile %>" alt="">
+                            <img class="w-full h-full object-cover object-center" src="<%= storyuser.profile %>" alt="">
                         </div>
                     </a>
 
@@ -46,17 +48,24 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js"
+        integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         let story = `<%= storyimage %>`;
         var progress = document.querySelector(".progress");
         var count = 0;
-        var interval = setInterval(function() {
+        var interval = setInterval(function () {
             if (count < 100) {
                 count++;
                 progress.style.width = `${count}%`;
             } else {
-                window.location = `http://localhost:3000/story/<%= storyuser._id %>/<%= Number(number)+1 %>`;
+                // window.location = `http://localhost:3000/story/<%= storyuser._id %>/<%= Number(number)+1 %>`;
+                const { protocol, host } = window.location;
+                const storyId = "<%= storyuser._id %>"; // Server-side rendered variable
+                const nextNumber = `<%= Number(number) + 1 %>`
+                window.location.href = `${protocol}//${host}/story/${storyId}/${nextNumber}`;
+
             }
 
         }, 50)

@@ -18,7 +18,7 @@
             <div class="top flex items-center  justify-between px-3">
                 <div class="left flex gap-3 items-center ">
                     <div class="profile w-[30px] h-[30px] rounded-full overflow-hidden">
-                        <img class="w-full h-full object-center object-cover" src="/images/uploads/<%= post.user.profile %>" alt="">
+                        <img class="w-full h-full object-center object-cover" src="<%= post.user.profile %>" alt="">
                     </div>
                     <h3 class="text-sm font-light">
                         <%= post.user.username %>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="image mt-1 rounded-2xl ml-2 mt-3  w-full h-[60vh] relative overflow-hidden">
-                <img class="w-full h-full object-cover object-center" src="/images/uploads/<%= post.image %>" alt="">
+                <img class="w-full h-full object-cover object-center" src="<%= post.image %>" alt="">
             </div>
 
             <div class="caption mt-4 w-8/12 h-auto ml-3 ">

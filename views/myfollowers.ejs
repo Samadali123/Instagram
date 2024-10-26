@@ -82,7 +82,7 @@
                                             class="w-[50px] h-[50px]  gradient  overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                                 <img class="w-full h-full object-center object-cover rounded-full "
-                                                    src="/images/uploads/<%= elem.profile %> " alt="">
+                                                    src="<%= elem.profile %> " alt="">
                                             </div>
                                         </div>
                                     </a>
@@ -91,7 +91,7 @@
                                             <div class="w-[50px] h-[50px]  overflow-hidden ">
                                                 <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
                                                     <img class="w-full h-full object-center object-cover rounded-full "
-                                                        src="/images/uploads/<%= elem.profile %> " alt="">
+                                                        src="<%= elem.profile %> " alt="">
                                                 </div>
                                             </div>
                                         </a>
@@ -166,7 +166,7 @@
                                                     class="w-[50px] h-[50px]  gradient bg-sky-100 overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center ">
                                                     <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
                                                         <img class="w-full h-full object-center object-cover rounded-full "
-                                                            src="/images/uploads/<%= elem.profile %> " alt="">
+                                                            src="<%= elem.profile %> " alt="">
                                                     </div>
                                                 </div>
                                             </a>
@@ -175,7 +175,7 @@
                                                     <div class="w-[50px] h-[50px]  rounded-full overflow-hidden ">
                                                         <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
                                                             <img class="w-full h-full object-center object-cover rounded-full "
-                                                                src="/images/uploads/<%= elem.profile %> " alt="">
+                                                                src="<%= elem.profile %> " alt="">
                                                         </div>
                                                     </div>
                                                 </a>
@@ -538,7 +538,7 @@
 
             if (dets.target.classList.contains("remove")) {
                 document.querySelector(".popup").classList.replace("hidden", "flex");
-                let src = `/images/uploads/${dets.target.dataset.profile}`
+                let src = `${dets.target.dataset.profile}`
                 document.querySelector(".popup .left .profile img").setAttribute("src", src);
                 document.querySelector(".popup .right h4 ").textContent = dets.target.dataset.username;
 
@@ -555,7 +555,7 @@
                                     <a class="cursor-pointer" href="/story/${elem._id}/0">
                                         <div class="w-[50px] h-[50px] gradient overflow-hidden rounded-full bg-gradient-to-r from-purple-700 to-orange-500 flex items-center justify-center">
                                             <div class="inner w-[92%] h-[92%] rounded-full overflow-hidden">
-                                                <img class="w-full h-full object-center object-cover rounded-full" src="/images/uploads/${elem.profile}" alt="">
+                                                <img class="w-full h-full object-center object-cover rounded-full" src="${elem.profile}" alt="">
                                             </div>
                                         </div>
                                     </a>
@@ -563,7 +563,7 @@
                                     <a href="/openprofile/${elem.username}">
                                         <div class="w-[50px] h-[50px] overflow-hidden">
                                             <div class="inner w-[99%] h-[99%] rounded-full overflow-hidden">
-                                                <img class="w-full h-full object-center object-cover rounded-full" src="/images/uploads/${elem.profile}" alt="">
+                                                <img class="w-full h-full object-center object-cover rounded-full" src="${elem.profile}" alt="">
                                             </div>
                                         </div>
                                     </a>

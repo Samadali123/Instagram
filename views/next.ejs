@@ -20,7 +20,7 @@
 
        <div class="redirect-container mt-[25%]  hidden  flex flex-col gap-3 justify-center items-center">
         <div class="redirect relative w-[65px] h-[65px] rounded-full overflow-hidden ">
-            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= loginuser.profile %>" alt="">
+            <img class="w-full h-full object-cover rounded-full" src="<%= loginuser.profile %>" alt="">
         </div>
          <a href="/profile" class="font-light text-xl">Back to profile</a>
        </div>
@@ -28,7 +28,7 @@
     <div class="stories-container overflow-y-auto pt-16 px-5 flex flex-col items-center justify-center w-full h-[75vh] ">
               
         <div style="border: 1px solid silver;" class="story relative w-[65px] h-[65px] rounded-full overflow-hidden">
-            <img class="w-full h-full object-cover rounded-full" src="/images/uploads/<%= cover  %>" alt="">
+            <img class="w-full h-full object-cover rounded-full" src="<%= cover  %>" alt="">
         </div>
 
         <form action="" method="post">
@@ -70,8 +70,6 @@ document.querySelector(".done").addEventListener("click", function(event) {
     })
     .catch(function(error) {
         console.log(error);
-    }).finally(function(){
-         
     });
 
 });
